@@ -1,0 +1,12 @@
+.stepper{
+    background-color: rgba(188, 188, 240, 0.322);
+}
+
+.header-stepper .active{
+    background-color: rgba(152, 152, 241, 0.425);
+}
+
+.header-stepper .active .number{
+    background-color: #556ee6;;
+    color: white;
+}
