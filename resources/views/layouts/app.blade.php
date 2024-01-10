@@ -7,7 +7,7 @@
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Elceto_Holding') }}</title>
 
         <!-- Fonts -->
         {{-- <link rel="preconnect" href="https://fonts.bunny.net">
@@ -18,7 +18,7 @@
 
         
         <!-- App favicon -->
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
+        <link rel="shortcut icon" href="{{asset('assets\images\logo_elceto.png')}}">
 
         <!-- Bootstrap Css -->
         <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" />

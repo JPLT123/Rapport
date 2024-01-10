@@ -3,7 +3,7 @@
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <a href="{{ route('dashboard') }}" class="logo logo-dark">
+                <a href="{{ route('Accueil') }}" class="logo logo-dark">
                     <span class="logo-sm">
                         <img src="{{asset('assets\images\logo_elceto.png')}}" style="width: 20px" alt="" height="22">
                     </span>
@@ -12,7 +12,7 @@
                     </span>
                 </a>
 
-                <a href="{{ route('dashboard') }}" class="logo logo-light">
+                <a href="{{ route('Accueil') }}" class="logo logo-light">
                     <span class="logo-sm">
                         <img src="{{asset('assets\images\logo_elceto.png')}}" style="width: 20px" alt="" height="22">
                     </span>
@@ -133,8 +133,9 @@
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="{{asset(Auth::user() ? '/storage/'.Auth::user()->profile_photo_path : 'null')}}"
-                    alt="{{ Auth::user() ? Auth::user()->name : 'null'}}">
+                    <img class="rounded-circle header-profile-user" src="{{ asset('/storage/'. Auth::user()->profile_photo_path ?? 'assets/user.png') }}"
+                    alt="{{ Auth::user() ? Auth::user()->name : 'null' }}">
+
                     <span class="d-none d-xl-inline-block ms-1" key="t-henry"> {{ Auth::user() ? Auth::user()->name : 'null'}}</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>

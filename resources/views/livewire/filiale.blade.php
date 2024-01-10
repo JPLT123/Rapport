@@ -57,7 +57,7 @@
                                 <div class="favorite-icon">
                                     <a href="javascript:void(0)"><i class="uil uil-heart-alt fs-18"></i></a>
                                 </div>
-                                <img src="{{ $Filiale->logo ? '/storage/' . $Filiale->logo : '/assets/images/small/img-1.jpg' }}" alt="" height="50" class="mb-3">
+                                <img src="{{ $Filiale->logo ? '/storage/'. $Filiale->logo : '/assets/images/image_produit.png' }}" alt="" height="50" class="mb-3">
                                 <div class="dropdown float-end">
                                     <a href="#" class="dropdown-toggle arrow-none" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="mdi mdi-dots-vertical m-0 text-muted h5"></i>

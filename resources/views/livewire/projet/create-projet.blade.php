@@ -43,7 +43,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label class="col-form-label">Project Description</label>
+                                        <label class="col-form-label">Project Description <span class="text-danger">*</span></label>
                                         <div class="col-lg-12">
                                             <textarea id="description" wire:model='description' class="form-control @error('description') is-invalid @enderror"></textarea>
                                             @error('description')
@@ -52,7 +52,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label class="col-form-label">Project Date</label>
+                                        <label class="col-form-label">Project Date <span class="text-danger">*</span></label>
                                         <div class="col-lg-12">
                                             <div class="input-daterange input-group" id="project-date-inputgroup" >
                                                 <input type="date" wire:model='datedebut' class="form-control @error('datedebut') is-invalid @enderror" placeholder="Start Date" name="debutdate" />
@@ -109,7 +109,7 @@
                                                     <div class="form-check form-check-primary mb-2 d-flex align-items-center">
                                                         <input wire:model.live="membre" class="form-check-input" type="checkbox" id="member-{{$user->id}}" name="member[]" value="{{$user->id}}">
                                                         <label class="form-check-label ms-2" for="member-{{$user->id}}">{{$user->name}}</label>
-                                                        <img src="{{asset($user->profile_photo_path ? $user->profile_photo_path : 'assets/images/users/avatar-1.jpg')}}" class="rounded-circle avatar-xs m-1" alt="">
+                                                        <img src="{{asset($user->profile_photo_path ? '/storage/'.$user->profile_photo_path : 'assets/user.png')}}" class="rounded-circle avatar-xs m-1" alt="">
                                                     </div>
                                                 </li>
                                             @endforeach

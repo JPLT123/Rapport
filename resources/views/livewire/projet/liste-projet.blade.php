@@ -73,7 +73,7 @@
                                     <tbody>
                                         @foreach ($projets as $projet)
                                             <tr>
-                                                <td><img src="{{$projet->filiale ? '/storage/'.$projet->filiale->logo : 'assets/images/image_produit.png'}}" alt="" class="avatar-sm"></td>
+                                                <td><img src="{{asset($projet->filiale->logo ? '/storage/'.$projet->filiale->logo : 'assets/images/image_produit.png')}}" alt="" class="avatar-sm"></td>
                                                 <td >
                                                     <h5 class=" font-size-14"><a href="javascript: void(0);" class="text-dark">{{$projet->nom}}</a></h5>
                                                     <p class="text-muted text-truncate">{{Str::limit($projet->description, $limit = 50, $end = '...') }}
@@ -99,7 +99,7 @@
                                                             @if ($item->status == 'activer')
                                                                 <div class="avatar-group-item">
                                                                     <a href="javascript: void(0);" class="d-inline-block">
-                                                                        <img src="{{asset($item->user->profile_photo_path ? $item->user->profile_photo_path : 'assets/images/users/avatar-8.jpg')}}" alt="" class="rounded-circle avatar-xs">
+                                                                        <img src="{{asset($item->user->profile_photo_path ? '/storage/'.$item->user->profile_photo_path : 'assets/user.png')}}" alt="" class="rounded-circle avatar-xs">
                                                                     </a>
                                                                 </div>
                                                             @endif

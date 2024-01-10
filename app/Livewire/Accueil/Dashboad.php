@@ -72,21 +72,17 @@ class Dashboad extends Component
 
     public function resendVerificationCode()
     {
-        $user = Auth::user();
+        $user = auth()->user();
+$verificationCode = mt_rand(100000, 999999);
 
-        if ($user && !$user->hasVerifiedEmail()) {
-            $newCode = mt_rand(100000, 999999);
+            // Stockez le code dans la base de données
+        $user->update(['verification_code' => $verificationCode]);
 
-            $user->update([
-                'verification_code' => $newCode,
-            ]);
-
-            Mail::to($user->email)->send(new VerificationCodeMail($newCode));
+            // Envoyez le code par e-mail
+        Mail::to($user->email)->send(new VerificationCodeMail($verificationCode));
 
             session()->flash('success', 'Nouveau code de vérification envoyé par e-mail.');
-        } else {
-            session()->flash('error', 'Impossible de renvoyer le code de vérification.');
-        }
+        
     }
 
 }

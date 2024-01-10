@@ -102,8 +102,7 @@ class Create extends Component
                 'resultat_attendus' => $Data['resultat_attendus'],
                 'observation' => $Data['observation'],
                 'date' => $Data['date'],
-                'hierachie' => $Data['hierachie'],
-                'slug' => $Data['slug'],
+                                'slug' => $Data['slug'],
             ]);
 
             $Data->delete();
@@ -189,7 +188,7 @@ class Create extends Component
             $uniqueSlug = $slug;
             $count = 1;
 
-            while (PlanifHebdomadaire::where('slug', $uniqueSlug)->exists()) {
+            while (Essaieplanif::where('slug', $uniqueSlug)->exists()) {
                 $uniqueSlug = $slug . '-' . $count;
                 $count++;
             }
@@ -261,8 +260,7 @@ class Create extends Component
                 'resultat_attendus' => $Data['resultat_attendus'],
                 'observation' => $Data['observation'],
                 'date' => $Data['date'],
-                'hierachie' => $Data['hierachie'],
-                'slug' => $Data['slug'],
+                                'slug' => $Data['slug'],
             ]);
 
             $Data->delete();

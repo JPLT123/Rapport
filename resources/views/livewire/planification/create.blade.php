@@ -146,7 +146,7 @@
                                         <div class="d-flex flex-wrap gap-2 m-4">
                                             <button type="submit" class="btn btn-success waves-effect waves-light">Ajouter une planification</button>
                                             <button type="button" wire:click="add" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
-                                            <button type="reset" class="btn btn-danger waves-effect waves-light">Annuler</button>
+                                            <button type="reset" class="btn btn-secondary waves-effect waves-light">Annuler</button>
                                         </div>
                                     </form>
                                </div>

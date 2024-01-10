@@ -132,12 +132,12 @@ class RapportJournalier extends Component
             'valeur' => 'required|string|max:255',
             'risques' => 'required|string|max:255',
             'tachesRealisees' => 'required',
-            'debutHeure' => 'required',
-            'finHeure' => 'required',
-            'lieu' => 'required',
-            'materielsUtilises' => 'required',
-            'observation' => 'required',
-            'observationglobal' => 'required',
+            'debutHeure' => 'required|date_format:H:i',
+            'finHeure' => 'required|date_format:H:i',
+            'lieu' => 'required|string|max:255',
+            'materielsUtilises' => 'required|string|max:255',
+            'observation' => 'required|string|max:255',
+            'observationglobal' => 'required|string|max:255',
             'tacheId' => 'required',
             
         ]);
@@ -154,8 +154,10 @@ class RapportJournalier extends Component
         ]);
 
         $Tachedemain1 = [];
+
         foreach ($this->tachesProchain as $item) {
-            $Tachedemain1 = Tacheprochain::create([
+            // Ajoutez chaque Tacheprochain à votre tableau $Tachedemain1
+            $Tachedemain1[] = Tacheprochain::create([
                 'taches' => $item['tachesDemain'],
                 'duree' => $item['duree'],
                 'designation' => $item['designationprochain'],
@@ -183,7 +185,7 @@ class RapportJournalier extends Component
         ]);
 
         foreach ($this->addtaches as $item) {
-            $rapport = Rapport::create([
+            $rapport1 = Rapport::create([
                 'tache_realiser' => $item['tachesRealisees'],
                 'tache_suplementaire' => $item['tachesSuplementaire'],
                 'debut_heure' => $item['debutHeure'],
@@ -194,9 +196,14 @@ class RapportJournalier extends Component
                 'observation' => $item['observation'],
                 'observationglobal' => $item['observationglobal'],
                 'id_tache' => $this->tacheId,
-                'id_prochain_tache' =>$TachedemainId,
+                'id_prochain_tache' => null, // Valeur par défaut
                 'id_user' => $user,
             ]);
+
+            // Utilisez la valeur correcte de 'id_prochain_tache' pour mettre à jour Rapport
+            if (count($Tachedemain1) > 0) {
+                $rapport1->update(['id_prochain_tache' => $Tachedemain1[0]->id]);
+            }
         }
 
         $rapportId = $rapport->id;
@@ -207,6 +214,7 @@ class RapportJournalier extends Component
             ImportFile::create([
                 'id_user' => $user,
                 'id_rapport' => $rapportId,
+                'nom_fichier' => 'fichier-joint-'.$this->dateActuelle,
                 'links' => $filename,
             ]);
         }

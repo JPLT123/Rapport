@@ -56,7 +56,7 @@
                                                     <div data-repeater-list="group-a">
                                                         <div data-repeater-item class="row">
                                                             <div  class="mb-3 col-md-4">
-                                                                <label for="tacheId">Tâches Prevues</label>
+                                                                <label for="tacheId">Tâches Prevues <span class="text-danger">*</span></label>
                                                                 <select class="form-control" type="tacheId" wire:model="tacheId" id="tacheId">
                                                                     <option value="">Selectionner...</option>
                                                                     @foreach ($planif as $tache)
@@ -73,7 +73,7 @@
                                                             </div>
 
                                                             <div  class="mb-3 col-md-4">
-                                                                <label for="tachesRealisees">Tâches Réalisées</label>
+                                                                <label for="tachesRealisees">Tâches Réalisées <span class="text-danger">*</span></label>
                                                                 <input type="tachesRealisees" wire:model="tachesRealisees" id="tachesRealisees" class="form-control" />
                                                                 @error('tachesRealisees') <span class="text-danger">{{ $message }}</span> @enderror
                                                             </div>
@@ -85,27 +85,27 @@
                                                             </div>
 
                                                             <div  class="mb-3 col-md-2">
-                                                                <label for="debutHeure">Heure de Début</label>
+                                                                <label for="debutHeure">Heure de Début <span class="text-danger">*</span></label>
                                                                 <input type="time" wire:model="debutHeure" id="debutHeure" class="form-control" placeholder="start time" />
                                                                 @error('debutHeure') <span class="text-danger">{{ $message }}</span> @enderror
                                                             </div>
 
                                                             <div  class="mb-3 col-md-2">
-                                                                <label for="finHeure">Fin heure</label>
+                                                                <label for="finHeure">Fin heure <span class="text-danger">*</span></label>
                                                                 <input type="time" wire:model="finHeure" id="finHeure" class="form-control" placeholder="End of Hour" />
                                                                 @error('finHeure') <span class="text-danger">{{ $message }}</span> @enderror
                                                             </div>
 
                                                             <div class="col-md-4">
                                                                 <div class="mb-3">
-                                                                    <label for="lieu">Lieu</label>
+                                                                    <label for="lieu">Lieu <span class="text-danger">*</span></label>
                                                                     <input type="text" wire:model="lieu" class="form-control" id="lieu" >
                                                                     @error('lieu') <span class="text-danger">{{ $message }}</span> @enderror
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="mb-3">
-                                                                    <label for="materielsUtilises">Materiels Utilises</label>
+                                                                    <label for="materielsUtilises">Materiels Utilises <span class="text-danger">*</span></label>
                                                                     <input wire:model="materielsUtilises" type="text" class="form-control" id="materielsUtilises"  >
                                                                     @error('materielsUtilises') <span class="text-danger">{{ $message }}</span> @enderror
                                                                 </div>
@@ -115,7 +115,7 @@
                                                         <div class="row">
                                                             <div class="col-lg-12">
                                                                 <div class="mb-3">
-                                                                    <label for="observation">Observations</label>
+                                                                    <label for="observation">Observations <span class="text-danger">*</span></label>
                                                                     <textarea wire:model="observation" id="observation" class="form-control" rows="2" ></textarea>
                                                                     @error('observation') <span class="text-danger">{{ $message }}</span> @enderror
                                                                 </div>
@@ -135,7 +135,7 @@
                                                                 <div data-repeater-item class="row">
     
                                                                     <div  class="mb-3 col-md-4">
-                                                                        <label for="tache[{{ $index }}][tacheId]">Tâches Prevues</label>
+                                                                        <label for="tache[{{ $index }}][tacheId]">Tâches Prevues <span class="text-danger">*</span></label>
                                                                         <select class="form-control" type="text" wire:model="addtaches.{{ $index }}.tacheId" id="tache[{{ $index }}][tacheId]">
                                                                             <option value="">Selectionner...</option>
                                                                             @foreach ($planif as $tache)
@@ -147,7 +147,7 @@
                                                                     </div>
     
                                                                     <div  class="mb-3 col-md-4">
-                                                                        <label for="tache[{{ $index }}][tachesRealisees]">Tâches Réalisées</label>
+                                                                        <label for="tache[{{ $index }}][tachesRealisees]">Tâches Réalisées <span class="text-danger">*</span></label>
                                                                         <input type="text" wire:model="addtaches.{{ $index }}.tachesRealisees" id="tache[{{ $index }}][tachesRealisees]" class="form-control" />
                                                                         @error('tachesRealisees') <span class="text-danger">{{ $message }}</span> @enderror
 
@@ -161,14 +161,14 @@
                                                                     </div>
     
                                                                     <div  class="mb-3 col-md-2">
-                                                                        <label for="tache[{{ $index }}][debutHeure]">Heure de Début</label>
+                                                                        <label for="tache[{{ $index }}][debutHeure]">Heure de Début <span class="text-danger">*</span></label>
                                                                         <input type="time" wire:model="addtaches.{{ $index }}.debutHeure" id="tache[{{ $index }}][debutHeure]" class="form-control" placeholder="start time" />
                                                                         @error('debutHeure') <span class="text-danger">{{ $message }}</span> @enderror
 
                                                                     </div>
     
                                                                     <div  class="mb-3 col-md-2">
-                                                                        <label for="tache[{{ $index }}][finHeure]">Fin heure</label>
+                                                                        <label for="tache[{{ $index }}][finHeure]">Fin heure <span class="text-danger">*</span></label>
                                                                         <input type="time" wire:model="addtaches.{{ $index }}.finHeure" id="tache[{{ $index }}][finHeure]" class="form-control" placeholder="End of Hour" />
                                                                         @error('finHeure') <span class="text-danger">{{ $message }}</span> @enderror
 
@@ -176,7 +176,7 @@
     
                                                                     <div class="col-md-4">
                                                                         <div class="mb-3">
-                                                                            <label for="tache[{{ $index }}][lieu]">Lieu</label>
+                                                                            <label for="tache[{{ $index }}][lieu]">Lieu <span class="text-danger">*</span></label>
                                                                             <input type="text" wire:model="addtaches.{{ $index }}.lieu" class="form-control" id="tache[{{ $index }}][lieu]" >
                                                                              @error('lieu') <span class="text-danger">{{ $message }}</span> @enderror
 
@@ -184,7 +184,7 @@
                                                                     </div>
                                                                     <div class="col-md-4">
                                                                         <div class="mb-3">
-                                                                            <label for="tache[{{ $index }}][materielsUtilises]">Materiels Utilises</label>
+                                                                            <label for="tache[{{ $index }}][materielsUtilises]">Materiels Utilises <span class="text-danger">*</span></label>
                                                                             <input wire:model="addtaches.{{ $index }}.materielsUtilises" type="text" class="form-control" id="tache[{{ $index }}][materielsUtilises]"  >
                                                                             @error('materielsUtilises') <span class="text-danger">{{ $message }}</span> @enderror
 
@@ -195,7 +195,7 @@
                                                                 <div class="row">
                                                                     <div class="col-lg-10">
                                                                         <div class="mb-3">
-                                                                            <label for="tache[{{ $index }}][observation]">Observations</label>
+                                                                            <label for="tache[{{ $index }}][observation]">Observations <span class="text-danger">*</span></label>
                                                                             <textarea wire:model="addtaches.{{ $index }}.observation" id="tache[{{ $index }}][observation]" class="form-control" rows="2" ></textarea>
                                                                             @error('observation') <span class="text-danger">{{ $message }}</span> @enderror
                                                                         </div>
@@ -203,7 +203,7 @@
     
                                                                     <div class="col-md-2 align-self-center">
                                                                         <div class="d-grid">
-                                                                            <input data-repeater-delete type="button" wire:click.prevent="removetaches({{ $index }})" class="btn btn-primary" value="Delete"/>
+                                                                            <input data-repeater-delete type="button" wire:click.prevent="removetaches({{ $index }})" class="btn btn-danger" value="Delete"/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -227,7 +227,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label for="Depense[{{ $index }}][designationDepenses]">Designation Dépenses:</label>
+                                                            <label for="Depense[{{ $index }}][designationDepenses]">Designation Dépenses <span class="text-danger">*</span>:</label>
                                                             <input wire:model="Depenses.{{ $index }}.designationDepenses" type="text" class="form-control"  id="Depense[{{ $index }}][designationDepenses]">
                                                             @error('designationDepenses') <span class="text-danger">{{ $message }}</span> @enderror
                                                         </div>
@@ -235,7 +235,7 @@
 
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label for="Depense[{{ $index }}][coutsReels]">Couts Reels</label>
+                                                            <label for="Depense[{{ $index }}][coutsReels]">Couts Reels <span class="text-danger">*</span></label>
                                                             <input type="text" wire:model="Depenses.{{ $index }}.coutsReels" class="form-control" id="Depense[{{ $index }}][coutsReels]" placeholder="Enter Couts Reels">
                                                             @error('coutsReels') <span class="text-danger">{{ $message }}</span> @enderror
                                                         </div>
@@ -243,7 +243,7 @@
 
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label for="Depense[{{ $index }}][coutsPrevionnels]">Couts previonnels</label>
+                                                            <label for="Depense[{{ $index }}][coutsPrevionnels]">Couts previonnels <span class="text-danger">*</span></label>
                                                             <input type="text" wire:model="Depenses.{{ $index }}.coutsPrevionnels" class="form-control" id="Depense[{{ $index }}][coutsPrevionnels]" placeholder="Enter Couts previonnels">
                                                             @error('coutsPrevionnels') <span class="text-danger">{{ $message }}</span> @enderror
                                                         </div>
@@ -252,7 +252,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-10">
                                                         <div class="mb-3">
-                                                            <label for="Depense[{{ $index }}][observationDepenses]">Observation</label>
+                                                            <label for="Depense[{{ $index }}][observationDepenses]">Observation<span class="text-danger">*</span></label>
                                                             <textarea wire:model="Depenses.{{ $index }}.observationDepenses" id="Depense[{{ $index }}][observationDepenses]" class="form-control" cols="500" rows="2" ></textarea>
                                                             @error('observationDepenses') <span class="text-danger">{{ $message }}</span> @enderror
                                                         </div>
@@ -279,7 +279,7 @@
                                                     <div class="row">
                                                         <div class="col-md-8 col-7">
                                                             <div class="mb-3">
-                                                                <label for="tachesProchain[tachesDemain]">Taches prevues :</label>
+                                                                <label for="tachesProchain[tachesDemain]">Taches prevues <span class="text-danger">*</span>:</label>
                                                                 <input type="text" wire:model="tachesDemain"  class="form-control" id="tachesProchain[]" placeholder="Enter your Name...">
                                                                 @error('tachesDemain') <span class="text-danger">{{ $message }}</span> @enderror
                                                             </div>
@@ -287,7 +287,7 @@
 
                                                         <div class="col-md-4 col-5">
                                                             <div class="mb-3">
-                                                                <label for="duree">Duree(en H) :</label>
+                                                                <label for="duree">Duree(en H) <span class="text-danger">*</span>:</label>
                                                                 <input type="time" wire:model="duree" class="form-control" id="tachesProchain[]" placeholder="Duree...">
                                                                 @error('duree') <span class="text-danger">{{ $message }}</span> @enderror
                                                             </div>
@@ -297,7 +297,7 @@
                                                     <div class="row">
                                                         <div class="col-md-6 col-6">
                                                             <div class="mb-3">
-                                                                <label for="designationprochain">Designation :</label>
+                                                                <label for="designationprochain">Designation <span class="text-danger">*</span>:</label>
                                                                 <input type="text" wire:model="designationprochain" class="form-control" id="tachesProchain[]" placeholder="Enter your Name...">
                                                                  @error('designationprochain') <span class="text-danger">{{ $message }}</span> @enderror
                                                             </div>
@@ -305,7 +305,7 @@
 
                                                         <div class="col-md-6 col-6">
                                                             <div class="mb-3">
-                                                                <label for="valeur">Valeur :</label>
+                                                                <label for="valeur">Valeur <span class="text-danger">*</span>:</label>
                                                                 <input type="text" wire:model="valeur" class="form-control" id="tachesProchain[]" placeholder="Enter your Name...">
                                                                  @error('valeur') <span class="text-danger">{{ $message }}</span> @enderror
                                                             </div>
@@ -315,7 +315,7 @@
 
                                                     <div class="inner-repeater mb-4">
                                                         <div data-repeater-list="inner-group" class="inner mb-3">
-                                                            <label for="tachesProchain[risques]">Risques et atténuations :</label>
+                                                            <label for="tachesProchain[risques]">Risques et atténuations <span class="text-danger">*</span>:</label>
                                                             <div data-repeater-item class="inner mb-3 row">
                                                                 <div class="col-md-12 col-8">
                                                                     <textarea wire:model="risques" id="tachesProchain[]" class="form-control" rows="3" placeholder="Enter Your Message"></textarea>
@@ -335,7 +335,7 @@
                                                             <div class="row">
                                                                 <div class="col-md-8 col-7">
                                                                     <div class="mb-3">
-                                                                        <label for="demain[{{ $index }}][tachesDemain]">Taches prevues :</label>
+                                                                        <label for="demain[{{ $index }}][tachesDemain]">Taches prevues <span class="text-danger">*</span> :</label>
                                                                         <input type="text" wire:model="tachesProchain.{{ $index }}.tachesDemain"  class="form-control" id="demain[{{ $index }}][tachesDemain]" placeholder="Enter your Name...">
                                                                         @error('tachesDemain') <span class="text-danger">{{ $message }}</span> @enderror
 
@@ -344,7 +344,7 @@
     
                                                                 <div class="col-md-4 col-5">
                                                                     <div class="mb-3">
-                                                                        <label for="demain[{{ $index }}][duree]">Duree(en H) :</label>
+                                                                        <label for="demain[{{ $index }}][duree]">Duree(en H) <span class="text-danger">*</span>:</label>
                                                                         <input type="time" wire:model="tachesProchain.{{ $index }}.duree" class="form-control" id="demain[{{ $index }}][duree]" placeholder="Duree...">
                                                                         @error('duree') <span class="text-danger">{{ $message }}</span> @enderror
 
@@ -355,7 +355,7 @@
                                                             <div class="row">
                                                                 <div class="col-md-6 col-6">
                                                                     <div class="mb-3">
-                                                                        <label for="demain[{{ $index }}][designationprochain]">Designation :</label>
+                                                                        <label for="demain[{{ $index }}][designationprochain]">Designation <span class="text-danger">*</span>:</label>
                                                                         <input type="text" wire:model="tachesProchain.{{ $index }}.designationprochain" class="form-control" id="demain[{{ $index }}][designationprochain]" placeholder="Enter your Name...">
                                                                         @error('designationprochain') <span class="text-danger">{{ $message }}</span> @enderror
 
@@ -364,7 +364,7 @@
     
                                                                 <div class="col-md-6 col-6">
                                                                     <div class="mb-3">
-                                                                        <label for="demain[{{ $index }}][valeur]">Valeur :</label>
+                                                                        <label for="demain[{{ $index }}][valeur]">Valeur <span class="text-danger">*</span>:</label>
                                                                         <input type="text" wire:model="tachesProchain.{{ $index }}.valeur" class="form-control" id="demain[{{ $index }}][valeur]" placeholder="Enter your Name...">
                                                                         @error('valeur') <span class="text-danger">{{ $message }}</span> @enderror
 
@@ -375,7 +375,7 @@
     
                                                             <div class="inner-repeater mb-4">
                                                                 <div data-repeater-list="inner-group" class="inner mb-3">
-                                                                    <label for="demain[{{ $index }}][risques]">Resques et attenuations :</label>
+                                                                    <label for="demain[{{ $index }}][risques]">Resques et attenuations <span class="text-danger">*</span>:</label>
                                                                     <div data-repeater-item class="inner mb-3 row">
                                                                         <div class="col-md-10 col-8">
                                                                             <textarea wire:model="tachesProchain.{{ $index }}.risques" id="demain[{{ $index }}][risques]" class="form-control" rows="3" placeholder="Enter Your Message"></textarea>
@@ -400,14 +400,14 @@
                                         </section>
 
                                         <div class="mt-4">
-                                            <label for="observationglobal">Observations de la journée :</label>
+                                            <label for="observationglobal">Observations de la journée <span class="text-danger">*</span>:</label>
                                             <textarea id="observationglobal" class="form-control" wire:model="observationglobal" rows="3" placeholder="(imprevus, indicateurs, references, defis, propositions de solution etc.)"></textarea>
                                             @error('observationglobal') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
 
                                         <div class="d-flex flex-wrap gap-2 m-4">
                                             <button type="submit" class="btn btn-success waves-effect waves-light">Enregistrer</button>
-                                            <button type="reset" class="btn btn-danger waves-effect waves-light">Cancel</button>
+                                            <button type="reset" class="btn btn-secondary waves-effect waves-light">Cancel</button>
                                         </div>
                                     </form>
                                 </div>

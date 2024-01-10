@@ -42,6 +42,20 @@ class PlanifChef extends Component
         $this->taches = array_values($this->taches);
     }
 
+    // Fonction pour générer un slug unique
+    private function generateUniqueSlug($baseSlug, $index)
+    {
+        $slug = $baseSlug . $index;
+    
+        // Vérifie si le slug existe déjà dans la base de données
+        while (Tach::where('slug', $slug)->exists()) {
+            $index++; // Incrémente l'index pour rendre le slug unique
+            $slug = $baseSlug . $index;
+        }
+    
+        return $slug;
+    }
+
     public function submitForm()
     {
         $this->validate([
@@ -63,11 +77,11 @@ class PlanifChef extends Component
                 $count++;
             }
 
-            foreach ($this->taches as $item) {
+            foreach ($this->taches as $index => $item) {
                 $tache = Tach::create([
                     'tache_prevues' => $item['tache_prevues'],
                     'id_projet' => $item['projet'],
-                    'slug' => $item['tache_prevues'],
+                    'slug' => $this->generateUniqueSlug($item['tache_prevues'], $index + 1),
                 ]);
             }
 

@@ -13,7 +13,9 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use App\Mail\VerificationCodeMail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class ListeUser extends Component
 {
@@ -135,7 +137,12 @@ class ListeUser extends Component
             $user->update(['status' => 'desactiver']);
             
         } else {
+        if ($user->verification_code) {
+            $user->update(['status' => 'activer',
+            'verification_code' => null]);
+        } else {
             $user->update(['status' => 'activer']);
+        }
     
         }
     }
@@ -161,6 +168,7 @@ class ListeUser extends Component
             "adresse" => $this->adresse,
             "id_filiale" => $this->filiale,
             "id_departement" => $this->departement,
+            'verification_code' => mt_rand(100000, 999999),
             "slug" => $slug, 
             "password" => Hash::make($this->password),
         ]);
@@ -169,6 +177,8 @@ class ListeUser extends Component
             'id_user' => $user->id,
             'id_role' => $this->role
         ]);
+    
+        Mail::to($user->email)->send(new VerificationCodeMail($user->verification_code));
     
         $this->dispatch("showSuccessMessage", ["message" => "Opérations effectuées avec succès"]);
         $this->ModalAdd();

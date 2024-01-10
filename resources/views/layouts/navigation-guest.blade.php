@@ -37,12 +37,12 @@
                         </li>
                     @endif
 
-                    <li>
+                    {{-- <li>
                         <a href="{{route('chat')}}" class="waves-effect">
                             <i class="bx bx-chat"></i>
                             <span key="t-chat">Chat</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     {{-- <li>
                         <a href="{{route('histoire-rapport')}}" class="waves-effect">
@@ -96,7 +96,7 @@
                         </ul>
                     </li>
     
-                    <li>
+                    {{-- <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <i class="bx bx-task"></i>
                             <span key="t-tasks">Tasks</span>
@@ -105,7 +105,7 @@
                             <li><a href="{{route('liste-tache')}}" key="t-task-list">Task List</a></li>
                             <li><a href="{{route('create-tache')}}" key="t-create-task">Create Task</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                 @endif
             </ul>
         </div>
