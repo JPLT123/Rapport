@@ -20,10 +20,8 @@ class DepartementSeeder extends Seeder
         Departement::create([
             'id_filiale' => $filiale->id,
             'slug' => 'departement-1',
-            'nom' => 'Nom du département 1',
-            'Description' => 'Description du département 1',
-            'Coutprevisionnel' => '100000',
-            'observation' => 'Observation du département 1',
+            'nom' => 'Gestion Administrative',
+            'Description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, alias atque odit expedita non facere ut dolores distinctio dolore cum veritatis culpa excepturi aut officia provident incidunt nulla eius laborum.',
             'status' => 'activer',
         ]);
     }

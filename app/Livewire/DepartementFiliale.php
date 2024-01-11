@@ -105,24 +105,23 @@ class DepartementFiliale extends Component
         $Departement = Departement::where('slug', $slug)->first();
     
         if (!$Departement) {
-            return; // Gérez le cas où Departement n'est pas trouvé.
+            return; // Gérez le cas où le département n'est pas trouvé.
         }
-        if ($Departement->status === 'activer') {
-            $Departement->update(['status' => 'desactiver']);
-
-            $Users = $Departement->users;
-            foreach ($Users as $user) {
-                $user->update(['status' => 'desactiver']);
-            }
-            
-        } else {
-            $Departement->update(['status' => 'activer']);
-    
-            $Users = $Departement->users;
-            foreach ($Users as $user) {
-                $user->update(['status' => 'activer']);
+        
+        $nouveauStatut = ($Departement->status === 'activer') ? 'desactiver' : 'activer';
+        
+        $Departement->update(['status' => $nouveauStatut]);
+        
+        $utilisateurs = $Departement->utilisateurs;
+        
+        foreach ($utilisateurs as $utilisateur) {
+            foreach ($utilisateur->roles as $role) {
+                if ($role->nom !== 'Admin') {
+                    $utilisateur->update(['status' => $nouveauStatut]);
+                }
             }
         }
+        
     }
     
     public function store(){

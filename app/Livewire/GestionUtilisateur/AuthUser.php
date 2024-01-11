@@ -41,7 +41,7 @@ class AuthUser extends Component
     {
         $this->validate([
             'adresse' => 'required',
-            "telephone" => ['required','unique:users'],
+            "telephone" => ['required','regex:/^(00224|\+224)?(?:61|62|65|66)[0-9]{1}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}$/','unique:users'],
             'filiale' => 'required',
             'departement' => 'required',
         ]);

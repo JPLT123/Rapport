@@ -15,7 +15,7 @@
                                         <div class="text-center">
                                             <div class="text-center mb-4 text-muted">
                                                 <a href="#" class="d-block auth-logo">
-                                                    <img src="{{asset('assets\images\logo_elceto.png')}}" style="width: 80px" alt="Elceto Holding" height="20" class="auth-logo-dark mx-auto">
+                                                    <img src="{{asset('assets\images\logo_elceto.png')}}" style="width: 100px;height: 90px" alt="Elceto Holding" height="20" class="auth-logo-dark mx-auto">
                                                     Elceto Holding
                                                 </a>
                                             </div>

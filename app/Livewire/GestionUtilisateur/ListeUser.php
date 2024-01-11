@@ -153,7 +153,7 @@ class ListeUser extends Component
             "name" => "required|string|max:255",
             "adresse" => "required|max:255",
             "email" => "required|email|unique:users",
-            "telephone" => "required|numeric|unique:users",
+            "telephone" => ['required','regex:/^(00224|\+224)?(?:61|62|65|66)[0-9]{1}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}$/','unique:users'],
             "filiale" => 'required|exists:filiales,id',
             "departement" => 'required|exists:departement,id',
             "role" => 'required|exists:role,id',

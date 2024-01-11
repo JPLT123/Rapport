@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
         $filiale = Filiale::first(); // Obtenez une filiale existante pour l'associer à un utilisateur
         $departement = Departement::first(); // Obtenez un département existant pour l'associer à un utilisateur
 
-        User::create([
+        $user = User::create([
             'slug' => 'lala-diallo-1',
             'name' => 'lala diallo',
             'email' => 'admin@gmail.com',
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
         ]);
 
         Permission::create([
-            'id_user' => 1,
+            'id_user' => $user->id,
             'id_role' => 1,
         ]);
     }

@@ -82,7 +82,7 @@
                                                                 <div class="mb-3 row align-items-center">
                                                                     <div class="col-md-8">
                                                                         <input wire:model="taches.{{ $index }}.tache_prevues" type="text" name="tache[{{ $index }}][tache_prevues]" class="form-control" required>
-@error('taches.*.tache_prevues')
+                                                                        @error('taches.*.tache_prevues')
                                                                             <span class="text-danger"> {{$message}} </span>
                                                                         @enderror
                                                                     </div>

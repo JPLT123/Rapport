@@ -53,19 +53,21 @@ public function generatePdf()
     public function render()
     {
         
-        $user = Auth::user();
-        // Récupérez tous les projets de l'utilisateur avec le total des tâches
-        $this->TotalTaches = Projet::whereHas('membres_projets', function ($query) use ($user) {
-            $query->where('id_user', $this->user->id);
-        })->withCount(['taches as taches_en_cours' => function ($query) {
-            $query->where('status', 'Terminer');
-        }])->withCount('taches')->get();
+        return view('livewire.profile.reglageUser')->extends('layouts.app')->section('content');
+        
+        // $user = Auth::user();
+        // // Récupérez tous les projets de l'utilisateur avec le total des tâches
+        // $this->TotalTaches = Projet::whereHas('membres_projets', function ($query) use ($user) {
+        //     $query->where('id_user', $this->user->id);
+        // })->withCount(['taches as taches_en_cours' => function ($query) {
+        //     $query->where('status', 'Terminer');
+        // }])->withCount('taches')->get();
 
-        $this->totale = $this->TotalTaches->sum('taches_count');
+        // $this->totale = $this->TotalTaches->sum('taches_count');
 
-        return view('profile.show',[
-            'projets' => $this->projet,
-        ])->extends('layouts.guest')->section('content');
+        // return view('profile.show',[
+        //     'projets' => $this->projet,
+        // ])->extends('layouts.guest')->section('content');
     }
     
 }

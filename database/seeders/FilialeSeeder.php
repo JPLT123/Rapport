@@ -16,14 +16,14 @@ class FilialeSeeder extends Seeder
         // Exemple de données de test
         Filiale::create([
             'slug' => 'filiale-1',
-            'nom' => 'Nom de la filiale 1',
-            'logo' => 'chemin/vers/logo1.png',
+            'nom' => 'Elceto Holding',
+            'logo' => null,
             'email' => 'filiale1@example.com',
-            'telephone' => '123456789',
-            'adresse' => 'Adresse de la filiale 1',
-            'hierachie' => 'Hierarchie de la filiale 1',
+            'telephone' => '666067007',
+            'adresse' => 'Gbessia',
+            'hierachie' => 1,
             'date_creation' => '2023-01-01',
-            'description' => 'Description de la filiale 1',
+            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, alias atque odit expedita non facere ut dolores distinctio dolore cum veritatis culpa excepturi aut officia provident incidunt nulla eius laborum.',
             'status' => 'activer',
         ]);
     }
