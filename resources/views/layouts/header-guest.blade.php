@@ -8,16 +8,16 @@
                         <img src="{{asset('assets\images\logo_elceto.png')}}" style="width: 20px" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{asset('assets\images\logo_elceto.png')}}" style="width: 20px" alt="" height="17">
+                        <img src="{{asset('assets\images\logo-ElcétoHolding.png')}}" style="width: 20px" alt="" height="17">
                     </span>
                 </a>
 
                 <a href="{{ route('Accueil') }}" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{asset('assets\images\logo_elceto.png')}}" style="width: 20px" alt="" height="22">
+                        <img src="{{asset('assets\images\logo_elceto white.png')}}" style="width: 50px; height:30px; " alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{asset('assets\images\logo_elceto.png')}}" style="width: 20px" alt="" height="19">
+                        <img src="{{asset('assets\images\logo-ElcétoHolding.png')}}" style="width: 150px; height:40px; " alt="" height="19">
                     </span>
                 </a>
             </div>
@@ -37,13 +37,13 @@
 
         <div class="d-flex">
 
-            <div class="dropdown d-none d-lg-inline-block ms-1">
+            {{-- <div class="dropdown d-none d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen">
                     <i class="bx bx-fullscreen"></i>
                 </button>
-            </div>
+            </div> --}}
 
-            <div class="dropdown d-inline-block">
+            {{-- <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="bx bx-bell bx-tada"></i>
@@ -128,7 +128,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
@@ -150,11 +150,11 @@
                 </div>
             </div>
 
-            <div class="dropdown d-inline-block">
+            {{-- <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
                     <i class="bx bx-cog bx-spin"></i>
                 </button>
-            </div>
+            </div> --}}
 
         </div>
     </div>
