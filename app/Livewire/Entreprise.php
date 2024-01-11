@@ -128,49 +128,39 @@ class Entreprise extends Component
     
     #[on('toggleStatus')]
     public function toggleStatus($slug)
-    {
-        $Filiale = Filiale::where('slug', $slug)->first();
-    
-        if (!$Filiale) {
-            return; // Gérez le cas où l'utilisateur n'est pas trouvé.
-        }
-        if ($Filiale->status === 'activer') {
-            $Filiale->update(['status' => 'desactiver']);
-            
-            $Departements = $Filiale->departements;
-            foreach ($Departements as $Departement) {
-                $Departement->update(['status' => 'desactiver']);
-            }
+{
+    $Filiale = Filiale::where('slug', $slug)->first();
 
-            $Projets = $Filiale->projets;
-            foreach ($Projets as $Projet) {
-                $Projet->update(['status' => 'Suspendu']);
-            }
+    if (!$Filiale) {
+        return; // Gérez le cas où l'utilisateur n'est pas trouvé.
+    }
 
-            $users = $Filiale->users;
-            foreach ($users as $user) {
-                $user->update(['status' => 'desactiver']);
-            }
+    $nouveauStatut = ($Filiale->status === 'activer') ? 'desactiver' : 'activer';
 
-        } else {
-            $Filiale->update(['status' => 'activer']);
+    $Filiale->update(['status' => $nouveauStatut]);
 
-            $Departements = $Filiale->departements;
-            foreach ($Departements as $Departement) {
-                $Departement->update(['status' => 'activer']);
-            }
+    $Departements = $Filiale->departements;
+    foreach ($Departements as $Departement) {
+        $Departement->update(['status' => $nouveauStatut]);
+    }
 
-            $Projets = $Filiale->projets;
-            foreach ($Projets as $Projet) {
-                $Projet->update(['status' => 'activer']);
-            }
+    $Projets = $Filiale->projets;
+    foreach ($Projets as $Projet) {
+        $Projet->update(['status' => ($nouveauStatut === 'activer') ? 'activer' : 'Suspendu']);
+    }
 
-            $users = $Filiale->users;
-            foreach ($users as $user) {
-                $user->update(['status' => 'activer']);
+    $users = $Filiale->users;
+    foreach ($users as $user) {
+        if ($user->status !== 'attente' && $user->status !== 'supprimer' ) {
+            foreach ($user->roles as $role) {
+                if ($role->nom !== 'Admin') {
+                    $user->update(['status' => $nouveauStatut]);
+                }
             }
         }
     }
+}
+
     
     public function store(){
         $this->validate([
@@ -179,7 +169,7 @@ class Entreprise extends Component
             "adresse" => "required|max:255",
             "responsable" => "required|max:255",
             "email" => "required|email|unique:filiales",
-            "telephone" => "required|numeric|unique:filiales",
+            "telephone" => ['required','regex:/^(00224|\+224)?(?:61|62|65|66)[0-9]{1}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}$/','unique:users'],
             "date" => "required",
             "images" => "image|max:2000|mimes:png,jpg,jpeg",
         ]);
@@ -234,6 +224,7 @@ class Entreprise extends Component
         $this->validate([
             "nom" => "required|string|max:255",
             "description" => "required|string|max:255",
+            "telephone" => ['required','regex:/^(00224|\+224)?(?:61|62|65|66)[0-9]{1}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}$/','unique:users'],
         ]);
 
         $Filiale = Filiale::where('slug', $this->id_Filiale)->first();

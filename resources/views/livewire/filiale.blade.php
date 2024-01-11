@@ -349,8 +349,11 @@
                                     <div>
                                         <label for="path_image">
                                             <div >
-                                                <img src="{{ $path_image ? $path_image->temporaryUrl() : '/storage/'.$edit_images }}"
-                                                    class="img-fluid" alt="Responsive image" style="width: 200px; height:200px;"/>
+                                                @if ($edit_images)
+                                                    <img src="{{ asset($path_image ? $path_image->temporaryUrl() : '/storage/'.$edit_images) }}" class="img-fluid" alt="Responsive image" style="width: 200px; height: 200px;"/>
+                                                @else
+                                                    <img src="{{ asset($path_image ? $path_image->temporaryUrl() : 'assets/images/image_produit.png') }}" class="img-fluid" alt="Responsive image" style="width: 200px; height: 200px;"/>
+                                                @endif
                                             </div>
                                         </label>
                                         <input type="file" wire:model="path_image" id="path_image" hidden>

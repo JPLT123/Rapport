@@ -77,4 +77,14 @@
                 timer: 1500
             })
     })
+
+    window.addEventListener("infoEvent", event=>{
+        swal.fire({
+                icon: 'info',
+                title: 'Page en cours de construction',
+                html: 'Nous travaillons actuellement sur cette page et elle ne sera pas disponible pour le moment. Veuillez revenir ultérieurement.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            })
+    })
 </script>

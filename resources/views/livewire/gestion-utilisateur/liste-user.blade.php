@@ -85,7 +85,7 @@
                                                     <td>{{$user->telephone ? $user->telephone : 'vide'}}</td>
                                                     <td>{{$user->adresse ? $user->adresse : 'vide'}}</td>
                                                     <td>
-                                                        <img src="{{$user->filiale ? '/storage/'.$user->filiale->logo : 'assets/images/image_produit.png'}}" alt="" class="rounded-circle avatar-sm"> {{$user->filiale ? $user->filiale->nom : 'vide'}}
+                                                        <img src="{{asset($user->filiale->logo ? '/storage/'.$user->filiale->logo : 'assets/images/image_produit.png')}}" alt="" class="rounded-circle avatar-sm"> {{$user->filiale ? $user->filiale->nom : 'vide'}}
                                                     </td>
                                                     @if ($user->status == 'activer')
                                                         <td><button wire:click="confirmation('{{ $user->slug }}')" class="btn btn-soft-success btn-sm btn-rounded">Activer</button></td>

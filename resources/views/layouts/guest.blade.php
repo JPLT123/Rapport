@@ -144,6 +144,7 @@
 
         <script src="assets/js/app.js"></script>
 
+        @include('sweetalert')
         <script>
           ClassicEditor
               .create( document.querySelector( '#editor' ) )

@@ -73,7 +73,7 @@ class Dashboad extends Component
     public function resendVerificationCode()
     {
         $user = auth()->user();
-$verificationCode = mt_rand(100000, 999999);
+        $verificationCode = mt_rand(100000, 999999);
 
             // Stockez le code dans la base de données
         $user->update(['verification_code' => $verificationCode]);

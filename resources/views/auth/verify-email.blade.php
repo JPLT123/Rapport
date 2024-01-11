@@ -1,15 +1,5 @@
 <div class="account-pages my-5 pt-sm-5">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="text-center mb-4 text-muted">
-                    <a href="#" class="d-block auth-logo">
-                        <img src="{{asset('assets\images\logo_elceto.png')}}" style="width: 80px" alt="Elceto Holding" height="20" class="auth-logo-dark mx-auto">
-                        Elceto Holding
-                    </a>
-                </div>
-            </div>
-        </div>
         <!-- end row -->
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6 col-xl-5">
