@@ -25,9 +25,9 @@
                     <div class="col-lg-10">
                         <div class="card">
                             <div class="card-body">
-                                <div class="text-center m-5">
+                                <div class="text-center m-1">
                                     <h4 class="card-title">PLANIFICATION HEBDOMADAIRE  DES ACTIVITES SEMAINE DU {{$formatDateRange}}</h4>
-                                    <div class="row m-5">
+                                    <div class="row mb-2">
                                         <div class="col-sm-5">
                                             <h4 class="card-title ">Entreprise : {{$filiale ? $filiale->nom : 'vide'}}</h4>
                                         </div>
@@ -51,7 +51,7 @@
                                     <form class="outer-repeater" wire:submit.prevent="submitForm">
                                         
                                         <div class="row">
-                                            <div class="col-md-6 col-6">
+                                            <div class="col-md-6 col-12">
                                                 <label>Le projet <span class="text-danger">*</span></label>
                                                 <select for="projet" wire:model.live="projet" name="projet" id="projet" class="form-control select2">
                                                     <option for="projet">Selectionner le projet... </option>
@@ -63,8 +63,8 @@
                                                     <span class="text-danger"> {{$message}} </span>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-6 col-6">
-                                                <label  for="date">Date d' activités <span class="text-danger">*</span></label>
+                                            <div class="col-md-6 col-12 ">
+                                                <label  class="mb-2" for="date">Date d' activités <span class="text-danger">*</span></label>
                                                 <input type="date" wire:model="date" class="form-control" placeholder="Date de début" id="date" name="date" />
                                                 @error('date')
                                                     <span class="text-danger">{{ $message }}</span>
