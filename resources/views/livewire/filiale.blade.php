@@ -134,7 +134,7 @@
                 <form wire:submit.prevent='store'>
                     <div class="modal-body">
                         <div class="row g-3">
-                            <div class="col-xxl-2 col-sm-6">
+                            <div class="col-8 col-sm-7">
                                <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group mb-3">
@@ -216,7 +216,7 @@
                                 </div>
                                </div>
                             </div>
-                            <div class="col-xxl-2 col-sm-6">
+                            <div class="col-4 col-sm-5">
                                 <div class="form-group ">
                                     <div class="text-center fw-bold fs-3">
                                         <span>IMAGE :<span class="text-danger">*</span></span>
@@ -261,7 +261,7 @@
                 <form wire:submit.prevent='update'>
                     <div class="modal-body">
                         <div class="row g-3">
-                            <div class="col-xxl-2 col-sm-6">
+                            <div class="col-8 col-sm-7">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group mb-3">
@@ -341,12 +341,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xxl-2 col-sm-6">
+                            <div class="col-4 col-sm-5">
                                 <div class="form-group ">
                                     <div class="text-center fw-bold fs-3">
                                         <span>IMAGE :<span class="text-danger">*</span></span>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <label for="path_image">
                                             <div >
                                                 @if ($edit_images)

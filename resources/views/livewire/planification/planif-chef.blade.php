@@ -48,14 +48,14 @@
                                     <form class="outer-repeater" wire:submit.prevent="submitForm">
                                             @csrf
                                         <div class="row">
-                                            <div class="col-md-6 col-6">
+                                            <div class="col-md-6 col-12">
                                                 <label>La date d'activites <span class="text-danger">*</span></label>
                                                 <input type="date" wire:model='date' class="form-control" placeholder="Start Date" name="date" />
                                                 @error('date')
                                                     <span class="text-danger"> {{$message}} </span>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-6 col-6">
+                                            <div class="col-md-6 col-12">
                                                 <label>Le projet <span class="text-danger">*</span></label>
                                                 <select wire:model="projet" name="projet" id="projet" class="form-control select2">
                                                     <option for="projet">Selectionner le projet... </option>

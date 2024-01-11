@@ -126,7 +126,8 @@
                         <div class="form-group mb-3">
                             <label for="description">Description :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" aria-label="description" aria-describedby="description-addon">
+                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model="description" cols="30" rows="5"></textarea>
+                                {{-- <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" aria-label="description" aria-describedby="description-addon"> --}}
                             </div>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
@@ -179,7 +180,7 @@
                         <div class="form-group mb-3">
                             <label for="description">Description :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" placeholder="Entrer categorie produit" aria-label="description" aria-describedby="description-addon">
+                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model="description" cols="30" rows="5"></textarea>
                             </div>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>

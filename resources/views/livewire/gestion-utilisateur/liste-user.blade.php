@@ -27,7 +27,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row mb-2">
-                                    <div class="col-xxl-2 col-lg-4">
+                                    <div class="col-sm-4 col-lg-4">
                                         <div class="search-box me-2 mb-2 d-inline-block">
                                             <div class="position-relative">
                                                 <input type="text" class="form-control" wire:model.live ="search" placeholder="Search...">
@@ -35,30 +35,37 @@
                                             </div>
                                         </div> 
                                     </div>
-                                    <div class="search-box col-xxl-2 col-lg-2">
-                                        <select wire:model.live ="status" class="form-control select2">
-                                            <option value="">Status</option>
-                                            <option value="activer">Activer</option>
-                                            <option value="desactiver">Desactiver</option>
-                                            <option value="attente">En attente</option>
-                                        </select>
+                                    <div class="col-sm-2 col-lg-2">
+                                        <div class="search-box me-2 mb-2 d-inline-block">
+                                            <div class="position-relative">
+                                                <select wire:model.live ="status" class="form-control select2">
+                                                    <option value="">Status</option>
+                                                    <option value="activer">Activer</option>
+                                                    <option value="desactiver">Desactiver</option>
+                                                    <option value="attente">En attente</option>
+                                                </select>
+                                            </div>
+                                        </div> 
+                                    </div><div class="col-sm-2 col-lg-2">
+                                        <div class="search-box me-2 mb-2 d-inline-block">
+                                            <div class="position-relative">
+                                                <select wire:model.live ="filiale_id" class="form-control select2">
+                                                    <option>Filiales</option>
+                                                    @foreach ($filiales as $filiale)
+                                                        <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div> 
                                     </div>
-                                    <div class="search-box col-xxl-2 col-lg-2">
-                                        <select wire:model.live ="filiale_id" class="form-control select2">
-                                            <option>Filiales</option>
-                                            @foreach ($filiales as $filiale)
-                                                <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-xxl-2 col-lg-4">
+                                    <div class="col-sm-4 col-lg-4">
                                         <div class="text-sm-end">
                                             <button type="button" data-bs-toggle="modal" data-bs-target="#addModal" class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i class="mdi mdi-plus me-1"></i> Add User</button>
                                         </div>
                                     </div><!-- end col-->
                                 </div>
         
-                                <div style="width: 100%; font-size: 9px;" class="table-responsive">
+                                <div style="width: 100%; font-size: 11px;" class="table-responsive">
                                     <table class="table align-middle table-nowrap table-check">
                                         <thead class="table-light">
                                             <tr>
