@@ -64,7 +64,7 @@
                                                 @enderror
                                             </div>
                                             <div class="col-md-6 col-12 ">
-                                                <label  class="mb-2" for="date">Date d' activités <span class="text-danger">*</span></label>
+                                                <label  class="mt-3" for="date">Date d' activités <span class="text-danger">*</span></label>
                                                 <input type="date" wire:model="date" class="form-control" placeholder="Date de début" id="date" name="date" />
                                                 @error('date')
                                                     <span class="text-danger">{{ $message }}</span>

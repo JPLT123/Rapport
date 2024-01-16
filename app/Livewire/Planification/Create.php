@@ -94,17 +94,6 @@ class Create extends Component
 
         // Boucle sur les données et les transférer dans la table de destination
         foreach ($sourceData as $Data) {
-
-            $planification = PlanifHebdomadaire::create([
-                'id_user' => $Data['id_user'],
-                'id_projet' => $Data['id_projet'],
-                'ressources_necessaires' => $Data['ressources_necessaires'],
-                'resultat_attendus' => $Data['resultat_attendus'],
-                'observation' => $Data['observation'],
-                'date' => $Data['date'],
-                                'slug' => $Data['slug'],
-            ]);
-
             $Data->delete();
         }
 
@@ -118,18 +107,7 @@ class Create extends Component
 
         // Boucle sur les données et les transférer dans la table de destination
         foreach ($sourcepivot as $item) {
-            // Recherche de la correspondance dans la collection $planif
-            $planifItem = $planif->where('slug', $item['id_planif'])->first();
-
-            // Vérification si la correspondance a été trouvée
-            if ($planifItem) {
-                PlantTache::create([
-                    'id_tache' => $item['id_tache'],
-                    'id_planif' => $planifItem->id,
-                ]);
-
                 $item->delete();
-            }
         }
         $this->taches = [];
         $this->createtaches = []; 
@@ -182,47 +160,56 @@ class Create extends Component
             ->where('date', $this->date)
             ->first();
 
+        $existingessaie = Essaieplanif::where('id_user', Auth::user()->id)
+        ->where('date', $this->date)
+        ->first();
+
         if (!$existingPlanning) {
-            // Si la date n'est pas encore planifiée, enregistrez la planification
-            $slug = Str::slug($this->date);
-            $uniqueSlug = $slug;
-            $count = 1;
+            if (!$existingessaie) {
+                // Si la date n'est pas encore planifiée, enregistrez la planification
+                $slug = Str::slug($this->date);
+                $uniqueSlug = $slug;
+                $count = 1;
 
-            while (Essaieplanif::where('slug', $uniqueSlug)->exists()) {
-                $uniqueSlug = $slug . '-' . $count;
-                $count++;
-            }
+                while (Essaieplanif::where('slug', $uniqueSlug)->exists()) {
+                    $uniqueSlug = $slug . '-' . $count;
+                    $count++;
+                }
 
-            $planification = Essaieplanif::create([
-                'id_user' => Auth::user()->id,
-                'id_projet' => $this->projet,
-                'ressources_necessaires' => $this->ressources,
-                'resultat_attendus' => $this->resultat,
-                'observation' => $this->observation,
-                'date' => $this->date,
-                'slug' => $uniqueSlug,
-                ]);
-
-                foreach ($this->createtaches as $item) {
-                    $tache = Tach::create([
-                        'tache_prevues' => $item['tache_prevues'],
-                        'id_projet' => $item['id_projet'],
-                        'slug' => $item['tache_prevues'],
+                $planification = Essaieplanif::create([
+                    'id_user' => Auth::user()->id,
+                    'id_projet' => $this->projet,
+                    'ressources_necessaires' => $this->ressources,
+                    'resultat_attendus' => $this->resultat,
+                    'observation' => $this->observation,
+                    'date' => $this->date,
+                    'slug' => $uniqueSlug,
                     ]);
 
-                    $this->taches[] = $tache->id;
-                }
-        
-                foreach ($this->taches as $item) {
-                
-                    essaiepivot::create([
-                        'id_tache' => $item,
-                        'id_planif' => $uniqueSlug,
-                        'id_user' => Auth::user()->id,
-                    ]);
-                }
+                    foreach ($this->createtaches as $item) {
+                        $tache = Tach::create([
+                            'tache_prevues' => $item['tache_prevues'],
+                            'id_projet' => $item['id_projet'],
+                            'slug' => $item['tache_prevues'],
+                        ]);
+
+                        $this->taches[] = $tache->id;
+                    }
+            
+                    foreach ($this->taches as $item) {
+                    
+                        essaiepivot::create([
+                            'id_tache' => $item,
+                            'id_planif' => $uniqueSlug,
+                            'id_user' => Auth::user()->id,
+                        ]);
+                    }
 
             $this->dispatch("showInfoMessage",message:"Operations effectuer avec success");
+            } else {
+                session()->flash('error', 'Vous avez déjà planifié une tâche pour cette date.');
+            }
+            
         } else {
             // Sinon, affichez un message d'erreur
             session()->flash('error', 'Vous avez déjà planifié une tâche pour cette date.');
