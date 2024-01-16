@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('lieu')->nullable();
             $table->string('observation')->nullable();
             $table->string('observationglobal')->nullable();
+            $table->date('date')->nullable();
             $table->timestamps();
         });
     }

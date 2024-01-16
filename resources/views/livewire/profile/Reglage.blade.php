@@ -1,4 +1,4 @@
-<x-slot name="header">
+{{-- <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
         {{ __('Profile') }}
     </h2>
@@ -82,5 +82,43 @@
                 @livewire('profile.delete-user-form')
             </div>
         @endif
+    </div>
+</div> --}}
+<div class="account-pages my-5 pt-sm-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10 col-xl-9">
+                <div class="card overflow-hidden">
+                    <div class="bg-primary bg-soft">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="text-primary p-4">
+                                    <h5 class="text-primary">Welcome Back !</h5>
+                                </div>
+                            </div>
+                            <div class="col-3 align-self-end">
+                                <img src="assets/images/profile-img.png" alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-0"> 
+                        @if (Laravel\Fortify\Features::canUpdateProfileInformation())
+                            @livewire('profile.update-profile-information-form')
+
+                            <x-section-border />
+                        @endif
+    
+                        @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::updatePasswords()))
+                            <div class="mt-10 sm:mt-0">
+                                @livewire('profile.update-password-form')
+                            </div>
+
+                            <x-section-border />
+                        @endif
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>

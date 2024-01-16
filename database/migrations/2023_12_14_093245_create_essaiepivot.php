@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_tache')->nullable();
             
-            $table->integer('id_planif')->nullable();
+            $table->string('id_planif')->nullable();
             
             $table->unsignedBigInteger('id_user')->nullable();
             $table->timestamps();

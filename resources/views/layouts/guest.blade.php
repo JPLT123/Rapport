@@ -53,17 +53,19 @@
         @livewireStyles
     </head>
     <body data-sidebar="dark" data-layout-mode="light">
-        {{-- l'en-tete de l'accueil --}}
-        @include('layouts.header-guest')
-        {{-- les menu de navigation --}}
-        @include('layouts.navigation-guest')
+        <div id="layout-wrapper">
+            {{-- l'en-tete de l'accueil --}}
+            @include('layouts.header-guest')
+            {{-- les menu de navigation --}}
+            @include('layouts.navigation-guest')
 
-        <div class="font-sans text-gray-900 antialiased">
-            @yield('content')
+            <div class="font-sans text-gray-900 antialiased">
+                @yield('content')
+            </div>
         </div>
 
-        
         @include('layouts.footer')
+        <div class="rightbar-overlay"></div>
           <!-- JAVASCRIPT -->
           <script src="{{asset('assets/libs/jquery/jquery.min.js')}}"></script>
           <script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -81,11 +83,7 @@
 
         <script src="{{asset('assets/js/pages/task-create.init.js')}}"></script>
 
-        <script src="{{asset('assets/js/app.js')}}"></script>
           <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-          
-          <!-- App js -->
-          <script src="{{asset('assets/js/app.js')}}"></script>
           
           <!-- two-step-verification js -->
           <script src="{{asset('assets/js/pages/two-step-verification.init.js')}}"></script>
@@ -95,7 +93,6 @@
 
         <script src="{{asset('assets/js/pages/tasklist.init.js')}}"></script>
 
-        <script src="{{asset('assets/js/app.js')}}"></script>
 
         <!-- crypto exchange init -->
         <script src="{{asset('assets/js/pages/crypto-exchange.init.js')}}"></script>
@@ -147,13 +144,6 @@
         <script src="assets/js/app.js"></script>
 
         @include('sweetalert')
-        <script>
-          ClassicEditor
-              .create( document.querySelector( '#editor' ) )
-              .catch( error => {
-                  console.error( error );
-              } );
-        </script>
         @livewireScripts
     </body>
 </html>

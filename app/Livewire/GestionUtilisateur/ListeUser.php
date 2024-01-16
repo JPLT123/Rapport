@@ -221,10 +221,12 @@ class ListeUser extends Component
                 "id_departement" => $this->departement,
             ]);
 
-            Permission::where('id_user',$user->id)
+            if ($this->role) {
+                Permission::where('id_user',$user->id)
                         ->update([
                             'id_role' => $this->role
                         ]);
+            }
 
             $this->dispatch("showSuccessMessage", ["message" => "Opérations effectuées avec succès"]);
             $this->ModalEdite();

@@ -32,6 +32,7 @@ class RapportJournalier extends Component
     public $observationDepenses;
     public $tachesDemain;
     public $tachesSuplementaire;
+    public $hierachie;
     public $filiale;
     public $duree;
     public $designationprochain;
