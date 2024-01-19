@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="mt-5 text-center">
-                        <p>© <script>document.write(new Date().getFullYear())</script> Skote. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                        <p>© <script>document.write(new Date().getFullYear())</script> Elceto Holding. Crafted with <i class="mdi mdi-heart text-danger"></i> by Taratec</p>
                     </div>
 
                 </div>

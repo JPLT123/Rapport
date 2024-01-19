@@ -93,12 +93,19 @@ class DetailPlanif extends Component
     {
         if ($this->user) {
             foreach ($this->planif as $planifItem) {
+                $statusTaches = PlantTache::where('id_planif', $planifItem->id)->pluck('id_tache')->toArray();
+                // dd($statusTaches);
+                
                 $planifItem->update([
                     'status' => 'Approved',
                     'nom' => 'accepter'
                 ]);
+            
+                // Mettez à jour les tâches associées à la planification
+                Tach::whereIn('id', $statusTaches)->update([
+                    'status' => 'En Cour',
+                ]);
             }
-
             $data = [
                 'user' => $this->user,
                 'Auth_user'=> Auth::user()
