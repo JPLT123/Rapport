@@ -82,21 +82,18 @@
                                                         <div class="form-group mt-2">
                                                             <h5>Les tâches prevues :</h5>
                                                             <ul>
-                                                                @php $dernierProjet = null; @endphp
-                                                                @forelse ($PlantTache as $tache)
-                                                                    @if ($tache->tach->projet->nom != $dernierProjet)
-
-                                                                        <h6>Projet: {{ $tache->tach->projet->nom }}</h6>
-
-                                                                        @php $dernierProjet = $tache->tach->projet->nom; @endphp
-                                                                    @else
-                                                                        <li>
-                                                                            {{ $tache->tach->tache_prevues ?? 'Cliquez sur un jour ' }}
-                                                                        </li>
-                                                                    @endif
-                                                                @empty
-                                                                    <li>Aucune tâche prévue pour le jour sélectionné.</li>
-                                                                @endforelse
+                                                                @php
+                                                                $projectNameDisplayed = false;
+                                                            @endphp
+                                                            @foreach($PlantTache as $tache)
+                                                                @if (!$projectNameDisplayed)
+                                                                        <h6>Projet: {{ $tache->tach->projet->nom ?? 'Cliquez sur un jour'}}</h6>
+                                                                    @php
+                                                                        $projectNameDisplayed = true;
+                                                                    @endphp
+                                                                @endif
+                                                                <li>{{ $tache->tach->tache_prevues ?? 'Cliquez sur un jour'}} </li>
+                                                            @endforeach
                                                             </ul>
                                                         </div>
                     

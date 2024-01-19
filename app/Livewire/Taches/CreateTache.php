@@ -23,10 +23,7 @@ class CreateTache extends Component
 
     public function addTaches()
     {
-        $this->taches[] = [
-            'id_projet' => '',
-            'tache_prevues' => '',
-        ];
+        $this->taches[] = ['tache_prevues' => '', 'projet' => ''];
     }
 
     public function removeTaches($index)
@@ -39,7 +36,7 @@ class CreateTache extends Component
     {
         $this->validate([
             'taches.*.tache_prevues' => 'required|string|max:255',
-            'projet' => 'required|exists:projets,id',
+            'taches.*.projet' => 'required|exists:projets,id',
         ]);
 
         $count = 1;
@@ -56,7 +53,7 @@ class CreateTache extends Component
         
             Tach::create([
                 'tache_prevues' => $item['tache_prevues'],
-                'id_projet' => $this->projet,
+                'id_projet' => $item['projet'],
                 'slug' => $slug,
             ]);
 

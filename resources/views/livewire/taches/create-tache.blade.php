@@ -32,12 +32,11 @@
                                         <div data-repeater-item class="outer">
                                             <div class="inner-repeater mb-4">
                                                 <div data-repeater-list="inner-group" class="inner form-group mb-0 row">
-                                                    <label class="col-form-label col-lg-2">Add Tasks</label>
                                                     <div  data-repeater-item class="inner col-lg-10 ms-md-auto">
                                                         @foreach ($taches as $index => $tache)
                                                             <div class="mb-3 row align-items-center">
                                                                 <div class="mt-2 col-md-3">
-                                                                    <select wire:model="'taches.{{ $index }}.projet" class="inner form-control" name="projet" id="projet">
+                                                                    <select wire:model="taches.{{ $index }}.projet" class="inner form-control" name="projet" id="projet">
                                                                         <option value="">Selectionner le projet...</option>
                                                                         @foreach ($chef as $item)
                                                                             @if ($item->is_chef == true)
@@ -45,7 +44,7 @@
                                                                             @endif
                                                                         @endforeach
                                                                     </select>
-                                                                    @error('projet')
+                                                                    @error('taches.{{ $index }}.projet')
                                                                         <span class="text-danger">{{ $message }}</span>
                                                                     @enderror
                                                                 </div>
@@ -57,7 +56,7 @@
                                                                 @enderror
                                                                 <div class=" col-lg-2 col-md-2 ">
                                                                     <div class="mt-2 mt-md-0 d-grid">
-                                                                        <input data-repeater-delete wire:click.prevent="removeTaches({{ $index }})" type="button" class="btn btn-primary inner" value="Delete" />
+                                                                        <input data-repeater-delete wire:click.prevent="removeTaches({{ $index }})" type="button" class="btn btn-danger inner" value="Delete" />
                                                                     </div>
                                                                 </div>
                                                                 
@@ -67,15 +66,15 @@
                                                 </div>
                                                 <div class="row justify-content-end">
                                                     <div class="col-lg-10">
-                                                        <input data-repeater-create type="button" wire:click="addTaches" class="btn btn-success inner" value="Add Number"/>
+                                                        <input data-repeater-create type="button" wire:click="addTaches" class="btn btn-success inner" value="Add Task"/>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row justify-content-end">
-                                        <div class="col-lg-10">
-                                            <button type="submit" class="btn btn-primary">Create Task</button>
+                                    <div class="row text-center">
+                                        <div class="col-lg-12">
+                                            <button type="submit" class="btn btn-primary">Save Tasks</button>
                                         </div>
                                     </div>
                                 </form>

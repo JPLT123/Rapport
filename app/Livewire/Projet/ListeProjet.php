@@ -77,9 +77,11 @@ class ListeProjet extends Component
                     ]);
                 }
             } else {
+               if ($projet->status !== 'Suspendu') {
                 $projet->update([
                     'status' => 'attente'
                 ]);
+               }
             }
         }
         return view('livewire.projet.liste-projet', [

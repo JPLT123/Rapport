@@ -58,6 +58,11 @@ class Tach extends Model
 		return $this->hasMany(PlantTache::class, 'id_tache');
 	}
 
+	public function planif()
+    {
+        return $this->belongsToMany(PlanifHebdomadaire::class, 'plant_tache', 'id_planif', 'id_tache');
+	}
+
 	public function rapports()
 	{
 		return $this->hasMany(Rapport::class, 'id_tache');

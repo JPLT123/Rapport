@@ -7,6 +7,7 @@ use App\Models\Rapport;
 use App\Models\Depenser;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\PlanifHebdomadaire;
 
 class PagePDF extends Controller
 {
@@ -46,4 +47,20 @@ class PagePDF extends Controller
         }
     }
 
+    public function status()
+    {dd('ok');
+        // Utilisez "first" au lieu de "get" pour obtenir un seul modèle
+        $planif = PlanifHebdomadaire::where('slug', $slug)->first();
+    
+        // Assurez-vous que le modèle existe avant de tenter la mise à jour
+        if ($planif) {
+            // Utilisez "update" directement sur le modèle
+            $planif->update(['status' => 'Approved']);
+        }
+    
+        // Vous pouvez également ajouter un message flash pour informer l'utilisateur de la mise à jour réussie
+        session()->flash('message', 'Le statut a été mis à jour avec succès.');
+    
+        // Vous pouvez également rediriger l'utilisateur ou effectuer d'autres actions après la mise à jour
+    }
 }

@@ -26,12 +26,14 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Planification\Apercu;
 use App\Livewire\Planification\Create;
 use App\Http\Middleware\RoleMiddleware;
+use App\Livewire\Profile\ChangePassword;
 use App\Livewire\Planification\PlanifChef;
 use App\Livewire\Rapport\RapportJournalier;
 use App\Livewire\Planification\DetailPlanif;
 use App\Livewire\GestionUtilisateur\AuthUser;
 use App\Livewire\GestionUtilisateur\ListeUser;
 use App\Livewire\GestionUtilisateur\DetailUser;
+use App\Livewire\Planification\HistoriquePlanif;
 use App\Livewire\Planification\UpdatePlanification;
 
 /*
@@ -58,6 +60,7 @@ Route::middleware([
     Route::get('/Accueil', Index::class)->name('Accueil');
     Route::get('/compte-desactiver', CompteDesactiver::class)->name('SupprimerDesactiver');
     Route::get('/profile-user', Show::class)->name('profile-user');
+    Route::get('/change-password', ChangePassword::class)->name('change-password');
     Route::get('/chat', ChatAccueil::class)->name('chat');
     Route::get('/chat/{recipientId}', ChatComposant::class)->name('chat-user');
     Route::get('/info-user', AuthUser::class)->name('info-user');
@@ -76,6 +79,7 @@ Route::middleware([
     Route::get('/Apercu-projet/{slug}', ApercuProjet::class)->name('Apercu-projet');
     Route::get('/liste-tache', ListeTache::class)->name('liste-tache');
     Route::get('/create-tache', CreateTache::class)->name('create-tache');
+    Route::get('/histoire-planification', HistoriquePlanif::class)->name('histoire-planification');
     Route::get('/histoire-rapport', HistoriqueRapport::class)->name('histoire-rapport');
     Route::get('/rapport-journalier', RapportJournalier::class)->name('rapport-journalier');
     Route::get('/reglage-profil-user', Reglage::class)->name('reglage');
@@ -83,7 +87,9 @@ Route::middleware([
     Route::get('/pdf-page/{slug}', AfficheRapport::class)->name('affiche-rapport');
     Route::get('/affiche-rapport-par-date/{slug}', RapportDate::class)->name('affiche-rapport-par-date');
     Route::get('/pdf-page1', [PagePDF::class,'index'])->name('telecharger');
-    Route::get('/telecharger/{id_rapport}', [PagePDF::class,'telecharger'])->name('telecharger-fichier');
+    Route::get('/telecharger/{id_rapport}', [PagePDF::class,'telecharger'])->name('telecharger-fichier');    Route::get('/telecharger/{id_rapport}', [status::class,'telecharger'])->name('telecharger-fichier');
+    Route::get('/status/{slug}', [PagePDF::class,'status'])->name('statusupdate');
+
     
 
 

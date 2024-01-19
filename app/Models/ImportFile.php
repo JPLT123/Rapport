@@ -36,6 +36,7 @@ class Importfile extends Model
 	protected $fillable = [
 		'id_user',
 		'id_rapport',
+		'nom_fichier',
 		'links'
 	];
 
