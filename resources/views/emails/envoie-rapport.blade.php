@@ -1,6 +1,6 @@
 @component('mail::message')
 
-<img src="http://127.0.0.1:8000/public/assets/images/logo_elceto.png" class="logo" alt="Elceto Logo">
+<img src="{{asset('assets/images/logo_elceto.png')}}" class="logo" alt="Elceto Logo">
 
 # Rapport journalier envoyée
 

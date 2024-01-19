@@ -42,6 +42,7 @@ class RapportJournalier extends Component
     public $observationglobal;
     public $Auth_user;
     public $tacheId;
+    public $tacheId1;
     public $planifications;
     public $dateActuelle;
     public $afficherFormulaire;
@@ -185,6 +186,10 @@ class RapportJournalier extends Component
             'id_user' => $user,
         ]);
 
+        Tach::where('id', $this->tacheId)->update([
+            'status' => 'Terminer'
+        ]);
+
         foreach ($this->addtaches as $item) {
             $rapport1 = Rapport::create([
                 'tache_realiser' => $item['tachesRealisees'],
@@ -196,7 +201,7 @@ class RapportJournalier extends Component
                 'materiels_utiliser' => $item['materielsUtilises'],
                 'observation' => $item['observation'],
                 'observationglobal' => $item['observationglobal'],
-                'id_tache' => $this->tacheId,
+                'id_tache' =>  $item['tacheId'],
                 'id_prochain_tache' => null, // Valeur par défaut
                 'id_user' => $user,
             ]);
@@ -204,7 +209,13 @@ class RapportJournalier extends Component
             // Utilisez la valeur correcte de 'id_prochain_tache' pour mettre à jour Rapport
             if (count($Tachedemain1) > 0) {
                 $rapport1->update(['id_prochain_tache' => $Tachedemain1[0]->id]);
+            }else{
+                $rapport1->update(['id_prochain_tache' => $TachedemainId]);
             }
+
+            Tach::where('id', $item['tacheId'])->update([
+                'status' => 'Terminer'
+            ]);            
         }
 
         $rapportId = $rapport->id;
@@ -218,11 +229,7 @@ class RapportJournalier extends Component
                 'nom_fichier' => 'fichier-joint-'.$this->dateActuelle,
                 'links' => $filename,
             ]);
-        }
-        
-       Tach::where('id',$this->tacheId)->update([
-            'status' => 'Terminer'
-        ]);
+        }       
         
         foreach ($this->Depenses as $item) {
             Depenser::create([
