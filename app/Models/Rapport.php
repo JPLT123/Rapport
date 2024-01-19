@@ -81,6 +81,6 @@ class Rapport extends Model
 
 	public function importfiles()
 	{
-		return $this->hasMany(Importfile::class, 'id_rapport');
+		return $this->hasMany(ImportFile::class, 'id_rapport');
 	}
 }

@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\Filiale;
 use Livewire\Component;
 use App\Models\PlantTache;
-use App\Models\essaiepivot;
+use App\Models\Essaiepivot;
 use Illuminate\Support\Str;
 use App\Models\Essaieplanif;
 use App\Models\MembresProjet;
@@ -42,7 +42,7 @@ class Create extends Component
     {
         
         // Récupérer tous les IDs de la table essaiepivot
-        $essaiepivotIDs = essaiepivot::pluck('id_tache');
+        $essaiepivotIDs = Essaiepivot::pluck('id_tache');
 
         $usersQuery = Tach::whereIn('status', ['attente'])
             ->whereNotIn('id', $essaiepivotIDs);
@@ -98,9 +98,9 @@ class Create extends Component
         }
 
         // Récupérer les données de la table source
-        $sourcepivot = essaiepivot::where('id_user',$this->Auth_user->id)->get();
+        $sourcepivot = Essaiepivot::where('id_user',$this->Auth_user->id)->get();
 
-        $essaiepivotIDs = essaiepivot::pluck('id_planif');
+        $essaiepivotIDs = Essaiepivot::pluck('id_planif');
 
         // Récupérer toutes les tâches dont les IDs correspondent à ceux de la table essaiepivot
         $planif = PlanifHebdomadaire::whereIn('slug', $essaiepivotIDs)->get();
@@ -198,7 +198,7 @@ class Create extends Component
             
                     foreach ($this->taches as $item) {
                     
-                        essaiepivot::create([
+                        Essaiepivot::create([
                             'id_tache' => $item,
                             'id_planif' => $uniqueSlug,
                             'id_user' => Auth::user()->id,
@@ -254,9 +254,9 @@ class Create extends Component
         }
 
         // Récupérer les données de la table source
-        $sourcepivot = essaiepivot::where('id_user',$this->Auth_user->id)->get();
+        $sourcepivot = Essaiepivot::where('id_user',$this->Auth_user->id)->get();
 
-        $essaiepivotIDs = essaiepivot::pluck('id_planif');
+        $essaiepivotIDs = Essaiepivot::pluck('id_planif');
 
         // Récupérer toutes les tâches dont les IDs correspondent à ceux de la table essaiepivot
         $planif = PlanifHebdomadaire::whereIn('slug', $essaiepivotIDs)->get();
