@@ -37,9 +37,33 @@ class UserSeeder extends Seeder
             'id_departement' => $departement->id,
         ]);
 
+        $user1 = User::create([
+            'slug' => 'lala-diallo-2',
+            'name' => 'aminata diallo',
+            'email' => 'aminata@gmail.com',
+            'telephone' => '223456789',
+            'adresse' => 'Adresse de l\'utilisateur 2',
+            'email_verified_at' => now(),
+            'password' => bcrypt('12345678'), // Assurez-vous de définir un mot de passe approprié
+            'remember_token' => Str::random(10),
+            'current_team_id' => null, // Vous pouvez ajuster cela en fonction de votre application
+            'profile_photo_path' => null,
+            'verification_code' => '123456', // Vous pouvez ajuster cela en fonction de votre application
+            'status' => 'attente',
+            'id_filiale' => $filiale->id,
+            'id_departement' => $departement->id,
+        ]);
+
+
+
         Permission::create([
             'id_user' => $user->id,
             'id_role' => 1,
+        ]);
+
+        Permission::create([
+            'id_user' => $user1->id,
+            'id_role' => 2,
         ]);
     }
 }

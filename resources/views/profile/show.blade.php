@@ -129,7 +129,7 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <h5 class="font-size-14 mb-1"><a href="javascript: void(0);" class="text-dark">{{ $fichier->nom_fichier ?? 'Document'}}.Zip</a></h5>
+                                                        <h5 class="font-size-14 mb-1"><a href="#" class="text-dark">{{ $fichier->nom_fichier ?? 'Document'}}.Zip</a></h5>
                                                         <small>Size : {{ formatSizeUnits(filesize(storage_path('app/' . $fichier->links))) }}</small>
                                                     </td>
                                                     <td>

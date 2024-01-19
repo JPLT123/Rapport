@@ -50,7 +50,7 @@
                             <span key="t-chat">historique</span>
                         </a>
                     </li> --}}
-    
+
                     @if (!empty(array_intersect(["Responsable", "Admin"], $userRoles)))
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
@@ -81,6 +81,15 @@
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{route('planification.apercu')}}" key="t-tui-calendar">Planification Overview</a></li>
                                     <li><a href="{{route('planification.create')}}" key="t-full-calendar">Create New </a></li>
+                                    
+                                    {{-- @if (!empty(array_intersect(["Responsable", "Admin"], $userRoles)))
+                                       
+                                        <li>
+                                            <a href="{{route('histoire-planification')}}" class="waves-effect">
+                                                <span key="t-chat">Historique Planification</span>
+                                            </a>
+                                        </li>
+                                    @endif --}}
                                 </ul>
                             </li>
     

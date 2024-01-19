@@ -42,7 +42,7 @@ class Create extends Component
     {
         
         // Récupérer tous les IDs de la table essaiepivot
-        $essaiepivotIDs = essaiepivot::pluck('id_tache')->all();
+        $essaiepivotIDs = essaiepivot::pluck('id_tache');
 
         $usersQuery = Tach::whereIn('status', ['attente'])
             ->whereNotIn('id', $essaiepivotIDs);
@@ -281,7 +281,7 @@ class Create extends Component
         $statusTache = PlantTache::pluck('id_tache');
             foreach ($statusTache as $item) {
                 Tach::where('id', $item)->update([
-                    'status' => 'En Cour'
+                    'status' => 'Attente'
                 ]);
             }
 

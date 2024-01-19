@@ -169,7 +169,7 @@ class UpdatePlanification extends Component
             ]);
         }
 
-        $chef = $this->planif->pluck('hierachie')->first();
+        $chef = $this->filiale->hierachie;
 
         // Utilisez find() pour obtenir un seul utilisateur par son ID
         $user = User::find($chef);
@@ -184,7 +184,7 @@ class UpdatePlanification extends Component
         } else {
             // Gérer le cas où l'utilisateur n'est pas trouvé
             // Par exemple, enregistrer un message d'erreur dans les logs
-            Log::error('Utilisateur introuvable avec l\'ID ' . $chef);
+            session()->flash('Utilisateur introuvable avec l\'ID ' . $chef);
         }
 
         $this->dispatch("successEvent",[]);   
