@@ -59,12 +59,26 @@
                                 </div>
                                 <img src="{{ $Filiale->logo ? '/storage/'. $Filiale->logo : '/assets/images/image_produit.png' }}" alt="" height="50" class="mb-3">
                                 <div class="dropdown float-end">
-                                    <a href="#" class="dropdown-toggle arrow-none" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a href="#" class="dropdown-toggle arrow-none" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false">
                                         <i class="mdi mdi-dots-vertical m-0 text-muted h5"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end">
                                         <a class="dropdown-item" wire:click="edite('{{ $Filiale->slug }}')" >Edit</a>
                                         <a class="dropdown-item" wire:click="confirmationDelete('{{ $Filiale->slug }}')">Delete</a>
+
+                                        <div class="btn-group">
+                                               
+                                            <div class="btn-group dropend">
+                                                <a class="dropdown-item" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Departement <i class="mdi mdi-chevron-right"></i>
+                                                </a>
+                                                <div class="dropdown-menu">
+                                                    @foreach ($Filiale->departements as $item)
+                                                        <a class="dropdown-item" href="#">{{$item->nom}}</a>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div> <!-- end dropdown -->
                                 <div class="float-end ms-2">
@@ -86,11 +100,6 @@
                                         <p class="text-muted fs-14 mb-0"><i class="uil uil-wallet"></i> Tel: {{$Filiale->telephone}}</p>
                                     </li>
                                 </ul>
-                                <div class="mt-3 hstack gap-2">
-                                    @foreach ($Filiale->departements as $item)
-                                        <span class="badge rounded-1 badge-soft-secondary">{{$item->nom}}</span>
-                                    @endforeach
-                                </div>
                                 <div class="mt-4 hstack gap-2">
                                     <a href="{{ route('detail-filiale',['slug' => $Filiale->slug]) }}" class="btn btn-info w-100">View Profile</a>
                                 </div>

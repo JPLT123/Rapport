@@ -115,7 +115,7 @@ use HasApiTokens;
 
 	public function importfiles()
 	{
-		return $this->hasMany(Importfile::class, 'id_user');
+		return $this->hasMany(ImportFile::class, 'id_user');
 	}
 
 	public function membres_projets()

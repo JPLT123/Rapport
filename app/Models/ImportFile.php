@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class Importfile extends Model
+class ImportFile extends Model
 {
 	protected $table = 'importfile';
 
