@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <!-- end page title -->
-                
+
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -29,7 +29,8 @@
                             <div class="card-body">
                                 <div class="row g-3">
                                     <div class="col-xxl-2 col-sm-4">
-                                        <input type="search" wire:model.live ="search" class="form-control" id="searchInput" placeholder="Search for ...">
+                                        <input type="search" wire:model.live ="search" class="form-control"
+                                            id="searchInput" placeholder="Search for ...">
                                     </div>
                                     <div class="col-xxl-2 col-sm-4">
                                         <select wire:model.live ="status" class="form-control select2">
@@ -39,7 +40,9 @@
                                         </select>
                                     </div>
                                     <div class="col-xxl-2 col-sm-4">
-                                        <button type="button" class="btn btn-soft-info mx-1 w-100" data-bs-toggle="modal" data-bs-target="#addModal"><i class="mdi mdi-plus-outline align-middle"></i> Ajouter</button>
+                                        <button type="button" class="btn btn-soft-info mx-1 w-100"
+                                            data-bs-toggle="modal" data-bs-target="#addModal"><i
+                                                class="mdi mdi-plus-outline align-middle"></i> Ajouter</button>
                                     </div>
                                 </div>
                             </div>
@@ -48,72 +51,83 @@
                     <!--end col-->
                 </div>
                 <!--end row-->
-                
+
                 <div class="row">
                     @foreach ($Filiales as $Filiale)
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="favorite-icon">
-                                    <a href="javascript:void(0)"><i class="uil uil-heart-alt fs-18"></i></a>
-                                </div>
-                                <img src="{{ $Filiale->logo ? '/storage/'. $Filiale->logo : '/assets/images/image_produit.png' }}" alt="" height="50" class="mb-3">
-                                <div class="dropdown float-end">
-                                    <a href="#" class="dropdown-toggle arrow-none" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false">
-                                        <i class="mdi mdi-dots-vertical m-0 text-muted h5"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" wire:click="edite('{{ $Filiale->slug }}')" >Edit</a>
-                                        <a class="dropdown-item" wire:click="confirmationDelete('{{ $Filiale->slug }}')">Delete</a>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="favorite-icon">
+                                        <a href="javascript:void(0)"><i class="uil uil-heart-alt fs-18"></i></a>
+                                    </div>
+                                    <img src="{{ $Filiale->logo ? '/storage/' . $Filiale->logo : '/assets/images/image_produit.png' }}"
+                                        alt="" height="50" class="mb-3">
+                                    <div class="dropdown float-end">
+                                        <a href="#" class="dropdown-toggle arrow-none" data-bs-toggle="dropdown"
+                                            data-bs-auto-close="false" aria-expanded="false">
+                                            <i class="mdi mdi-dots-vertical m-0 text-muted h5"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" wire:click="edite('{{ $Filiale->slug }}')">Edit</a>
+                                            <a class="dropdown-item"
+                                                wire:click="confirmationDelete('{{ $Filiale->slug }}')">Delete</a>
 
-                                        <div class="btn-group">
-                                               
-                                            <div class="btn-group dropend">
-                                                <a class="dropdown-item" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    Departement <i class="mdi mdi-chevron-right"></i>
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    @foreach ($Filiale->departements as $item)
-                                                        <a class="dropdown-item" href="#">{{$item->nom}}</a>
-                                                    @endforeach
+                                            <div class="btn-group">
+
+                                                <div class="btn-group dropend">
+                                                    <a class="dropdown-item" id="dropdownMenuButton"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Departement <i class="mdi mdi-chevron-right"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu">
+                                                        @foreach ($Filiale->departements as $item)
+                                                            <a class="dropdown-item"
+                                                                href="#">{{ $item->nom }}</a>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div> <!-- end dropdown -->
+                                    <div class="float-end ms-2">
+                                        @if ($Filiale->status == 'activer')
+                                            <button wire:click="confirmation('{{ $Filiale->slug }}')"
+                                                class="btn btn-soft-success btn-sm">Active</button>
+                                        @else
+                                            <button wire:click="confirmation('{{ $Filiale->slug }}')"
+                                                class="btn btn-soft-danger btn-sm">desactiver</button>
+                                        @endif
                                     </div>
-                                </div> <!-- end dropdown -->
-                                <div class="float-end ms-2">
-                                    @if ($Filiale->status == 'activer')
-                                        <button wire:click="confirmation('{{ $Filiale->slug }}')" class="btn btn-soft-success btn-sm">Active</button>
-                                    @else
-                                        <button wire:click="confirmation('{{ $Filiale->slug }}')" class="btn btn-soft-danger btn-sm">desactiver</button>
-                                    @endif 
-                                </div>
-                                <h5 class="fs-17 mb-2"><a href="job-details.html" class="text-dark">{{$Filiale->nom}}</a></h5>
-                                <ul class="list-inline mb-0">
-                                    <li class="list-inline-item">
-                                        <p class="text-muted fs-14 mb-1">{{$Filiale->email}}</p>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <p class="text-muted fs-14 mb-0"><i class="mdi mdi-map-marker"></i> {{$Filiale->adresse }}</p>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <p class="text-muted fs-14 mb-0"><i class="uil uil-wallet"></i> Tel: {{$Filiale->telephone}}</p>
-                                    </li>
-                                </ul>
-                                <div class="mt-4 hstack gap-2">
-                                    <a href="{{ route('detail-filiale',['slug' => $Filiale->slug]) }}" class="btn btn-info w-100">View Profile</a>
+                                    <h5 class="fs-17 mb-2"><a href="job-details.html"
+                                            class="text-dark">{{ $Filiale->nom }}</a></h5>
+                                    <ul class="list-inline mb-0">
+                                        <li class="list-inline-item">
+                                            <p class="text-muted fs-14 mb-1">{{ $Filiale->email }}</p>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <p class="text-muted fs-14 mb-0"><i class="mdi mdi-map-marker"></i>
+                                                {{ $Filiale->adresse }}</p>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <p class="text-muted fs-14 mb-0"><i class="uil uil-wallet"></i> Tel:
+                                                {{ $Filiale->telephone }}</p>
+                                        </li>
+                                    </ul>
+                                    <div class="mt-4 hstack gap-2">
+                                        <a href="{{ route('detail-filiale', ['slug' => $Filiale->slug]) }}"
+                                            class="btn btn-info w-100">View Profile</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!--end col-->
+                        <!--end col-->
                     @endforeach
 
                 </div><!--end row-->
-                <div class="col-11">
-                    {{$Filiales->links('pagination::bootstrap-5')}}
+                <div class="col-11" wire:ignore>
+                    {{ $Filiales->links('pagination::bootstrap-5') }}
                 </div>
-                
+
             </div> <!-- container-fluid -->
         </div><!-- End Page-content -->
 
@@ -121,7 +135,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-6">
-                        <script>document.write(new Date().getFullYear())</script> © Skote.
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script> © Skote.
                     </div>
                     <div class="col-sm-6">
                         <div class="text-sm-end d-none d-sm-block">
@@ -133,7 +149,8 @@
         </footer>
     </div>
 
-    <div class="modal fade orderdetailsModal " id="addModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+    <div class="modal fade orderdetailsModal " id="addModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -144,86 +161,110 @@
                     <div class="modal-body">
                         <div class="row g-3">
                             <div class="col-8 col-sm-7">
-                               <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group mb-3">
-                                        <label for="nom">Nom :<span class="text-danger">*</span></label>
-                                        <div class="input-group auth-pass-inputgroup">
-                                            <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" required autocomplete="current-nom" aria-label="nom" aria-describedby="nom-addon">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group mb-3">
+                                            <label for="nom">Nom :<span class="text-danger">*</span></label>
+                                            <div class="input-group auth-pass-inputgroup">
+                                                <input type="nom"
+                                                    class="form-control @error('nom') is-invalid @enderror"
+                                                    wire:model="nom" required autocomplete="current-nom"
+                                                    aria-label="nom" aria-describedby="nom-addon">
+                                            </div>
+                                            @error('nom')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
-                                        @error('nom')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
                                     </div>
-                                </div>
-                                
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label for="adresse" class="form-label">Adresse : <span class="text-danger">*</span></label>
-                                        <input id="adresse" type="text" wire:model='adresse' autofocus autocomplete="adresse" class="form-control @error('adresse') is-invalid @enderror">
-                                        @error('adresse')
-                                            <span class="text-danger"> {{$message}} </span>
-                                        @enderror
-                                    </div>
-                                </div>
-        
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label for="telephone" class="form-label">Telephone : <span class="text-danger">*</span></label>
-                                        <input id="telephone" type="text" wire:model='telephone' autofocus autocomplete="telephone" class="form-control @error('telephone') is-invalid @enderror">
-                                        @error('telephone')
-                                            <span class="text-danger"> {{$message}} </span>
-                                        @enderror
-                                    </div>
-                                </div>
-    
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">Email : <span class="text-danger">*</span></label>
-                                        <input id="email" type="text" wire:model='email' autofocus autocomplete="email" class="form-control @error('email') is-invalid @enderror">
-                                        @error('email')
-                                            <span class="text-danger"> {{$message}} </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group mb-3">
-                                        <label for="date">Date de creation :<span class="text-danger">*</span></label>
-                                        <div class="input-group auth-pass-inputgroup">
-                                            <input type="date" class="form-control @error('date') is-invalid @enderror" wire:model="date" required autocomplete="current-date" placeholder="Entrer categorie produit" aria-label="date" aria-describedby="date-addon">
+
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="adresse" class="form-label">Adresse : <span
+                                                    class="text-danger">*</span></label>
+                                            <input id="adresse" type="text" wire:model='adresse' autofocus
+                                                autocomplete="adresse"
+                                                class="form-control @error('adresse') is-invalid @enderror">
+                                            @error('adresse')
+                                                <span class="text-danger"> {{ $message }} </span>
+                                            @enderror
                                         </div>
-                                        @error('date')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
                                     </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label for="responsable" class="form-label">Responsable : <span class="text-danger">*</span></label>
-                                        <select id="responsable" wire:model='responsable' class="form-control select2">
-                                            <option value="">Selectionner l'hierachie... </option>
-                                            @foreach ($chef as $item)
-                                                    <option value="{{$item->id}}">{{$item->name}}
-                                                        <img src="{{asset($item->profile_photo_path ? '/storage/'.$item->profile_photo_path : 'assets\user.png')}}" class="rounded-circle avatar-xs m-1" alt="">
+
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="telephone" class="form-label">Telephone : <span
+                                                    class="text-danger">*</span></label>
+                                            <input id="telephone" type="text" wire:model='telephone' autofocus
+                                                autocomplete="telephone"
+                                                class="form-control @error('telephone') is-invalid @enderror">
+                                            @error('telephone')
+                                                <span class="text-danger"> {{ $message }} </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email : <span
+                                                    class="text-danger">*</span></label>
+                                            <input id="email" type="text" wire:model='email' autofocus
+                                                autocomplete="email"
+                                                class="form-control @error('email') is-invalid @enderror">
+                                            @error('email')
+                                                <span class="text-danger"> {{ $message }} </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group mb-3">
+                                            <label for="date">Date de creation :<span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group auth-pass-inputgroup">
+                                                <input type="date"
+                                                    class="form-control @error('date') is-invalid @enderror"
+                                                    wire:model="date" required autocomplete="current-date"
+                                                    placeholder="Entrer categorie produit" aria-label="date"
+                                                    aria-describedby="date-addon">
+                                            </div>
+                                            @error('date')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="responsable" class="form-label">Responsable : <span
+                                                    class="text-danger">*</span></label>
+                                            <select id="responsable" wire:model='responsable'
+                                                class="form-control select2">
+                                                <option value="">Selectionner l'hierachie... </option>
+                                                @foreach ($chef as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->name }}
+                                                        <img src="{{ asset($item->profile_photo_path ? '/storage/' . $item->profile_photo_path : 'assets\user.png') }}"
+                                                            class="rounded-circle avatar-xs m-1" alt="">
                                                     </option>
-                                            @endforeach
-                                        </select>
-                                        @error('responsable')
-                                            <span class="text-danger"> {{$message}} </span>
+                                                @endforeach
+                                            </select>
+                                            @error('responsable')
+                                                <span class="text-danger"> {{ $message }} </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="description">Description :<span
+                                                class="text-danger">*</span></label>
+                                        <div class="input-group auth-pass-inputgroup">
+                                            <input type="description"
+                                                class="form-control @error('description') is-invalid @enderror"
+                                                wire:model="description" required autocomplete="current-description"
+                                                aria-label="description" aria-describedby="description-addon">
+
+                                        </div>
+                                        @error('description')
+                                            <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="form-group mb-3">
-                                    <label for="description">Description :<span class="text-danger">*</span></label>
-                                    <div class="input-group auth-pass-inputgroup">
-                                        <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" aria-label="description" aria-describedby="description-addon">
-                                        
-                                    </div>
-                                    @error('description')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                               </div>
                             </div>
                             <div class="col-4 col-sm-5">
                                 <div class="form-group ">
@@ -234,7 +275,8 @@
                                         <label for="images">
                                             <div class="m-4">
                                                 <img src="{{ $images ? $images->temporaryUrl() : 'assets/images/image_produit.png' }}"
-                                                    class="img-fluid text-center" alt="Responsive image" style="width: 100%; height:200px;"/>
+                                                    class="img-fluid text-center" alt="Responsive image"
+                                                    style="width: 100%; height:200px;" />
                                             </div>
                                         </label>
                                         <input type="file" wire:model="images" id="images" hidden>
@@ -243,7 +285,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -259,7 +301,8 @@
         </div>
     </div>
 
-    <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+    <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1"
+        role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -276,7 +319,10 @@
                                         <div class="form-group mb-3">
                                             <label for="nom">Nom :<span class="text-danger">*</span></label>
                                             <div class="input-group auth-pass-inputgroup">
-                                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" required autocomplete="current-nom" aria-label="nom" aria-describedby="nom-addon">
+                                                <input type="nom"
+                                                    class="form-control @error('nom') is-invalid @enderror"
+                                                    wire:model="nom" required autocomplete="current-nom"
+                                                    aria-label="nom" aria-describedby="nom-addon">
                                             </div>
                                             @error('nom')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -285,38 +331,51 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="adresse" class="form-label">Adresse : <span class="text-danger">*</span></label>
-                                            <input id="adresse" type="text" wire:model='adresse' autofocus autocomplete="adresse" class="form-control @error('adresse') is-invalid @enderror">
+                                            <label for="adresse" class="form-label">Adresse : <span
+                                                    class="text-danger">*</span></label>
+                                            <input id="adresse" type="text" wire:model='adresse' autofocus
+                                                autocomplete="adresse"
+                                                class="form-control @error('adresse') is-invalid @enderror">
                                             @error('adresse')
-                                                <span class="text-danger"> {{$message}} </span>
+                                                <span class="text-danger"> {{ $message }} </span>
                                             @enderror
                                         </div>
                                     </div>
-            
+
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="telephone" class="form-label">Telephone : <span class="text-danger">*</span></label>
-                                            <input id="telephone" type="text" wire:model='telephone' autofocus autocomplete="telephone" class="form-control @error('telephone') is-invalid @enderror">
+                                            <label for="telephone" class="form-label">Telephone : <span
+                                                    class="text-danger">*</span></label>
+                                            <input id="telephone" type="text" wire:model='telephone' autofocus
+                                                autocomplete="telephone"
+                                                class="form-control @error('telephone') is-invalid @enderror">
                                             @error('telephone')
-                                                <span class="text-danger"> {{$message}} </span>
+                                                <span class="text-danger"> {{ $message }} </span>
                                             @enderror
                                         </div>
                                     </div>
-        
+
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="email" class="form-label">Email : <span class="text-danger">*</span></label>
-                                            <input id="email" type="text" wire:model='email' autofocus autocomplete="email" class="form-control @error('email') is-invalid @enderror">
+                                            <label for="email" class="form-label">Email : <span
+                                                    class="text-danger">*</span></label>
+                                            <input id="email" type="text" wire:model='email' autofocus
+                                                autocomplete="email"
+                                                class="form-control @error('email') is-invalid @enderror">
                                             @error('email')
-                                                <span class="text-danger"> {{$message}} </span>
+                                                <span class="text-danger"> {{ $message }} </span>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group mb-3">
-                                            <label for="date">Date de creation :<span class="text-danger">*</span></label>
+                                            <label for="date">Date de creation :<span
+                                                    class="text-danger">*</span></label>
                                             <div class="input-group auth-pass-inputgroup">
-                                                <input type="date" class="form-control @error('date') is-invalid @enderror" wire:model="date"  aria-label="date" aria-describedby="date-addon">
+                                                <input type="date"
+                                                    class="form-control @error('date') is-invalid @enderror"
+                                                    wire:model="date" aria-label="date"
+                                                    aria-describedby="date-addon">
                                             </div>
                                             @error('date')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -325,24 +384,31 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="responsable" class="form-label">Responsable : <span class="text-danger">*</span></label>
-                                            <select id="responsable" wire:model='responsable' class="form-control select2">
+                                            <label for="responsable" class="form-label">Responsable : <span
+                                                    class="text-danger">*</span></label>
+                                            <select id="responsable" wire:model='responsable'
+                                                class="form-control select2">
                                                 <option value="">Selectionner l'hierachie... </option>
                                                 @foreach ($chef as $item)
-                                                        <option value="{{$item->id}}">{{$item->name}}
-                                                            <img src="{{asset($item->profile_photo_path ? '/storage/'.$item->profile_photo_path : 'assets\user.png')}}" class="rounded-circle avatar-xs m-1" alt="">
-                                                        </option>
+                                                    <option value="{{ $item->id }}">{{ $item->name }}
+                                                        <img src="{{ asset($item->profile_photo_path ? '/storage/' . $item->profile_photo_path : 'assets\user.png') }}"
+                                                            class="rounded-circle avatar-xs m-1" alt="">
+                                                    </option>
                                                 @endforeach
                                             </select>
                                             @error('responsable')
-                                                <span class="text-danger"> {{$message}} </span>
+                                                <span class="text-danger"> {{ $message }} </span>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label for="description">Description :<span class="text-danger">*</span></label>
+                                        <label for="description">Description :<span
+                                                class="text-danger">*</span></label>
                                         <div class="input-group auth-pass-inputgroup">
-                                            <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" aria-label="description" aria-describedby="description-addon">
+                                            <input type="description"
+                                                class="form-control @error('description') is-invalid @enderror"
+                                                wire:model="description" required autocomplete="current-description"
+                                                aria-label="description" aria-describedby="description-addon">
                                         </div>
                                         @error('description')
                                             <span class="text-danger">{{ $message }}</span>
@@ -357,11 +423,15 @@
                                     </div>
                                     <div class="text-center">
                                         <label for="path_image">
-                                            <div >
+                                            <div>
                                                 @if ($edit_images)
-                                                    <img src="{{ asset($path_image ? $path_image->temporaryUrl() : '/storage/'.$edit_images) }}" class="img-fluid" alt="Responsive image" style="width: 200px; height: 200px;"/>
+                                                    <img src="{{ asset($path_image ? $path_image->temporaryUrl() : '/storage/' . $edit_images) }}"
+                                                        class="img-fluid" alt="Responsive image"
+                                                        style="width: 200px; height: 200px;" />
                                                 @else
-                                                    <img src="{{ asset($path_image ? $path_image->temporaryUrl() : 'assets/images/image_produit.png') }}" class="img-fluid" alt="Responsive image" style="width: 200px; height: 200px;"/>
+                                                    <img src="{{ asset($path_image ? $path_image->temporaryUrl() : 'assets/images/image_produit.png') }}"
+                                                        class="img-fluid" alt="Responsive image"
+                                                        style="width: 200px; height: 200px;" />
                                                 @endif
                                             </div>
                                         </label>
@@ -371,7 +441,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
