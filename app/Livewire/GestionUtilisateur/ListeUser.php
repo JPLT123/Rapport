@@ -221,7 +221,7 @@ class ListeUser extends Component
                 "id_departement" => $this->departement,
             ]);
 
-            if ($this->role) {
+            if ($this->role !== null) {
                 Permission::where('id_user',$user->id)
                         ->update([
                             'id_role' => $this->role

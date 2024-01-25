@@ -67,21 +67,16 @@ class PlanifChef extends Component
             'projet' => 'required|exists:projets,id',
         ]);
 
-        $slug = Str::slug($this->date);
-            $uniqueSlug = $slug;
-
-            $count = 1;
-
-            while (Planification::where('slug', $uniqueSlug)->exists()) {
-                $uniqueSlug = $slug . '-' . $count;
-                $count++;
-            }
+        // Générez le slug à partir du nom d'utilisateur
+        $username = preg_replace('/\s+/', '', Auth::user()->name);
+        // Remplacez cela par le nom d'utilisateur réel
+        $slug = generateUserSlug($username);
 
             foreach ($this->taches as $index => $item) {
                 $tache = Tach::create([
                     'tache_prevues' => $item['tache_prevues'],
                     'id_projet' => $item['projet'],
-                    'slug' => $this->generateUniqueSlug($item['tache_prevues'], $index + 1),
+                    'slug' => $slug,
                 ]);
             }
 

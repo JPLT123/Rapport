@@ -34,47 +34,52 @@
                                                 <div data-repeater-list="inner-group" class="inner form-group mb-0 row">
                                                     <div  data-repeater-item class="inner col-lg-10 ms-md-auto">
                                                         @foreach ($taches as $index => $tache)
-                                                            <div class="mb-3 row align-items-center">
-                                                                <div class="mt-2 col-md-3">
-                                                                    <select wire:model="taches.{{ $index }}.projet" class="inner form-control" name="projet" id="projet">
-                                                                        <option value="">Selectionner le projet...</option>
-                                                                        @foreach ($chef as $item)
-                                                                            @if ($item->is_chef == true)
-                                                                                <option value="{{$item->projet->id}}">{{$item->projet->nom}}</option>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </select>
-                                                                    @error('taches.{{ $index }}.projet')
-                                                                        <span class="text-danger">{{ $message }}</span>
-                                                                    @enderror
-                                                                </div>
-                                                                <div class="mt-2 col-md-7">
-                                                                    <input wire:model="taches.{{ $index }}.tache_prevues" type="text" name="tache[{{ $index }}][tache_prevues]" class="form-control" required>
-                                                                </div>
-                                                                @error('taches.{{ $index }}.tache_prevues')
-                                                                    <span class="text-danger">{{ $message }}</span>
-                                                                @enderror
-                                                                <div class=" col-lg-2 col-md-2 ">
-                                                                    <div class="mt-2 mt-md-0 d-grid">
-                                                                        <input data-repeater-delete wire:click.prevent="removeTaches({{ $index }})" type="button" class="btn btn-danger inner" value="Delete" />
+                                                        <div data-repeater-list="inner-group" class="inner form-group">
+                                                            <div data-repeater-item class="inner ms-md-auto">
+                                                                <div class="mb-3 row align-items-center">
+                                                                    <div class="mt-2 col-md-3">
+                                                                        <select wire:model="taches.{{ $index }}.projet" class="inner form-control" name="projet" id="projet">
+                                                                            <option value="">Selectionner le projet...</option>
+                                                                            @foreach ($chef as $item)
+                                                                                @if ($item->is_chef == true)
+                                                                                    <option value="{{$item->projet->id}}">{{$item->projet->nom}}</option>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </select>
+                                                                        @error('taches.{{ $index }}.projet')
+                                                                            <span class="text-danger">{{ $message }}</span>
+                                                                        @enderror
+                                                                    </div> 
+                                                                    <div class="col-md-6">
+                                                                        <input wire:model="taches.{{ $index }}.tache_prevues" type="text" name="tache[{{ $index }}][tache_prevues]" class="form-control" required>
+                                                                        @error('taches.*.tache_prevues')
+                                                                            <span class="text-danger"> {{$message}} </span>
+                                                                        @enderror
+                                                                    </div>
+                                                                    
+                                                                    <div class="col-md-3">
+                                                                        <div class="mt-2 mt-md-0 d-grid">
+                                                                            <input data-repeater-delete wire:click.prevent="removeTache({{ $index }})" type="button" class="btn btn-danger inner" value="Delete" />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                
                                                             </div>
+                                                        </div>
                                                         @endforeach
                                                     </div>
                                                 </div>
                                                 <div class="row justify-content-end">
-                                                    <div class="col-lg-10">
+                                                    <div class="col-lg-5 col-6 mb-2 mb-lg-0">
                                                         <input data-repeater-create type="button" wire:click="addTaches" class="btn btn-success inner" value="Add Task"/>
                                                     </div>
+                                                
+                                                    <div class="col-lg-5 col-6">
+                                                        <div class="text-sm-end">
+                                                            <button type="submit" class="btn btn-primary">Save Tasks</button>
+                                                        </div>
+                                                    </div><!-- end col-->
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row text-center">
-                                        <div class="col-lg-12">
-                                            <button type="submit" class="btn btn-primary">Save Tasks</button>
                                         </div>
                                     </div>
                                 </form>

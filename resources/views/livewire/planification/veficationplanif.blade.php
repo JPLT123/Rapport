@@ -55,7 +55,6 @@
                                             <div>
                                                 <div class="row">
                                                     <!-- Afficher le formulaire pour la mise à jour de la planification -->
-                                                    <form wire:submit.prevent="Updateplanif">
                                                         <!-- Champs pour la mise à jour de la planification -->
                                                         <label for="projet">Projet:</label>
                                                         <select for="projet" wire:model.live="projet" name="projet" id="projet" class="form-control select2">
@@ -73,27 +72,67 @@
                                                                     $tache = App\Models\Tach::find($tacheId);
                                                                 @endphp
                                                                 @if ($tache->projet->id == $projet)
-                                                                <div class="form-check form-check-primary mb-2 d-flex align-items-center">
-                                                                    <input wire:model="Newtaches" class="form-check-input" type="checkbox" id="Newtaches-{{ $tache->id }}" name="Newtaches[]" value="{{ $tache->id }}" checked>
-                                                                    <label class="form-check-label ms-2" for="Newtaches-{{ $tache->id }}">{{ $tache->tache_prevues }}</label>
-                                                                    <span class="badge m-2 rounded-1 badge-soft-secondary">tâche existante</span>
-                                                                </div>
+                                                                    <div class="form-check form-check-primary mb-2 d-flex align-items-center">
+                                                                        <input wire:model="Newtaches" class="form-check-input" type="checkbox" id="Newtaches-{{ $tache->id }}" name="Newtaches[]" value="{{ $tache->id }}">
+                                                                        <label class="form-check-label ms-2" for="Newtaches-{{ $tache->id }}">{{ $tache->tache_prevues }}</label>
+                                                                        <span class="badge m-2 rounded-1 badge-soft-secondary">tâche existante</span>
+                                                                    </div>
                                                                 @endif
                                                             @endif
                                                         @endforeach
-                                                                
-                                                        <!-- Pour les nouvelles tâches -->
-                                                        @foreach ($Alltaches as $item)
-                                                            <div class="form-check form-check-primary mb-2 d-flex align-items-center">
-                                                                <input wire:model="Newtaches" class="form-check-input" type="checkbox" id="Newtaches-{{ $item->id }}" name="Newtaches[]" value="{{ $item->id }}">
-                                                                <label class="form-check-label ms-2" for="Newtaches-{{ $item->id }}">{{ $item->tache_prevues }}</label>
-                                                                <span class="badge m-2 rounded-1 badge-soft-success">nouvelle tâche</span>
-                                                            </div>
-                                                        @endforeach
-
+                                                        @if ($Alltaches!==null)
+                                                            @foreach ($Alltaches as $item)
+                                                                <div class="form-check form-check-primary mb-2 d-flex align-items-center">
+                                                                    <input wire:model="Newtaches" class="form-check-input" type="checkbox" id="Newtaches-{{ $item->id }}" name="Newtaches[]" value="{{ $item->id }}">
+                                                                    <label class="form-check-label ms-2" for="Newtaches-{{ $item->id }}">{{ $item->tache_prevues }}</label>
+                                                                    <span class="badge m-2 rounded-1 badge-soft-success">nouvelle tâche</span>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
                                                         <div class="col-sm-12">
+                                                            @if ($resultat !== null)
+                                                            
+                                                            @if(session('success'))
+                                                                <div class="alert alert-success">
+                                                                    {{ session('success') }}
+                                                                </div>
+                                                            @endif
+
+                                                            @if(session('error'))
+                                                                <div class="alert alert-danger">
+                                                                    {{ session('error') }}
+                                                                </div>
+                                                            @endif
+                                                            @foreach ($updatetaches as $tache)
+                                                                @if ($tache)
+                                                                    @php
+                                                                        $tache = App\Models\Tach::find($tache);
+                                                                        $this->tache_prevues = $tache->tache_prevues;
+                                                                    @endphp
+                                                                    @if ($tache->status !== 'Supprimer')
+                                                                    <div>
+                                                                        <label for="tache_{{ $tache->id }}">tâche creer</label>
+                                                                        <!-- Ajoutez d'autres champs pour les autres propriétés de la tâche si nécessaire -->
+                                                                        <div class="row">
+
+                                                                            <div class="col-md-9">
+                                                                                <textarea class="form-control" id="tache_{{ $tache->id }}"  wire:model="tache_prevues" rows="3"></textarea>
+                                                                                {{-- <input class="form-control" type="text" id="tache_{{ $tache->id }}" wire:model="tache_prevues"> --}}
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                <div class="mt-2 mt-md-0 d-grid">
+                                                                                    <button wire:click="update({{$tache->id}})" class="btn btn-info">update</button>
+                                                                                    <button wire:click="delete({{$tache->id}})" class="btn btn-danger mt-2">Delete</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
                                                             @foreach ($createtaches as $index => $tache)
-                                                                <label for="createtaches[{{ $index }}][tache_prevues]">Tâche prévue:</label>
+                                                                <label class="mt-2" for="createtaches[{{ $index }}][tache_prevues]">Tâche prévue:</label>
                                                                 <div class="mb-3 row align-items-center">
                                                                     <div class="col-md-9">
                                                                         <input wire:model="createtaches.{{ $index }}.tache_prevues" type="text" name="tache[{{ $index }}][tache_prevues]" class="form-control" required>
@@ -146,19 +185,17 @@
                                                             <div class="col-xxl-10 col-lg-8">
                                                                 <div class="search-box me-2 mb-2 d-inline-block">
                                                                     <div class="position-relative">
-                                                                        <button type="submit" class="btn btn-success  waves-effect waves-light mb-2 me-2">Mettre à jour la planification</button>
+                                                                        <button wire:click="Updateplanif" type="button" class="btn btn-success  waves-effect waves-light mb-2 me-2">Mettre à jour la planification</button>
                                                                     </div>
                                                                 </div> 
                                                             </div>
                                                             <div class="col-xxl-2 col-lg-4">
                                                                 <div class="text-sm-end">
-                                                                    <button type="reset" class="btn btn-danger  waves-effect waves-light mb-2 me-2"> Annuler</button>
+                                                                    <button type="reset" class="btn btn-danger  waves-effect waves-light mb-2 me-2"> Delete</button>
                                                                 </div>
                                                             </div><!-- end col-->
                                                         </div>
                                                         <!-- Bouton de soumission -->
-                                                        
-                                                    </form>
                                             
                                                     <!-- Afficher les messages flash -->
                                                     @if (session()->has('error'))

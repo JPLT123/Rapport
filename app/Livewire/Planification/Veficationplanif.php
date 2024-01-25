@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
-class UpdatePlanification extends Component
+class Veficationplanif extends Component
 {
     public $id_planif;
     public $ressources;
@@ -29,6 +29,7 @@ class UpdatePlanification extends Component
     public $planif;
     public $object;
     public $Alltaches;
+    public $updatetaches = [];
     public $taches = [];
     public $Newtaches = [];
     public $createtaches = [];
@@ -42,8 +43,8 @@ class UpdatePlanification extends Component
     {
         $user = Auth::user();
 
-        $this->planif = $user->planif_hebdomadaires()->where('status', 'rejeter')
-            ->whereBetween('date', [now()->startOfWeek()->addWeek(), now()->endOfWeek()->addWeek()])
+        $this->planif = $user->planif_hebdomadaires()->where('status', ['attente'])
+            // ->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])
             ->get();
 
             $this->filiale = $user->filiale;
@@ -51,8 +52,8 @@ class UpdatePlanification extends Component
 
         // Utilisez une seule variable pour stocker les résultats des requêtes
         $plantTache = PlantTache::where('id_planif', $this->id_planif)->get();
-
-        $usersQuery = Tach::whereIn('status',['New']);
+        
+        $usersQuery = Tach::where('status', 'New');
 
         if ($this->projet) {
             $usersQuery->where('id_projet', $this->projet);
@@ -62,11 +63,11 @@ class UpdatePlanification extends Component
 
         $idprojet = Projet::where('status', 'activer')->get();
 
-        return view('livewire.planification.listplanification', [
+        return view('livewire.planification.veficationplanif', [
             "user" => $user,
             "planifs" => $this->planif,
-            "PlantTache" => $plantTache,  // Utilisez la variable correcte
-            "Alltaches" => $this->Alltaches,  // Utilisez la variable correcte
+            "PlantTache" => $plantTache,
+            "Alltaches" => $this->Alltaches,
             "idprojet" => $idprojet
         ])->extends('layouts.guest')->section('content');
     }
@@ -91,16 +92,8 @@ class UpdatePlanification extends Component
         $this->ressources = $planif->ressources_necessaires;
         $this->resultat = $planif->resultat_attendus;
         $this->Observation = $planif->observation;
-        $this->taches = $planif->plant_taches->pluck('id_tache');
-
-        $usersQuery = Tach::where('status', 'New')
-        ->whereNotIn('id', $this->taches);
-
-        if ($this->projet) {
-            $usersQuery->where('id_projet', $this->projet);
-        }
-
-        $this->Alltaches = $usersQuery->get();
+        $this->taches = $planif->plant_taches->where('status', false)->pluck('id_tache');
+        $this->updatetaches = $planif->plant_taches->where('status',true)->pluck('id_tache');
     }
 
     public function Updateplanif()
@@ -124,6 +117,7 @@ class UpdatePlanification extends Component
             ]);
 
             $idsTache = PlantTache::where('id_planif', $this->id_planif)
+                     ->where('status', false)
                      ->pluck('id_tache');
             
             Tach::whereIn('id', $idsTache)->update([
@@ -131,25 +125,30 @@ class UpdatePlanification extends Component
             ]);
 
             PlantTache::where('id_planif', $this->id_planif)
+            ->where('status',false)
                 ->delete();
 
-            // Générez le slug à partir du nom d'utilisateur
-            $username = preg_replace('/\s+/', '', Auth::user()->name);
-            // Remplacez cela par le nom d'utilisateur réel
-            $slug = generateUserSlug($username);
+            $slug = Str::slug($this->id_planif);
+            $uniqueSlug = $slug;
+            $count = 1;
+
+            while (Tach::where('slug', $uniqueSlug)->exists()) {
+                $uniqueSlug = $slug . '-' . $count;
+                $count++;
+            }
 
             foreach ($this->createtaches as $item) {
                 $tache = Tach::create([
                     'tache_prevues' => $item['tache_prevues'],
                     'id_projet' => $item['id_projet'],
-                    'slug' => $slug,
+                    'slug' => $uniqueSlug,
                 ]);
 
                 $this->Newtaches[] = $tache->id;
             }
 
             // Enregistrer les tâches
-            if ($this->Newtaches) {
+            if ($this->Newtaches !== null) {
                 foreach ($this->Newtaches as $item) {
                    $taches = PlantTache::create([
                         'id_tache' => $item,
@@ -172,6 +171,49 @@ class UpdatePlanification extends Component
         $this->reset();
     }
 
+    public function update($id)
+    {
+        $tache = Tach::find($id);
+        if ($tache) {
+            $updateResult = $tache->update([
+                'tache_prevues' => $this->tache_prevues,
+                'status' => 'Attente'
+            ]);
+    
+            if ($updateResult) {
+                // Mise à jour réussie, affichez un message de confirmation
+                session()->flash('success', 'Tâche mise à jour avec succès!');
+            } else {
+                // La mise à jour a échoué, affichez un message d'erreur
+                session()->flash('error', 'La mise à jour de la tâche a échoué.');
+            }
+        } else {
+            // La tâche n'a pas été trouvée, affichez un message d'erreur
+            session()->flash('error', 'Tâche non trouvée.');
+        }
+    }
+
+    public function delete($id)
+    {
+        $tache = Tach::find($id);
+        if ($tache) {
+            $updateResult = $tache->update([
+                'status' => 'Supprimer'
+            ]);
+    
+            if ($updateResult) {
+                // Mise à jour réussie, affichez un message de confirmation
+                session()->flash('success', 'Tâche supprimer avec succès!');
+            } else {
+                // La supprimer a échoué, affichez un message d'erreur
+                session()->flash('error', 'La suppression de la tâche a échoué.');
+            }
+        } else {
+            // La tâche n'a pas été trouvée, affichez un message d'erreur
+            session()->flash('error', 'Tâche non trouvée.');
+        }
+    }
+
     public function envoie()
     {
         foreach ($this->planif as $planifItem) {
@@ -180,7 +222,7 @@ class UpdatePlanification extends Component
             ]);
         }
 
-        $chef = $this->filiale->pluck('hierachie')->first();
+        $chef = $this->filiale->hierachie;
 
         // Utilisez find() pour obtenir un seul utilisateur par son ID
         $user = User::find($chef);
@@ -198,7 +240,7 @@ class UpdatePlanification extends Component
             session()->flash('Utilisateur introuvable avec l\'ID ' . $chef);
         }
 
-        $this->dispatch("successEvent",[]);   
+        $this->dispatch("successEvent",[]);
         return redirect()->route('Accueil');
     }
 }
