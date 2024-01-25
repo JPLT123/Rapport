@@ -19,7 +19,7 @@ class RoleSeeder extends Seeder
         ]);
 
         Role::create([
-            'nom' => 'Responsable Hierachie',
+            'nom' => 'Responsable',
             'description' => 'responsable hierachie',
         ]);
 

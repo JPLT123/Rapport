@@ -40,7 +40,7 @@ class DetailPlanif extends Component
     public function render()
     {
         $this->planif = $this->user->planif_hebdomadaires()->where('status', 'attente')
-            ->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])
+            ->whereBetween('date', [now()->startOfWeek()->addWeek(), now()->endOfWeek()->addWeek()])
             ->get();
 
             $this->filiale = $this->user->filiale;
@@ -114,6 +114,7 @@ class DetailPlanif extends Component
             Mail::to($this->user->email)->send(new ConfirmationChefEmail($data));  
             
             $this->dispatch("showInfoMessage",message:"Operations effectuer avec success");
+            return redirect()->route('Accueil');
         } else {
             
             $this->dispatch("showErrorMessage",[]);
@@ -150,6 +151,7 @@ class DetailPlanif extends Component
             Mail::to($this->user->email)->send(new Rejeterplanif($data));  
             
             $this->dispatch("successEvent",[]);
+            return redirect()->route('Accueil');
         }
     }
 

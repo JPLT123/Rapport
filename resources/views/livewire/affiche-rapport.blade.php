@@ -1,7 +1,7 @@
 <div>
     <div id="content">
         <div  style="font-family: Arial, sans-serif; margin: 20px;">   
-            <div style="border: 1px solid #ccc; padding: 20px; max-width: 800px; margin: 0 auto;">
+            <div style="border: 1px solid #ccc; padding: 30px; max-width: 800px; margin: 0 auto;">
                 <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
                     <img src="{{asset('assets\images\logo_elceto.png')}}" alt="Logo de l'entreprise"  style="max-width: 100%; height: 60px; margin-right: 10px;">
                     <span>Elceto Holding S.A.S</span>
@@ -55,7 +55,7 @@
                     $num=1;
                     $nd=1;
                 @endphp
-                @foreach ($rapports as $item)
+                {{-- @foreach ($rapports as $item)
         
                     <h4>{{$num++}}- Activités de la journée</h4>
                     <div style="margin-bottom: 10px;">
@@ -103,7 +103,35 @@
                         <span style="font-weight: bold;">Observations:</span>
                         {{ $item->observation ?? "pas d'observation" }}.
                     </div>
-                @endforeach
+                @endforeach --}}
+                <table style="border-collapse: collapse; width: 100%; page-break-inside: auto;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 3px; text-align: left;">Tâches Prévues</th>
+                            <th style="padding: 3px; text-align: left;">Tâches Réalisées</th>
+                            <th style="padding: 3px; text-align: left;">Tâches Supplémentaires</th>
+                            <th style="padding: 3px; text-align: left;">Heure Début</th>
+                            <th style="padding: 3px; text-align: left;">Heure Fin</th>
+                            <th style="padding: 3px; text-align: left;">Lieu</th>
+                            <th style="padding: 3px; text-align: left;">Matériels Utilisés</th>
+                            <th style="padding: 3px; text-align: left;">Observations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($rapports as $index => $item)
+                            <tr style="border-bottom: 1px solid #ddd; page-break-inside: auto;">
+                                <td style="padding: 8px;">{{ $item->tach->tache_prevues }}</td>
+                                <td style="padding: 8px;">{{ $item->tache_realiser }}</td>
+                                <td style="padding: 8px;">{{ $item->tache_suplementaire ? $item->tache_suplementaire : "pas de tache suplementaires" }}</td>
+                                <td style="padding: 8px;">{{ optional($item->debut_heure)->format('H:i') ?? "pas de debut_heure" }}</td>
+                                <td style="padding: 8px;">{{ optional($item->fin_heure)->format('H:i') ?? "pas de fin_heure" }}</td>
+                                <td style="padding: 8px;">{{ $item->lieu ?? "pas de lieu" }}</td>
+                                <td style="padding: 8px;">{{ $item->materiels_utiliser ?? "pas de materiels utilisés" }}</td>
+                                <td style="padding: 8px;">{{ $item->observation ?? "pas d'observation" }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
                 <br>
                 <h4>Depenses des Activités</h4>
                 @if ($depenses->isEmpty())
@@ -121,7 +149,7 @@
                         <tbody>
                             @foreach ($depenses as $item)
                                 <tr style="border-bottom: 1px solid #ddd;">
-                                    <td style="padding: 8px;">{{$item->designation?? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam libero quas voluptatem ut ducimus quidem nemo odio pariatur dignissimos? Delectus veritatis deserunt nulla adipisci quas modi accusantium exercitationem beatae culpa.'}}</td>
+                                    <td style="padding: 8px;">{{$item->Designation?? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam libero quas voluptatem ut ducimus quidem nemo odio pariatur dignissimos? Delectus veritatis deserunt nulla adipisci quas modi accusantium exercitationem beatae culpa.'}}</td>
                                     <td style="padding: 8px;">{{$item->CoutReel}}</td>
                                     <td style="padding: 8px;">{{$item->Coutprevisionnel}}</td>
                                     <td style="padding: 8px;">{{$item->observation}}</td>

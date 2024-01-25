@@ -34,6 +34,7 @@ use App\Livewire\GestionUtilisateur\AuthUser;
 use App\Livewire\GestionUtilisateur\ListeUser;
 use App\Livewire\GestionUtilisateur\DetailUser;
 use App\Livewire\Planification\HistoriquePlanif;
+use App\Livewire\Planification\Veficationplanif;
 use App\Livewire\Planification\UpdatePlanification;
 
 /*
@@ -73,6 +74,7 @@ Route::middleware([
     Route::get('/planification.create', Create::class)->name('planification.create');
     Route::get('/planification.projet', PlanifChef::class)->name('planification.projet');
     Route::get('/planification.Update/{slug}', UpdatePlanification::class)->name('planification.Update');
+    Route::get('/planification.verifier/{slug}', Veficationplanif::class)->name('planification.verifier');
     Route::get('/planification-detail/{slug}', DetailPlanif::class)->name('planification-detail');
     Route::get('/create-projet', CreateProjet::class)->name('create-projet');
     Route::get('/liste-projet', ListeProjet::class)->name('liste-projet');

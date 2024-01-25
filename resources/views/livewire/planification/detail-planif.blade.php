@@ -86,13 +86,15 @@
                                                                 $projectNameDisplayed = false;
                                                             @endphp
                                                             @foreach($PlantTache as $tache)
-                                                                @if (!$projectNameDisplayed)
+                                                                @if ($tache->tach->status !== 'Supprimer')
+                                                                    @if (!$projectNameDisplayed)
                                                                         <h6>Projet: {{ $tache->tach->projet->nom ?? 'Cliquez sur un jour'}}</h6>
-                                                                    @php
-                                                                        $projectNameDisplayed = true;
-                                                                    @endphp
+                                                                        @php
+                                                                            $projectNameDisplayed = true;
+                                                                        @endphp
+                                                                    @endif
+                                                                    <li>{{ $tache->tach->tache_prevues ?? 'Cliquez sur un jour'}} </li>
                                                                 @endif
-                                                                <li>{{ $tache->tach->tache_prevues ?? 'Cliquez sur un jour'}} </li>
                                                             @endforeach
                                                             </ul>
                                                         </div>

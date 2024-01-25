@@ -26,7 +26,7 @@ class CreateTache extends Component
         $this->taches[] = ['tache_prevues' => '', 'projet' => ''];
     }
 
-    public function removeTaches($index)
+    public function removeTache($index)
     {
         unset($this->taches[$index]);
         $this->taches = array_values($this->taches);
@@ -43,13 +43,10 @@ class CreateTache extends Component
         
         foreach ($this->taches as $item) {
 
-            $slug = Str::slug('taches' . '-' . $count);
-
-            // Assurez-vous que le slug est unique
-            while (Tach::where('slug', $slug)->exists()) {
-                $count++;
-                $slug = Str::slug('taches' . '-' . $count);
-            }
+             // Générez le slug à partir du nom d'utilisateur
+             $username = preg_replace('/\s+/', '', Auth::user()->name);
+             // Remplacez cela par le nom d'utilisateur réel
+            $slug = generateUserSlug($username);
         
             Tach::create([
                 'tache_prevues' => $item['tache_prevues'],

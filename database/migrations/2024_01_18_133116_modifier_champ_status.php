@@ -24,25 +24,4 @@ return new class extends Migration
             $table->string('status')->default('attente')->change();
         });
     }
-
-    // public function up()
-    // {
-    //     // Changez le type de la colonne status à enum avec des valeurs spécifiées
-    //     Schema::table('projets', function (Blueprint $table) {
-    //         $table->enum('status', ['attente', 'Terminer', 'Retard', 'Avance', 'Suspendu', 'supprimer', 'activer'])->default('attente')->change();
-    //     });
-    // }
-
-    // /**
-    //  * Reverse the migrations.
-    //  *
-    //  * @return void
-    //  */
-    // public function down()
-    // {
-    //     // Si nécessaire, vous pouvez définir la colonne status comme string dans la migration de rollback
-    //     Schema::table('projets', function (Blueprint $table) {
-    //         $table->string('status')->default('attente')->change();
-    //     });
-    // }
 };
