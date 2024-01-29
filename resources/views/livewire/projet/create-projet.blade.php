@@ -140,14 +140,10 @@
                                     </div>
                                     
                                     <div class="row mb-2">
-                                        <div class="col-xxl-10 col-lg-6">
-                                            <div class="search-box me-2 mb-2 d-inline-block">
-                                                <div class="position-relative">
-                                                    <button type="submit" class="btn btn-success  waves-effect waves-light mb-2 me-2">Create Project</button>
-                                                </div>
-                                            </div> 
+                                        <div class="col-lg-6 col-md-6">
+                                            <button type="submit" class="btn btn-success  waves-effect waves-light mb-2 me-2">Create Project</button> 
                                         </div>
-                                        <div class="col-xxl-2 col-lg-6">
+                                        <div class="col-lg-6 col-md-6">
                                             <div class="text-sm-end">
                                                 <button type="reset" class="btn btn-danger  waves-effect waves-light mb-2 me-2"> Annuler</button>
                                             </div>

@@ -28,7 +28,8 @@
                             <div class="card-body border-bottom">
                                 <div class="row g-3">
                                     <div class="col-xxl-2 col-lg-4">
-                                        <input type="search" wire:model.live ="search" class="form-control" id="searchInput" placeholder="Search for ...">
+                                        <input type="search" wire:model.live ="search" class="form-control"
+                                            id="searchInput" placeholder="Search for ...">
                                     </div>
                                     <div class="col-xxl-2 col-lg-4">
                                         <select wire:model.live ="status" class="form-control select2">
@@ -38,12 +39,14 @@
                                         </select>
                                     </div>
                                     <div class="col-xxl-2 col-lg-4">
-                                        <button type="button" class="btn btn-soft-info mx-1 w-100" data-bs-toggle="modal" data-bs-target="#addModal"><i class="mdi mdi-plus-outline align-middle"></i> Ajouter</button>
+                                        <button type="button" class="btn btn-soft-info mx-1 w-100"
+                                            data-bs-toggle="modal" data-bs-target="#addModal"><i
+                                                class="mdi mdi-plus-outline align-middle"></i> Ajouter</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
-                                
+
                                 <div class="table-responsive">
                                     <table class="table table-bordered align-middle nowrap">
                                         <thead>
@@ -61,51 +64,64 @@
                                                 $Num = 1;
                                             @endphp
                                             @foreach ($Departements as $Departement)
-                                            <tr>
-                                                <td scope="row">
-                                                    {{$Num++}}
-                                                </td>
-                                                <td> {{ $Departement->nom }} </td>
-                                                <td> {{$Departement->Description}} </td>
-                                                <td> {{ $Departement->filiale->nom}} </td>
-                                                @if ($Departement->status == 'activer')
-                                                    <td><button wire:click="confirmation('{{ $Departement->slug }}')" class="btn btn-soft-success btn-sm">Active</button></td>
-                                                @else
-                                                    <td><button wire:click="confirmation('{{ $Departement->slug }}')" class="btn btn-soft-danger btn-sm">desactiver</button></td>
-                                                @endif
+                                                <tr>
+                                                    <td scope="row">
+                                                        {{ $Num++ }}
+                                                    </td>
+                                                    <td> {{ $Departement->nom }} </td>
+                                                    <td> {{ $Departement->Description }} </td>
+                                                    <td> {{ $Departement->filiale->nom }} </td>
+                                                    @if ($Departement->status == 'activer')
+                                                        <td><button
+                                                                wire:click="confirmation('{{ $Departement->slug }}')"
+                                                                class="btn btn-soft-success btn-sm">Active</button></td>
+                                                    @else
+                                                        <td><button
+                                                                wire:click="confirmation('{{ $Departement->slug }}')"
+                                                                class="btn btn-soft-danger btn-sm">desactiver</button>
+                                                        </td>
+                                                    @endif
                                                     <td>
                                                         <ul class="list-unstyled hstack gap-1 mb-0">
                                                             {{-- <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                                                 <a wire:click="ViewDepartement('{{ $Departement->slug }}')" class="btn btn-sm btn-soft-primary"><i class="mdi mdi-eye-outline"></i></a>
                                                             </li> --}}
-                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                                                <a wire:click="edite('{{ $Departement->slug }}')" class="btn btn-sm btn-soft-info"><i class="mdi mdi-pencil-outline"></i></a>
+                                                            <li data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                title="Edit">
+                                                                <a wire:click="edite('{{ $Departement->slug }}')"
+                                                                    class="btn btn-sm btn-soft-info"><i
+                                                                        class="mdi mdi-pencil-outline"></i></a>
                                                             </li>
-                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                                                <a wire:click="confirmationDelete('{{ $Departement->slug }}')" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger"><i class="mdi mdi-delete-outline"></i></a>
+                                                            <li data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                title="Delete">
+                                                                <a wire:click="confirmationDelete('{{ $Departement->slug }}')"
+                                                                    data-bs-toggle="modal"
+                                                                    class="btn btn-sm btn-soft-danger"><i
+                                                                        class="mdi mdi-delete-outline"></i></a>
                                                             </li>
                                                         </ul>
                                                     </td>
-                                            </tr>
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="col-11">
-                                    {{$Departements->links('pagination::bootstrap-5')}}
+                                <div class="col-11" wire:ignore>
+                                    {{ $Departements->links('pagination::bootstrap-5') }}
                                 </div>
                                 <!--end row-->
                             </div>
                         </div><!--end card-->
                     </div><!--end col-->
-            
+
                 </div><!--end row-->
 
             </div> <!-- container-fluid -->
         </div>
         <!-- End Page-content -->
     </div>
-    <div class="modal fade orderdetailsModal " id="addModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+    <div class="modal fade orderdetailsModal " id="addModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -117,7 +133,8 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom du departement:<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" aria-label="nom" aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror"
+                                    wire:model="nom" aria-label="nom" aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>
@@ -126,7 +143,9 @@
                         <div class="form-group mb-3">
                             <label for="description">Description :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" aria-label="description" aria-describedby="description-addon">
+                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model="description" cols="30"
+                                    rows="5"></textarea>
+                                {{-- <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" aria-label="description" aria-describedby="description-addon"> --}}
                             </div>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
@@ -137,11 +156,11 @@
                             <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
                                 <option value="">selectionneur...</option>
                                 @foreach ($filiales as $filiale)
-                                <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
+                                    <option value="{{ $filiale->id }}">{{ $filiale->nom }}</option>
                                 @endforeach
                             </select>
                             @error('filiale')
-                                <span class="text-danger"> {{$message}} </span>
+                                <span class="text-danger"> {{ $message }} </span>
                             @enderror
                         </div>
                     </div>
@@ -157,7 +176,8 @@
         </div>
     </div>
 
-    <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+    <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1"
+        role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -170,7 +190,10 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" required autocomplete="current-nom" placeholder="Entrer categorie produit" aria-label="nom" aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror"
+                                    wire:model="nom" required autocomplete="current-nom"
+                                    placeholder="Entrer categorie produit" aria-label="nom"
+                                    aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>
@@ -179,7 +202,8 @@
                         <div class="form-group mb-3">
                             <label for="description">Description :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" placeholder="Entrer categorie produit" aria-label="description" aria-describedby="description-addon">
+                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model="description" cols="30"
+                                    rows="5"></textarea>
                             </div>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
@@ -190,11 +214,11 @@
                             <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
                                 <option value="">selectionneur...</option>
                                 @foreach ($filiales as $filiale)
-                                <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
+                                    <option value="{{ $filiale->id }}">{{ $filiale->nom }}</option>
                                 @endforeach
                             </select>
                             @error('filiale')
-                                <span class="text-danger"> {{$message}} </span>
+                                <span class="text-danger"> {{ $message }} </span>
                             @enderror
                         </div>
                     </div>
