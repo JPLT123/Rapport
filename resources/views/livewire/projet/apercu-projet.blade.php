@@ -129,7 +129,7 @@
                 <!-- end row -->
 
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-4">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Overview</h4>
@@ -219,7 +219,7 @@
                     </div> --}}
                     <!-- end col -->
 
-                    <div class="col-xl-7">
+                    <div class="col-xl-4">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Tasks</h4>
@@ -260,18 +260,6 @@
                                                                         <td>
                                                                             <h5 class="text-truncate font-size-14 mb-1"><a href="javascript: void(0);" class="text-dark">{{$item->tache_prevues}}</a></h5>
                                                                             {{-- <p class="text-muted mb-0">Assigned to {{$item->membres_projets_relation->name}}</p> --}}
-                                                                        </td>
-                                                                        <td style="width: 90px;">
-                                                                            <div>
-                                                                                <ul class="list-inline mb-0 font-size-16">
-                                                                                    <li class="list-inline-item">
-                                                                                        <a href="javascript: void(0);" class="text-success p-1"><i class="bx bxs-edit-alt"></i></a>
-                                                                                    </li>
-                                                                                    <li class="list-inline-item">
-                                                                                        <a href="javascript: void(0);" class="text-danger p-1"><i class="bx bxs-trash"></i></a>
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </div>
                                                                         </td>
                                                                     </tr>
                                                                 @endif

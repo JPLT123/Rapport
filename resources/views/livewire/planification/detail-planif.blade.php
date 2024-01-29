@@ -83,8 +83,9 @@
                                                             <h5>Les tâches prevues :</h5>
                                                             <ul>
                                                                 @php
-                                                                $projectNameDisplayed = false;
-                                                            @endphp
+                                                                    $projectNameDisplayed = false;
+                                                                @endphp
+                                                            
                                                             @foreach($PlantTache as $tache)
                                                                 @if ($tache->tach->status !== 'Supprimer')
                                                                     @if (!$projectNameDisplayed)

@@ -152,13 +152,13 @@ class Create extends Component
             'observation' => 'required|string|max:255',
             'projet' => 'required|exists:projets,id',
             'date' => ['required', 'date_format:Y-m-d', function ($attribute, $value, $fail) {
-                $startOfWeek = now()->startOfWeek()->addWeek();
-                $endOfWeek = now()->endOfWeek()->addWeek();
+                $startOfWeek = now()->startOfWeek();
+                $endOfWeek = now()->endOfWeek();
 
                 $selectedDate = Carbon::createFromFormat('Y-m-d', $value);
 
                 if ($selectedDate->lt($startOfWeek) || $selectedDate->gt($endOfWeek)) {
-                    $fail("La date doit être dans la semaine Suivante.");
+                    $fail("La date doit être dans la semaine actuelle.");
                 }
             }],
             'taches.*' => 'exists:taches,id',

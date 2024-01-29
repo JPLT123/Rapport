@@ -30,20 +30,20 @@
                                 <div class="row g-3">
                                     <div class="col-xxl-3 col-sm-3">
                                         <select wire:model.live ="projet" class="form-control select2">
-                                            <option value="">Projets</option>
+                                            <option value="">Selectionner...</option>
                                             @foreach ($projets as $projet)
                                                 <option value="{{ $projet->id }}">{{ $projet->nom  }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="col-xxl-2 col-sm-3">
-                                        <a href="{{route('create-projet')}}" class="btn btn-soft-info mx-1 w-100" ><i class=" bx bx-edit-alt"></i> Update</a>
+                                        <a wire:click="CompletedTasks" class="btn btn-soft-info mx-1 w-100" ><i class=" bx bx-edit-alt"></i> Update</a>
                                     </div>
                                     <div class="col-xxl-2 col-sm-3">
-                                        <a href="{{route('create-projet')}}" class="btn btn-soft-success mx-1 w-100" ><i class="mdi mdi-plus-outline align-middle"></i> Add</a>
+                                        <a href="{{route('create-tache')}}" class="btn btn-soft-success mx-1 w-100" ><i class="mdi mdi-plus-outline align-middle"></i> Add</a>
                                     </div>
                                     <div class="col-xxl-2 col-sm-3">
-                                        <a wire:click="deleteCompletedTasks" class="btn btn-soft-danger mx-1 w-100" ><i class="bx bx-trash"></i> Delete</a>
+                                        <a wire:click="confirmationDelete" class="btn btn-soft-danger mx-1 w-100" ><i class="bx bx-trash"></i> Delete</a>
                                     </div>
                                 </div>
                             </div>
@@ -65,7 +65,7 @@
                                                     <tr>
                                                         <td style="width: 40px;">
                                                             <div class="form-check font-size-16">
-                                                                <input class="form-check-input" type="checkbox" id="upcomingtaskCheck01">
+                                                                <input wire:model="tache" class="form-check-input" type="checkbox" id="tache-{{ $tache->id }}" name="tache[]" value="{{ $tache->id }}">
                                                                 <label class="form-check-label" for="upcomingtaskCheck01"></label>
                                                             </div>
                                                         </td>
@@ -85,7 +85,7 @@
                                                         </td>
                                                         <td>
                                                             <div class="text-center">
-                                                                <span class="badge rounded-pill badge-soft-secondary font-size-11">{{$tache->status}}</span>
+                                                                <span class="badge rounded-pill badge-soft-warning font-size-11">{{$tache->status}}</span>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -107,8 +107,7 @@
                                                 <tr>
                                                     <td style="width: 40px;">
                                                         <div class="form-check font-size-16">
-                                                            <input class="form-check-input" type="checkbox" wire:model="tache.{{ $index }}.id" value="{{ $tache['id'] }}" id="taskCheck{{ $index }}">
-                                                            <label class="form-check-label" for="taskCheck{{ $index }}"></label>
+                                                            <input wire:model="tache" class="form-check-input" type="checkbox" id="tache-{{ $tache->id }}" name="tache[]" value="{{ $tache->id }}">
                                                         </div>
                                                     </td>
                                                     <td>
@@ -127,7 +126,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="text-center">
-                                                            <span class="badge rounded-pill badge-soft-warning font-size-11">{{$tache->status}}</span>
+                                                            <span class="badge rounded-pill badge-soft-info font-size-11">{{$tache->status}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -138,8 +137,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Completed</h4>
@@ -151,7 +148,7 @@
                                                     <tr>
                                                         <td style="width: 40px;">
                                                             <div class="form-check font-size-16">
-                                                                <input class="form-check-input" type="checkbox" id="upcomingtaskCheck01">
+                                                                <input wire:model="tache" class="form-check-input" type="checkbox" id="tache-{{ $tache->id }}" name="tache[]" value="{{ $tache->id }}">
                                                                 <label class="form-check-label" for="upcomingtaskCheck01"></label>
                                                             </div>
                                                         </td>
@@ -199,89 +196,40 @@
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Recent Tasks</h4>
 
-                                <div class="table-responsive">
+                                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
                                     <table class="table table-nowrap align-middle mb-0">
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <h5 class="text-truncate font-size-14 m-0"><a href="javascript: void(0);" class="text-dark">Brand logo design</a></h5>
-                                                </td>
-                                                <td>
-                                                    <div class="avatar-group">
-                                                        <div class="avatar-group-item">
-                                                            <a href="javascript: void(0);" class="d-inline-block">
-                                                                <img src="assets/images/users/avatar-4.jpg" alt="" class="rounded-circle avatar-xs">
-                                                            </a>
-                                                        </div>
-                                                        <div class="avatar-group-item">
-                                                            <a href="javascript: void(0);" class="d-inline-block">
-                                                                <img src="assets/images/users/avatar-5.jpg" alt="" class="rounded-circle avatar-xs">
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <h5 class="text-truncate font-size-14 m-0"><a href="javascript: void(0);" class="text-dark">Create a Blog Template UI</a></h5>
-                                                </td>
-                                                <td>
-                                                    <div class="avatar-group">
-                                                        <div class="avatar-group-item">
-                                                            <a href="javascript: void(0);" class="d-inline-block">
-                                                                <img src="assets/images/users/avatar-1.jpg" alt="" class="rounded-circle avatar-xs">
-                                                            </a>
-                                                        </div>
-                                                        <div class="avatar-group-item">
-                                                            <a href="javascript: void(0);" class="d-inline-block">
-                                                                <img src="assets/images/users/avatar-2.jpg" alt="" class="rounded-circle avatar-xs">
-                                                            </a>
-                                                        </div>
-                                                        <div class="avatar-group-item">
-                                                            <a href="javascript: void(0);" class="d-inline-block">
-                                                                <img src="assets/images/users/avatar-3.jpg" alt="" class="rounded-circle avatar-xs">
-                                                            </a>
-                                                        </div>
-                                                        <div class="avatar-group-item">
-                                                            <a href="javascript: void(0);" class="d-inline-block">
-                                                                <div class="avatar-xs">
-                                                                    <span class="avatar-title rounded-circle bg-info text-white font-size-16">
-                                                                        D
-                                                                    </span>
-                                                                </div>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <h5 class="text-truncate font-size-14 m-0"><a href="javascript: void(0);" class="text-dark">Redesign - Landing page</a></h5>
-                                                </td>
-                                                <td>
-                                                    <div class="avatar-group">
-                                                        <div class="avatar-group-item">
-                                                            <a href="javascript: void(0);" class="d-inline-block">
-                                                                <img src="assets/images/users/avatar-8.jpg" alt="" class="rounded-circle avatar-xs">
-                                                            </a>
-                                                        </div>
-                                                        <div class="avatar-group-item">
-                                                            <a href="javascript: void(0);" class="d-inline-block">
-                                                                <img src="assets/images/users/avatar-7.jpg" alt="" class="rounded-circle avatar-xs">
-                                                            </a>
-                                                        </div>
-                                                        <div class="avatar-group-item">
-                                                            <a href="javascript: void(0);" class="d-inline-block">
-                                                                <div class="avatar-xs">
-                                                                    <span class="avatar-title rounded-circle bg-danger text-white font-size-16">
-                                                                        P
-                                                                    </span>
-                                                                </div>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            @foreach ($taches as $tache)
+                                                @if($tache->status == 'New')
+                                                    <tr>
+                                                        <td style="width: 40px;">
+                                                            <div class="form-check font-size-16">
+                                                                <input wire:model="tache" class="form-check-input" type="checkbox" id="tache-{{ $tache->id }}" name="tache[]" value="{{ $tache->id }}">
+                                                                <label class="form-check-label" for="upcomingtaskCheck01"></label>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <h5 class="text-truncate font-size-14 m-0"><a href="javascript: void(0);" class="text-dark">{{$tache->tache_prevues}}</a></h5>
+                                                        </td>
+                                                        <td>
+                                                            <div class="avatar-group">
+                                                                @foreach ($tache->projet->membres_projets_relation as $item)
+                                                                    <div class="avatar-group-item">
+                                                                        <a href="javascript: void(0);" class="d-inline-block">
+                                                                            <img src="{{asset($item->profile_photo_path ? '/storage/'.$item->profile_photo_path : 'assets\user.png')}}" alt="" class="rounded-circle avatar-xs">
+                                                                        </a>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="text-center">
+                                                                <span class="badge rounded-pill badge-soft-secondary font-size-11">{{$tache->status}}</span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -313,8 +261,41 @@
             </div>
         </footer>
     </div>
+    <div class="modal fade orderdetailsModal " id="hierachie" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rejeter la Planification</h5>
+                    <button type="button" class="btn-close"  aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <textarea class="form-control mb-2" id="tache_prevues"  wire:model="tache_prevues" rows="2"></textarea>
+                        @error('tache_prevues')
+                            <span class="text-danger"> {{$message}} </span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" wire:click="closeupdate" class="btn btn-success waves-effect" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" wire:click="UpdateCompletedTasks" class="btn btn-danger waves-effect waves-light">valider</button>
+                </div>
+                
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 </div>
 @include('sweetalert')
+<script>
+    window.addEventListener("show_modal", event => {
+        // alert('okay')
+        $('#hierachie').modal('show');
+    })
+
+    window.addEventListener("closeupdate", event => {
+        $("#hierachie").modal("hide")
+    })
+</script>
 <script>
     // Supposons que vous avez récupéré ces données depuis votre backend (à l'aide d'AJAX, par exemple)
     var totalTasksByDay = {!! json_encode($totalTasksByDay) !!};

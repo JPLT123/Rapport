@@ -14,11 +14,13 @@ class TacheSeeder extends Seeder
      */
     public function run(): void
     {
+        $statuses = ['New','Attente', 'En Cour', 'Terminer'];
 
         for ($i = 1; $i <= 150; $i++) {
             Tach::create([
                 'slug' => "tache_projet1_$i",
                 'tache_prevues' => "Tâche prévue $i pour projet",
+                'status' => $statuses[array_rand($statuses)],
                 'id_projet' => rand(1,5)
             ]);
         }
