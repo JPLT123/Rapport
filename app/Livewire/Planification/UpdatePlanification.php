@@ -43,7 +43,7 @@ class UpdatePlanification extends Component
         $user = Auth::user();
 
         $this->planif = $user->planif_hebdomadaires()->where('status', 'rejeter')
-            ->whereBetween('date', [now()->startOfWeek()->addWeek(), now()->endOfWeek()->addWeek()])
+            ->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])
             ->get();
 
             $this->filiale = $user->filiale;

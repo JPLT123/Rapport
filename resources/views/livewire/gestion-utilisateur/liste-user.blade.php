@@ -113,7 +113,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <ul class="pagination pagination-rounded justify-content-end mb-2">
+                                <ul wire:ignore class="pagination pagination-rounded justify-content-end mb-2">
                                     {{$users->links('pagination::bootstrap-5')}}
                                 </ul>
                             </div>

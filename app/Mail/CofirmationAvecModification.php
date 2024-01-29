@@ -35,6 +35,8 @@ class CofirmationAvecModification extends Mailable
      */
     public function content(): Content
     {
+        // $this->cc($this->data['ccEmail']);
+
         return new Content(
             markdown: 'emails.CofirmationAvecModification',
         );

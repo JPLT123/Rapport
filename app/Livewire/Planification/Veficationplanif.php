@@ -44,7 +44,7 @@ class Veficationplanif extends Component
         $user = Auth::user();
 
         $this->planif = $user->planif_hebdomadaires()->where('status', ['attente'])
-            // ->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])
+            ->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])
             ->get();
 
             $this->filiale = $user->filiale;

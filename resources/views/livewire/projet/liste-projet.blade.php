@@ -135,7 +135,7 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <div class="text-center pagination pagination-rounded justify-content-end mb-2">
+                        <div wire:ignore class="text-center pagination pagination-rounded justify-content-end mb-2">
                             {{$projets->links('pagination::bootstrap-5')}}
                         </div>
                     </div> <!-- end col-->

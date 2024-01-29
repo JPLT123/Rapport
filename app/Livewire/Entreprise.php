@@ -52,7 +52,6 @@ class Entreprise extends Component
         $this->chef = User::where('status', 'activer')
           ->where('id', '!=', $Auth_user->id)
           ->get();
-
         return view('livewire.filiale', [
             "Filiales" => $Filiale,
             "chef" =>$this->chef
@@ -128,39 +127,38 @@ class Entreprise extends Component
     
     #[on('toggleStatus')]
     public function toggleStatus($slug)
-{
-    $Filiale = Filiale::where('slug', $slug)->first();
+    {
+        $Filiale = Filiale::where('slug', $slug)->first();
 
-    if (!$Filiale) {
-        return; // Gérez le cas où l'utilisateur n'est pas trouvé.
-    }
+        if (!$Filiale) {
+            return; // Gérez le cas où l'utilisateur n'est pas trouvé.
+        }
 
-    $nouveauStatut = ($Filiale->status === 'activer') ? 'desactiver' : 'activer';
+        $nouveauStatut = ($Filiale->status === 'activer') ? 'desactiver' : 'activer';
 
-    $Filiale->update(['status' => $nouveauStatut]);
+        $Filiale->update(['status' => $nouveauStatut]);
 
-    $Departements = $Filiale->departements;
-    foreach ($Departements as $Departement) {
-        $Departement->update(['status' => $nouveauStatut]);
-    }
+        $Departements = $Filiale->departements;
+        foreach ($Departements as $Departement) {
+            $Departement->update(['status' => $nouveauStatut]);
+        }
 
-    $Projets = $Filiale->projets;
-    foreach ($Projets as $Projet) {
-        $Projet->update(['status' => ($nouveauStatut === 'activer') ? 'activer' : 'Suspendu']);
-    }
+        $Projets = $Filiale->projets;
+        foreach ($Projets as $Projet) {
+            $Projet->update(['status' => ($nouveauStatut === 'activer') ? 'activer' : 'Suspendu']);
+        }
 
-    $users = $Filiale->users;
-    foreach ($users as $user) {
-        if ($user->status !== 'attente' && $user->status !== 'supprimer' ) {
-            foreach ($user->roles as $role) {
-                if ($role->nom !== 'Admin') {
-                    $user->update(['status' => $nouveauStatut]);
+        $users = $Filiale->users;
+        foreach ($users as $user) {
+            if ($user->status !== 'attente' && $user->status !== 'supprimer' ) {
+                foreach ($user->roles as $role) {
+                    if ($role->nom !== 'Admin') {
+                        $user->update(['status' => $nouveauStatut]);
+                    }
                 }
             }
         }
     }
-}
-
     
     public function store(){
         $this->validate([

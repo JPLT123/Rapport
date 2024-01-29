@@ -22,7 +22,7 @@
                 </div>
                 <!-- end page title -->
 
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-xl-4">
                         <div class="card overflow-hidden">
                             <div class="bg-primary bg-soft">
@@ -703,7 +703,15 @@
                 </div>
             </div>
         </div>
-        <!-- end modal -->
+        <!-- end modal --> --}}
+        <div class="row text-center">
+            <div class="col-12">
+                <div class="text-primary p-3">
+                    <h5 class="text-primary">Welcome Back !</h5>
+                    <img src="assets\dashbord-rapport.png" alt="" class="img-fluid">
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>

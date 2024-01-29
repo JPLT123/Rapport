@@ -40,7 +40,7 @@ class DetailPlanif extends Component
     public function render()
     {
         $this->planif = $this->user->planif_hebdomadaires()->where('status', 'attente')
-            ->whereBetween('date', [now()->startOfWeek()->addWeek(), now()->endOfWeek()->addWeek()])
+            ->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])
             ->get();
 
             $this->filiale = $this->user->filiale;

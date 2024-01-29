@@ -35,6 +35,7 @@ class ConfirmationChefEmail extends Mailable
      */
     public function content(): Content
     {
+        // $this->cc($this->data['ccEmail']);
         return new Content(
             markdown: 'emails.ConfirmationChef-Email',
         );

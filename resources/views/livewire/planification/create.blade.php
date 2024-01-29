@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <!-- Vérifier si le jour actuel est vendredi, samedi ou dimanche -->
-                @if (now()->dayOfWeek >= 4 && now()->dayOfWeek <= 7)
+                {{-- @if (now()->dayOfWeek >= 4 && now()->dayOfWeek <= 7) --}}
                     {{-- @if ($planificationTerminee)
                         <div class="col-12 text-center">
                             <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque quidem, reprehenderit voluptatibus iste consequuntur quis a dolorem quas distinctio,</h5>
@@ -165,13 +165,13 @@
                             </div>
                         </div>
                     {{-- @endif --}}
-                @else
+                {{-- @else
                     <div class="text-center mt-2">
                         <p class="mt-3"> Ce contenu est disponible uniquement les vendredis, samedis et dimanches.</p>
                     <img class="mt-3" src="assets\planifsrapport.png" style="width: 55%" alt="">
                     </div>
                     <!-- Afficher un message si ce n'est pas vendredi, samedi ou dimanche -->
-                @endif
+                @endif --}}
 
                 {{-- <!-- end row -->
                 <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>

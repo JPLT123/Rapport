@@ -38,9 +38,16 @@ class Reglage extends Component
 
     public function update()
     {
+        $this->validate([
+            "nom" => "required|string|max:255",
+            "adresse" => "required|max:255",
+            "email" => "required|email|unique:users",
+            "telephone" => ['required','regex:/^(00224|\+224)?(?:61|62|65|66)[0-9]{1}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}$/','unique:users'],
+        ]);
+    
 
         if ($this->edit_images == null) {
-            $this->user->update([
+            $updateResult = $this->user->update([
                 "name" => $this->nom,
                 "email" => $this->email,
                 "telephone" => $this->telephone,
@@ -55,24 +62,28 @@ class Reglage extends Component
                 $this->user->update(['logo' => null]);
             }
             $image = $this->edit_images->store('images/users','public');
-            $this->user->update([
+            $updateResult = $this->user->update([
                 "name" => $this->nom,
                 "email" => $this->email,
                 "profile_photo_path" => $image,
             ]);
+        }
+
+        if ($updateResult) {
+            // Mise à jour réussie, affichez un message de confirmation
+            session()->flash('success', 'Tâche supprimer avec succès!');
+        } else {
+            // La supprimer a échoué, affichez un message d'erreur
+            session()->flash('error', 'La suppression de la tâche a échoué.');
         }
         
     }
 
     public function updatePassword()
     {
-        $user = Auth::user();
+        
+        Auth::guard('web')->logout();
+        return redirect()->route('password.email');
 
-        Auth::logout();
-        if ($user) {
-            $user->logout();
-        }
-
-        return redirect()->route('change-password');
     }
 }
