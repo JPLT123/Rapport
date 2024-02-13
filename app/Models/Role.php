@@ -36,4 +36,9 @@ class Role extends Model
 	{
 		return $this->hasMany(Permission::class, 'id_role');
 	}
+
+	public function user()
+	{
+		return $this->belongsToMany(User::class, 'permissions', 'id_role', 'id_user');
+	}
 }

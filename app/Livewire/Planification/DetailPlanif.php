@@ -10,6 +10,7 @@ use App\Models\PlantTache;
 use App\Mail\Rejeterplanif;
 use Illuminate\Support\Str;
 use App\Models\PlanifHebdomadaire;
+use Illuminate\Support\Facades\DB;
 use App\Mail\ConfirmationChefEmail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -29,6 +30,7 @@ class DetailPlanif extends Component
     public $planif;
     public $object;
     public $Alltaches;
+    public $permission;
     public $taches = [];
     public $Newtaches = [];
     public $createtaches = [];
@@ -45,6 +47,12 @@ class DetailPlanif extends Component
 
             $this->filiale = $this->user->filiale;
             $this->departement =  $this->user->departement;    
+            
+            $this->permission = DB::table('users')
+                ->join('permissions', 'users.id', '=', 'permissions.id_user')
+                ->join('role', 'permissions.id_role', '=', 'role.id')
+                ->where('users.id', Auth::user()->id)
+                ->value('role.nom');
 
         // Utilisez une seule variable pour stocker les résultats des requêtes
         $plantTache = PlantTache::where('id_planif', $this->id_planif)->get();
@@ -106,13 +114,92 @@ class DetailPlanif extends Component
                     'status' => 'En Cour',
                 ]);
             }
-            $data = [
-                'user' => $this->user,
-                'Auth_user'=> Auth::user()
-            ];
-
-            Mail::to($this->user->email)->send(new ConfirmationChefEmail($data));  
             
+            if ($this->user->id_departement !== null) {
+                if ($this->permission == "Membre") {
+                    $hierachie = $this->filiale->hierachie;
+                    if ($this->user->id !== $hierachie) {
+                        $responsable = $this->departement->hierachie;
+                        $email_responsable = User::where('id', $responsable)->value('email'); 
+                        $email_admin = User::where('status', 'activer')
+                            ->whereIn('id', function($query) {
+                                $query->select('id_user')->from('permissions')->where('id_role', 1);
+                            })->value('email');
+
+                            $data = [
+                                'user' => $this->user,
+                                'Auth_user'=> Auth::user(),
+                                'ccEmail' => $email
+                            ];
+                
+                            Mail::to($this->user->email)->cc($email)->cc($email_admin)->send(new ConfirmationChefEmail($data));  
+                    }
+                } elseif ($this->permission == "Responsable service") {
+                    $hierachie = $this->filiale->hierachie;
+                    if ($this->user->id !== $hierachie) {
+                        $email_admin = User::where('status', 'activer')
+                            ->whereIn('id', function($query) {
+                                $query->select('id_user')->from('permissions')->where('id_role', 1);
+                            })->value('email');
+
+                        $data = [
+                            'user' => $this->user,
+                            'Auth_user'=> Auth::user(),
+                            'ccEmail' => $email_admin
+                        ];
+            
+                        Mail::to($this->user->email)->cc($email_admin)->send(new ConfirmationChefEmail($data));  
+                    }
+                } elseif ($this->permission == "Responsable") {
+                    $hierachie = $this->filiale->hierachie;
+                    if ($this->user->id == $hierachie) {
+                        $data = [
+                            'user' => $this->user,
+                            'Auth_user'=> Auth::user()
+                        ];
+            
+                        Mail::to($this->user->email)->send(new ConfirmationChefEmail($data));
+                    }
+                }
+            } else {
+                if ($this->permission == "Responsable departement") {
+                    $hierachie = $this->service->hierachie;
+                    
+                    if ($this->user->id == $hierachie) {
+                        $data = [
+                            'user' => $this->user,
+                            'Auth_user'=> Auth::user()
+                        ];
+            
+                        Mail::to($this->user->email)->send(new ConfirmationChefEmail($data));    
+                    }
+                } elseif ($this->permission == "Membre") {
+                    $hierachie = $this->filiale->hierachie;
+
+                    if ($this->user->id !== $hierachie) {
+                        $email = User::where('id', $hierachie)->value('email'); 
+                        $responsable = $this->departement->hierachie; 
+                        $email_admin = User::where('status', 'activer')
+                            ->whereIn('id', function($query) {
+                                $query->select('id_user')->from('permissions')->where('id_role', 1);
+                        })->value('email');
+
+                        $data = [
+                            'user' => $this->user,
+                            'Auth_user'=> Auth::user(),
+                            'ccEmail' => $email_admin
+                        ];
+            
+                        Mail::to($this->user->email)->cc($email_admin)->send(new ConfirmationChefEmail($data)); 
+                    }
+                } else {
+                    $data = [
+                        'user' => $this->user,
+                        'Auth_user'=> Auth::user(),
+                    ];
+                    Mail::to($this->user->email)->send(new ConfirmationChefEmail($data)); 
+                }
+            }
             $this->dispatch("showInfoMessage",message:"Operations effectuer avec success");
             return redirect()->route('Accueil');
         } else {
@@ -142,14 +229,105 @@ class DetailPlanif extends Component
 
             $this->closeupdate();
 
-            $data = [
-                'user' => $this->user,
-                'Auth_user'=> Auth::user(),
-                'object'=> $this->object
-            ];
-
-            Mail::to($this->user->email)->send(new Rejeterplanif($data));  
             
+            if ($this->user->id_departement !== null) {
+                if ($this->permission == "Membre") {
+                    $hierachie = $this->filiale->hierachie;
+                    if ($this->user->id !== $hierachie) {
+                        $email = User::where('id', $hierachie)->value('email'); 
+                        $responsable = $this->departement->hierachie;
+                        $email_responsable = User::where('id', $responsable)->value('email'); 
+                        $email_admin = User::where('status', 'activer')
+                            ->whereIn('id', function($query) {
+                                $query->select('id_user')->from('permissions')->where('id_role', 1);
+                        })->value('email');
+
+                            
+                        $data = [
+                            'user' => $this->user,
+                            'Auth_user'=> Auth::user(),
+                            'object'=> $this->object,
+                            'ccEmail' => $email
+                        ];
+
+                        Mail::to($this->user->email)->cc($email)->cc($email_admin)->send(new Rejeterplanif($data));  
+                            
+                    }
+                } elseif ($this->permission == "Responsable service") {
+                    $hierachie = $this->filiale->hierachie;
+                    if ($this->user->id !== $hierachie) {
+                        $email_admin = User::where('status', 'activer')
+                            ->whereIn('id', function($query) {
+                                $query->select('id_user')->from('permissions')->where('id_role', 1);
+                        })->value('email');
+
+                                                    
+                        $data = [
+                            'user' => $this->user,
+                            'Auth_user'=> Auth::user(),
+                            'object'=> $this->object,
+                            'ccEmail' => $email_admin
+                        ];
+
+                        Mail::to($this->user->email)->cc($email_admin)->send(new Rejeterplanif($data));  
+                    }
+                } elseif ($this->permission == "Responsable") {
+                    $hierachie = $this->filiale->hierachie;
+                    if ($this->user->id == $hierachie) {            
+                        $data = [
+                            'user' => $this->user,
+                            'Auth_user'=> Auth::user(),
+                            'object'=> $this->object,
+                        ];
+
+                        Mail::to($this->user->email)->send(new Rejeterplanif($data));  
+                    }
+                }
+            } else {
+                if ($this->permission == "Responsable departement") {
+                    $hierachie = $this->service->hierachie;
+                    
+                    if ($this->user->id == $hierachie) {              
+                        $data = [
+                            'user' => $this->user,
+                            'Auth_user'=> Auth::user(),
+                            'object'=> $this->object
+                        ];
+
+                        Mail::to($this->user->email)->send(new Rejeterplanif($data));  
+                    }
+                } elseif ($this->permission == "Membre") {
+                    $hierachie = $this->service->hierachie;
+
+                    if ($this->user->id !== $hierachie) {
+                        $email_admin = User::where('status', 'activer')
+                            ->whereIn('id', function($query) {
+                                $query->select('id_user')->from('permissions')->where('id_role', 1);
+                            })->value('email');
+
+                                           
+                        $data = [
+                            'user' => $this->user,
+                            'Auth_user'=> Auth::user(),
+                            'object'=> $this->object,
+                            'ccEmail' => $email
+                        ];
+
+                        Mail::to($this->user->email)->cc($email_admin)->send(new Rejeterplanif($data));  
+                    }
+                } else {
+                                       
+                    $data = [
+                        'user' => $this->user,
+                        'Auth_user'=> Auth::user(),
+                        'object'=> $this->object,
+                        'ccEmail' => $email
+                    ];
+
+                    Mail::to($this->user->email)->send(new Rejeterplanif($data));  
+                }
+            }
+
             $this->dispatch("successEvent",[]);
             return redirect()->route('Accueil');
         }

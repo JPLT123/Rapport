@@ -21,7 +21,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $risques
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int|null $rapport
  * 
+ * @property Rapportgeneral|null $rapportgeneral
  * @property Collection|Rapport[] $rapports
  *
  * @package App\Models
@@ -31,7 +33,8 @@ class Tacheprochain extends Model
 	protected $table = 'tacheprochain';
 
 	protected $casts = [
-		'duree' => 'datetime'
+		'duree' => 'datetime',
+		'rapport' => 'int'
 	];
 
 	protected $fillable = [
@@ -39,8 +42,14 @@ class Tacheprochain extends Model
 		'duree',
 		'designation',
 		'valeur',
-		'risques'
+		'risques',
+		'rapport'
 	];
+
+	public function rapportgeneral()
+	{
+		return $this->belongsTo(Rapportgeneral::class, 'rapport');
+	}
 
 	public function rapports()
 	{

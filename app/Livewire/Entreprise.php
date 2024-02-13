@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Filiale;
 use Livewire\Component;
@@ -34,12 +35,24 @@ class Entreprise extends Component
     public $edit_images;
     public $Departements;
     public $responsable;
+    public $userRoles;
 
     public function render()
     {
-        $query = Filiale::query()
+        
+        $user = Auth::user();
+        $this->userRoles = $user->roles->pluck('nom')->toArray();  
+        
+        if (in_array('Responsable', $this->userRoles)) {
+            $query = Filiale::query()
+                    ->where("hierachie", $user->id)
                     ->where('nom', 'like', '%' . $this->search . '%')
                     ->whereIn("status", ['activer', 'desactiver']);
+        }else{
+            $query = Filiale::query()
+                    ->where('nom', 'like', '%' . $this->search . '%')
+                    ->whereIn("status", ['activer', 'desactiver']);
+        }
 
         if ($this->status) {
             $query->where('status', $this->status);
@@ -50,8 +63,12 @@ class Entreprise extends Component
         $Auth_user = Auth::user();
         
         $this->chef = User::where('status', 'activer')
-          ->where('id', '!=', $Auth_user->id)
-          ->get();
+                  ->whereNull("id_Service")
+                  ->whereNotIn('id', function($query) {
+                      $query->select('id_user')->from('permissions')->where('id_role', 1);
+                  })
+                  ->get();
+
         return view('livewire.filiale', [
             "Filiales" => $Filiale,
             "chef" =>$this->chef
@@ -165,7 +182,6 @@ class Entreprise extends Component
             "nom" => "required|string|max:255|unique:filiales",
             "description" => "required|string|max:255",
             "adresse" => "required|max:255",
-            "responsable" => "required|max:255",
             "email" => "required|email|unique:filiales",
             "telephone" => ['required','regex:/^(00224|\+224)?(?:61|62|65|66)[0-9]{1}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}$/','unique:users'],
             "date" => "required",
@@ -188,8 +204,7 @@ class Entreprise extends Component
             "slug" => $slug
         ]);
 
-        Permission::create([
-            "id_user" => $this->responsable,
+        Permission::where("id_user", $this->responsable)->update([
             "id_role" => 2,
         ]);
 
@@ -222,11 +237,16 @@ class Entreprise extends Component
         $this->validate([
             "nom" => "required|string|max:255",
             "description" => "required|string|max:255",
-            "telephone" => ['required','regex:/^(00224|\+224)?(?:61|62|65|66)[0-9]{1}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}$/','unique:users'],
+            "telephone" => ['required','regex:/^(00224|\+224)?(?:61|62|65|66)[0-9]{1}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}$/'],
         ]);
 
         $Filiale = Filiale::where('slug', $this->id_Filiale)->first();
 
+        if ($Filiale->hierachie != 1) {
+            Permission::where("id_user", $Filiale->hierachie)->update([
+                "id_role" => 4,
+            ]);
+        }
         if ($Filiale) { 
             if ($this->path_image == null) {
     
@@ -238,6 +258,10 @@ class Entreprise extends Component
                     "adresse" => $this->adresse,
                     "date_creation" => $this->date,
                     "hierachie" => $this->responsable,
+                ]);
+
+                Permission::where("id_user", $this->responsable)->update([
+                    "id_role" => 2,
                 ]);
             } else {
                 $filename = basename($this->edit_images);
@@ -259,6 +283,15 @@ class Entreprise extends Component
                     "logo" => $image,
                 ]);
                 
+                if ($Filiale->hierachie !== 1) {
+                    Permission::where("id_user", $Filiale->hierachie)->update([
+                        "id_role" => 4,
+                    ]);
+                }
+
+                Permission::where("id_user", $this->responsable)->update([
+                    "id_role" => 2,
+                ]);
             }
 
             $this->dispatch("showSuccessMessage", ["message" => "Opérations effectuées avec succès"]);

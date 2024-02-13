@@ -10,7 +10,7 @@ Nous tenons à vous informer que le Rapport journalier de votre collègue {{ $da
 
 Vous pouvez accéder au Rapport en cliquant sur le bouton ci-dessous :
 
-@component('mail::button', ['url' => route('affiche-rapport', ['slug' => $data['Auth_user']->slug]),'color' => 'primary'])
+@component('mail::button', ['url' => route('affiche-rapport', ['slug' => $data['rapport']]),'color' => 'primary'])
 Accéder au Rapport
 @endcomponent
 

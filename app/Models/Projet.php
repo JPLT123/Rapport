@@ -6,10 +6,9 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Projet
@@ -21,9 +20,10 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string|null $description
  * @property Carbon|null $debutdate
  * @property Carbon|null $findate
- * @property string $status
+ * @property string|null $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int|null $service
  * 
  * @property Filiale|null $filiale
  * @property Collection|Essaieplanif[] $essaieplanifs
@@ -41,7 +41,8 @@ class Projet extends Model
 	protected $casts = [
 		'id_filiale' => 'int',
 		'debutdate' => 'datetime',
-		'findate' => 'datetime'
+		'findate' => 'datetime',
+		'service' => 'int'
 	];
 
 	protected $fillable = [
@@ -51,7 +52,8 @@ class Projet extends Model
 		'description',
 		'debutdate',
 		'findate',
-		'status'
+		'status',
+		'service'
 	];
 
 	public function filiale()
@@ -82,7 +84,12 @@ class Projet extends Model
 	public function taches()
 	{
 		return $this->hasMany(Tach::class, 'id_projet');
-}
+	}
+
+	public function service()
+	{
+		return $this->belongsTo(Service::class, 'id_Service');
+	}
 
 	public function membres_projets_relation()
     {

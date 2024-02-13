@@ -38,9 +38,11 @@
                                             <option value="desactiver">Desactiver</option>
                                         </select>
                                     </div>
-                                    <div class="col-xxl-2 col-sm-4">
-                                        <button type="button" class="btn btn-soft-info mx-1 w-100" data-bs-toggle="modal" data-bs-target="#addModal"><i class="mdi mdi-plus-outline align-middle"></i> Ajouter</button>
-                                    </div>
+                                    @if (in_array("Admin", $userRoles))
+                                        <div class="col-xxl-2 col-sm-4">
+                                            <button type="button" class="btn btn-soft-info mx-1 w-100" data-bs-toggle="modal" data-bs-target="#addModal"><i class="mdi mdi-plus-outline align-middle"></i> Ajouter</button>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -58,36 +60,42 @@
                                     <a href="javascript:void(0)"><i class="uil uil-heart-alt fs-18"></i></a>
                                 </div>
                                 <img src="{{ $Filiale->logo ? '/storage/'. $Filiale->logo : '/assets/images/image_produit.png' }}" alt="" height="50" class="mb-3">
-                                <div class="dropdown float-end">
-                                    <a href="#" class="dropdown-toggle arrow-none" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false">
-                                        <i class="mdi mdi-dots-vertical m-0 text-muted h5"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" wire:click="edite('{{ $Filiale->slug }}')" >Edit</a>
-                                        <a class="dropdown-item" wire:click="confirmationDelete('{{ $Filiale->slug }}')">Delete</a>
+                                @if (in_array("Admin", $userRoles))
+                                    <div class="dropdown float-end">
+                                        <a href="#" class="dropdown-toggle arrow-none" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false">
+                                            <i class="mdi mdi-dots-vertical m-0 text-muted h5"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" wire:click="edite('{{ $Filiale->slug }}')" >Edit</a>
+                                            <a class="dropdown-item" wire:click="confirmationDelete('{{ $Filiale->slug }}')">Delete</a>
 
-                                        <div class="btn-group">
-                                               
-                                            <div class="btn-group dropend">
-                                                <a class="dropdown-item" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    Departement <i class="mdi mdi-chevron-right"></i>
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    @foreach ($Filiale->departements as $item)
-                                                        <a class="dropdown-item" href="#">{{$item->nom}}</a>
-                                                    @endforeach
+                                            <div class="btn-group">
+                                                
+                                                <div class="btn-group dropend">
+                                                    <a class="dropdown-item" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Services <i class="mdi mdi-chevron-right"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu">
+                                                        @foreach ($Filiale->departements as $item)
+                                                            <a class="dropdown-item" href="#">{{$item->nom}}</a>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div> <!-- end dropdown -->
+                                    <div class="float-end ms-2">
+                                        @if ($Filiale->status == 'activer')
+                                            <button wire:click="confirmation('{{ $Filiale->slug }}')" class="btn btn-soft-success btn-sm">Active</button>
+                                        @else
+                                            <button wire:click="confirmation('{{ $Filiale->slug }}')" class="btn btn-soft-danger btn-sm">desactiver</button>
+                                        @endif 
                                     </div>
-                                </div> <!-- end dropdown -->
+                                @else
                                 <div class="float-end ms-2">
-                                    @if ($Filiale->status == 'activer')
-                                        <button wire:click="confirmation('{{ $Filiale->slug }}')" class="btn btn-soft-success btn-sm">Active</button>
-                                    @else
-                                        <button wire:click="confirmation('{{ $Filiale->slug }}')" class="btn btn-soft-danger btn-sm">desactiver</button>
-                                    @endif 
+                                    <a class="badge bg-dark bg-soft text-white font-size-14">{{$Filiale->status}}</a>
                                 </div>
+                                @endif
                                 <h5 class="fs-17 mb-2"><a href="job-details.html" class="text-dark">{{$Filiale->nom}}</a></h5>
                                 <ul class="list-inline mb-0">
                                     <li class="list-inline-item">
@@ -143,7 +151,7 @@
                 <form wire:submit.prevent='store'>
                     <div class="modal-body">
                         <div class="row g-3">
-                            <div class="col-xxl-2 col-sm-6">
+                            <div class="col-lg-6 col-sm-6">
                                <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group mb-3">
@@ -203,10 +211,12 @@
                                         <select id="responsable" wire:model='responsable' class="form-control select2">
                                             <option value="">Selectionner l'hierachie... </option>
                                             @foreach ($chef as $item)
-                                                    <option value="{{$item->id}}">{{$item->name}}
-                                                        <img src="{{asset($item->profile_photo_path ? '/storage/'.$item->profile_photo_path : 'assets\user.png')}}" class="rounded-circle avatar-xs m-1" alt="">
-                                                    </option>
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->name }}
+                                                    <img src="assets\user.png" alt="">
+                                                </option>
                                             @endforeach
+
                                         </select>
                                         @error('responsable')
                                             <span class="text-danger"> {{$message}} </span>
@@ -225,14 +235,14 @@
                                 </div>
                                </div>
                             </div>
-                            <div class="col-xxl-2 col-sm-6">
+                            <div class="col-lg-6 col-sm-6">
                                 <div class="form-group ">
                                     <div class="text-center fw-bold fs-3">
                                         <span>IMAGE :<span class="text-danger">*</span></span>
                                     </div>
-                                    <div>
+                                    <div  class="text-center mt-3">
                                         <label for="images">
-                                            <div class="m-4">
+                                            <div  class="text-center mt-3">
                                                 <img src="{{ $images ? $images->temporaryUrl() : 'assets/images/image_produit.png' }}"
                                                     class="img-fluid text-center" alt="Responsive image" style="width: 100%; height:200px;"/>
                                             </div>
@@ -270,7 +280,7 @@
                 <form wire:submit.prevent='update'>
                     <div class="modal-body">
                         <div class="row g-3">
-                            <div class="col-xxl-2 col-sm-6">
+                            <div class="col-lg-6 col-sm-6">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group mb-3">
@@ -328,10 +338,10 @@
                                             <label for="responsable" class="form-label">Responsable : <span class="text-danger">*</span></label>
                                             <select id="responsable" wire:model='responsable' class="form-control select2">
                                                 <option value="">Selectionner l'hierachie... </option>
-                                                @foreach ($chef as $item)
-                                                        <option value="{{$item->id}}">{{$item->name}}
-                                                            <img src="{{asset($item->profile_photo_path ? '/storage/'.$item->profile_photo_path : 'assets\user.png')}}" class="rounded-circle avatar-xs m-1" alt="">
-                                                        </option>
+                                                @foreach ($chef as $item) 
+                                                    <option value="{{ $item->id }}">
+                                                        {{ $item->name }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                             @error('responsable')
@@ -350,14 +360,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xxl-2 col-sm-6">
+                            <div class="col-lg-6 col-sm-6">
                                 <div class="form-group ">
                                     <div class="text-center fw-bold fs-3">
                                         <span>IMAGE :<span class="text-danger">*</span></span>
                                     </div>
-                                    <div>
+                                    <div class="text-center mt-3">
                                         <label for="path_image">
-                                            <div >
+                                            <div class="text-center mt-3">
                                                 @if ($edit_images)
                                                     <img src="{{ asset($path_image ? $path_image->temporaryUrl() : '/storage/'.$edit_images) }}" class="img-fluid" alt="Responsive image" style="width: 200px; height: 200px;"/>
                                                 @else
@@ -387,105 +397,6 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade orderdetailsModal " id="verifier" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderdetailsModalLabel">Edition filiale</h5>
-                    {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
-                </div>
-
-                <div class="row justify-content-center">
-                    <div class="col-md-8 col-lg-6 col-xl-5">
-                        <div class="card">
-    
-                            <div class="card-body">
-    
-                                <div class="p-2">
-                                    <div class="text-center">
-    
-                                        <div class="avatar-md mx-auto">
-                                            <div class="avatar-title rounded-circle bg-light">
-                                                <i class="bx bxs-envelope h1 mb-0 text-primary"></i>
-                                            </div>
-                                        </div>
-                                        <div class="p-2 mt-4">
-    
-                                            <h4>Verify your email</h4>
-                                            <p class="mb-5">Please enter the 4 digit code sent to <span
-                                                    class="fw-semibold">example@abc.com</span></p>
-    
-                                            <form>
-                                                <div class="row">
-                                                    <div class="col-3">
-                                                        <div class="mb-3">
-                                                            <label for="digit1-input" class="visually-hidden">Dight 1</label>
-                                                            <input type="text"
-                                                                class="form-control form-control-lg text-center two-step"
-                                                                maxLength="1"
-                                                                data-value="1"
-                                                                id="digit1-input">
-                                                        </div>
-                                                    </div>
-    
-                                                    <div class="col-3">
-                                                        <div class="mb-3">
-                                                            <label for="digit2-input" class="visually-hidden">Dight 2</label>
-                                                            <input type="text"
-                                                                class="form-control form-control-lg text-center two-step"
-                                                                maxLength="1"
-                                                                data-value="2"
-                                                                id="digit2-input">
-                                                        </div>
-                                                    </div>
-    
-                                                    <div class="col-3">
-                                                        <div class="mb-3">
-                                                            <label for="digit3-input" class="visually-hidden">Dight 3</label>
-                                                            <input type="text"
-                                                                class="form-control form-control-lg text-center two-step"
-                                                                maxLength="1"
-                                                                data-value="3"
-                                                                id="digit3-input">
-                                                        </div>
-                                                    </div>
-    
-                                                    <div class="col-3">
-                                                        <div class="mb-3">
-                                                            <label for="digit4-input" class="visually-hidden">Dight 4</label>
-                                                            <input type="text"
-                                                                class="form-control form-control-lg text-center two-step"
-                                                                maxLength="1"
-                                                                data-value="4"
-                                                                id="digit4-input">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-    
-                                            <div class="mt-4">
-                                                <a href="index.html" class="btn btn-success w-md">Confirm</a>
-                                            </div>
-                                        </div>
-    
-                                    </div>
-                                </div>
-    
-                            </div>
-                        </div>
-                        <div class="mt-5 text-center">
-                            <p>Didn't receive a code ? <a href="#" class="fw-medium text-primary"> Resend </a> </p>
-                            <p>©
-                                <script>document.write(new Date().getFullYear())</script> Skote. Crafted with <i
-                                    class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
-                        </div>
-    
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 @include('sweetalert')
 <script>
@@ -496,7 +407,7 @@
 
     window.addEventListener("showModalEdite", event => {
         // alert('okay')
-        $('#verifier').modal('show');
+        $('#editModal').modal('show');
     })
 
     window.addEventListener("closeModalAdd", event => {

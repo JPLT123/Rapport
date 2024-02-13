@@ -11,54 +11,53 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Departement
+ * Class Service
  * 
  * @property int $id
- * @property int|null $id_filiale
  * @property string|null $slug
  * @property string|null $nom
  * @property string|null $Description
- * @property string|null $Coutprevisionnel
- * @property string|null $observation
+ * @property Carbon|null $date_creation
  * @property string $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $hierachie
  * 
- * @property Filiale|null $filiale
+ * @property Collection|Filiale[] $filiales
+ * @property Collection|Projet[] $projets
  * @property Collection|User[] $users
  *
  * @package App\Models
  */
-class Departement extends Model
+class Service extends Model
 {
-	protected $table = 'departement';
+	protected $table = 'services';
 
 	protected $casts = [
-		'id_filiale' => 'int'
+		'date_creation' => 'datetime'
 	];
 
 	protected $fillable = [
-		'id_filiale',
 		'slug',
 		'nom',
 		'Description',
-		'Coutprevisionnel',
-		'observation',
+		'date_creation',
 		'status',
 		'hierachie'
 	];
 
-	// Dans le modèle Departement
-	public function utilisateurs()
+	public function filiales()
 	{
-		return $this->hasMany(User::class, 'id_departement');
+		return $this->hasMany(Filiale::class, 'id_Service');
 	}
 
-
-	public function filiale()
+	public function projets()
 	{
-		return $this->belongsTo(Filiale::class, 'id_filiale');
+		return $this->hasMany(Projet::class, 'service');
 	}
 
+	public function users()
+	{
+		return $this->hasMany(User::class, 'id_Service');
 	}
+}

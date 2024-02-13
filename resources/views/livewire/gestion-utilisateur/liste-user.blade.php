@@ -21,7 +21,6 @@
                     </div>
                 </div>
                 <!-- end page title -->
-
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -51,11 +50,14 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-xxl-2 col-lg-4">
-                                        <div class="text-sm-end">
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#addModal" class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i class="mdi mdi-plus me-1"></i> Add User</button>
-                                        </div>
-                                    </div><!-- end col-->
+                                    
+                                    @if (in_array(1, $userRoles) || in_array(2, $userRoles))
+                                        <div class="col-xxl-2 col-lg-4">
+                                            <div class="text-sm-end">
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#addModal" class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"><i class="mdi mdi-plus me-1"></i> Add User</button>
+                                            </div>
+                                        </div><!-- end col-->
+                                    @endif
                                 </div>
         
                                 <div style="width: 100%; font-size: 11px;" class="table-responsive">
@@ -67,26 +69,35 @@
                                                 <th scope="align-middle">Email</th>
                                                 <th scope="align-middle">Telephone</th>
                                                 <th scope="align-middle">Adresse</th>
-                                                <th scope="align-middle">L'entreprise</th>
+                                                <th scope="align-middle">L'entreprises/Filiales</th>                                                    
                                                 <th scope="align-middle">Status</th>
                                                 <th class="align-middle">View Details</th>
-                                                <th class="align-middle">Action</th>
+                                                @if (in_array(1, $userRoles) || in_array(2, $userRoles))
+                                                    <th class="align-middle">Action</th>
+                                                @endif
                                             </tr>
                                         </thead>
-                                        <tbody>
                                             @php
                                                 $Num = 1;
                                             @endphp
                                             @foreach ($users as $user)
-                                                <tr>
-                                                    <td>{{$Num++}} </td>
-                                                    <td>{{$user->name}}</td>
-                                                    <td>{{$user->email}}</td>
-                                                    <td>{{$user->telephone ? $user->telephone : 'vide'}}</td>
-                                                    <td>{{$user->adresse ? $user->adresse : 'vide'}}</td>
+                                            <tr>
+                                                <td>{{$Num++}} </td>
+                                                <td>{{$user->name}}</td>
+                                                <td>{{$user->email}}</td>
+                                                <td>{{$user->telephone ? $user->telephone : 'vide'}}</td>
+                                                <td>{{$user->adresse ? $user->adresse : 'vide'}}</td>
+                                                @if ($user->filiale)
                                                     <td>
-                                                        <img src="{{asset($user->filiale->logo ? '/storage/'.$user->filiale->logo : 'assets/images/image_produit.png')}}" alt="" class="rounded-circle avatar-sm"> {{$user->filiale ? $user->filiale->nom : 'vide'}}
+                                                        <img src="{{asset($user->filiale->logo ? '/storage/'.$user->filiale->logo : 'assets/images/image_produit.png')}}" alt="" class="rounded-circle avatar-sm"> {{$user->filiale->nom ? $user->filiale->nom : 'vide'}}
                                                     </td>
+                                                @else
+                                                    <td>
+                                                        <img src="{{asset('assets\images\logo_elceto.png')}}" alt="" class="rounded-circle avatar-sm"> Elceto Holding
+                                                    </td>
+                                                @endif
+
+                                                @if (in_array(1, $userRoles) || in_array(2, $userRoles))
                                                     @if ($user->status == 'activer')
                                                         <td><button wire:click="confirmation('{{ $user->slug }}')" class="btn btn-soft-success btn-sm btn-rounded">Activer</button></td>
                                                     @elseif ($user->status == 'desactiver')
@@ -108,12 +119,18 @@
                                                             </li>
                                                         </ul>
                                                     </td>
-                                                </tr>
+                                                @else
+                                                <td><a class="badge bg-dark bg-soft text-white font-size-14">{{$user->status}}</a></td>
+                                                    <td>
+                                                        <a href="{{ route('detail-user',['slug' => $user->slug]) }}" class="btn btn-primary btn-sm btn-rounded">View Details</a>
+                                                    </td>
+                                                @endif
+                                            </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
-                                <ul wire:ignore class="pagination pagination-rounded justify-content-end mb-2">
+                                <ul class="pagination pagination-rounded justify-content-end mb-2" wire:ignore >
                                     {{$users->links('pagination::bootstrap-5')}}
                                 </ul>
                             </div>
@@ -133,6 +150,15 @@
                     <h5 class="modal-title" id="orderdetailsModalLabel">Ajout d'un utilisateur</h5>
                     {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
                 </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 <form wire:submit.prevent='AddUser'>
                     <div class="modal-body">
@@ -178,52 +204,103 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="filiale">Filiale <span class="text-danger">*</span></label>
-                                    <select name="filiale" id="filiale" class="form-control" wire:model.live="filiale">
-                                        <option value="">selectionneur...</option>
-                                        @foreach ($filiales as $filiale)
-                                            <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('filiale')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                </div> 
-                            </div>
+                            @if (in_array(1, $userRoles))
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" wire:click="showFormForOption1" wire:model.live="showFormOption1" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                            <label class="form-check-label" for="inlineRadio1">L'Entreprise Elceto Holding</label>
+                                            
+                                        </div>
+                                    </div> 
+                                </div>
 
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="filiale">Departement <span class="text-danger">*</span></label>
-                                    <select name="filiale" id="filiale" class="form-control" wire:model="departement">
-                                        <option value="">selectionneur...</option>
-                                        @foreach ($departements  as $departement)
-                                            <option value="{{ $departement->id }}">{{ $departement->nom  }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('departement')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                </div> 
-                            </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" wire:click="showFormForOption2" wire:model.live="showFormOption2" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                            <label class="form-check-label" for="inlineRadio2">Choisir une filiale</label>
+                                        </div>                                                          
+                                    </div>
+                                </div>
 
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="role">Role <span class="text-danger">*</span></label>
-                                    <select name="role" id="role" class="form-control" wire:model="role">
-                                        <option value="">selectionneur...</option>
-                                        @foreach ($roles as $role)
-                                            @if ($role->nom != 'Admin' && $role->nom != 'Chef projet' )
-                                                <option value="{{ $role->id }}">{{ $role->nom  }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    @error('role')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                </div> 
-                            </div>
+                                @if ($showFormOption1)
+                                    <div class="form-group mb-3">
+                                        <label for="service">Departements <span class="text-danger">*</span></label>
+                                        <select name="service" id="service" class="form-control" wire:model="service">
+                                            <option value="">selectionneur...</option>
+                                            @foreach ($services as $service)
+                                                <option value="{{ $service->id }}">{{ $service->nom  }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('service')
+                                            <span class="text-danger"> {{$message}} </span>
+                                        @enderror
+                                    </div> 
+                                @endif
+                                
+                                @if ($showFormOption2)
+                                    <div class="col-lg-6">
+                                        <div class="form-group mb-3">
+                                            <label for="filiale">Filiales <span class="text-danger">*</span></label>
+                                            <select name="filiale" id="filiale" class="form-control" wire:model.live="filiale">
+                                                <option value="">selectionneur...</option>
+                                                @foreach ($filiales as $filiale)
+                                                    <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('filiale')
+                                                <span class="text-danger"> {{$message}} </span>
+                                            @enderror
+                                        </div> 
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group mb-3">
+                                            <label for="filiale">Services <span class="text-danger">*</span></label>
+                                            <select name="filiale" id="filiale" class="form-control" wire:model="departement">
+                                                <option value="">selectionneur...</option>
+                                                @foreach ($departements  as $departement)
+                                                    <option value="{{ $departement->id }}">{{ $departement->nom  }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('departement')
+                                                <span class="text-danger"> {{$message}} </span>
+                                            @enderror
+                                        </div> 
+                                    </div>
+                                @endif
+                            @else
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="filiale">Filiales <span class="text-danger">*</span></label>
+                                        <select name="filiale" id="filiale" class="form-control" wire:model.live="filiale">
+                                            <option value="">selectionneur...</option>
+                                            @foreach ($filiales as $filiale)
+                                                <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('filiale')
+                                            <span class="text-danger"> {{$message}} </span>
+                                        @enderror
+                                    </div> 
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="filiale">Services <span class="text-danger">*</span></label>
+                                        <select name="filiale" id="filiale" class="form-control" wire:model="departement">
+                                            <option value="">selectionneur...</option>
+                                            @foreach ($departements  as $departement)
+                                                <option value="{{ $departement->id }}">{{ $departement->nom  }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('departement')
+                                            <span class="text-danger"> {{$message}} </span>
+                                        @enderror
+                                    </div> 
+                                </div>
+                            @endif
                         </div>
                         
                     </div>
@@ -292,53 +369,103 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="filiale">Filiale <span class="text-danger">*</span></label>
-                                    <select name="filiale" id="filiale" class="form-control" wire:model.live="filiale">
-                                        <option value="">selectionneur...</option>
-                                        @foreach ($filiales as $filiale)
-                                        
-                                        <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('filiale')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                </div> 
-                            </div>
+                            @if (in_array(1, $userRoles))
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" wire:click="showFormForOption1" wire:model.live="showFormOption1" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                            <label class="form-check-label" for="inlineRadio1">L'Entreprise Elceto Holding</label>
+                                            
+                                        </div>
+                                    </div> 
+                                </div>
 
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="filiale">Departement <span class="text-danger">*</span></label>
-                                    <select name="filiale" id="filiale" class="form-control" wire:model="departement">
-                                        <option value="">selectionneur...</option>
-                                        @foreach ($departements as $departement)
-                                            <option value="{{ $departement->id }}">{{ $departement->nom  }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('departement')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                </div> 
-                            </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" wire:click="showFormForOption2" wire:model.live="showFormOption2" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                            <label class="form-check-label" for="inlineRadio2">Choisir une filiale</label>
+                                        </div>                                                          
+                                    </div>
+                                </div>
 
-                            <div class="col-lg-6">
-                                <div class="form-group mb-3">
-                                    <label for="role">Role <span class="text-danger">*</span></label>
-                                    <select name="role" id="role" class="form-control" wire:model="role">
-                                        <option value="">selectionneur...</option>
-                                        @foreach ($roles as $role)
-                                            @if ($role->nom != 'Admin' && $role->nom != 'Chef projet' )
-                                                <option value="{{ $role->id }}">{{ $role->nom  }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    @error('role')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                </div> 
-                            </div>
+                                @if ($showFormOption1)
+                                    <div class="form-group mb-3">
+                                        <label for="service">Departements <span class="text-danger">*</span></label>
+                                        <select name="service" id="service" class="form-control" wire:model="service">
+                                            <option value="">selectionneur...</option>
+                                            @foreach ($services as $service)
+                                                <option value="{{ $service->id }}">{{ $service->nom  }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('service')
+                                            <span class="text-danger"> {{$message}} </span>
+                                        @enderror
+                                    </div> 
+                                @endif
+                                
+                                @if ($showFormOption2)
+                                    <div class="col-lg-6">
+                                        <div class="form-group mb-3">
+                                            <label for="filiale">Filiales <span class="text-danger">*</span></label>
+                                            <select name="filiale" id="filiale" class="form-control" wire:model.live="filiale">
+                                                <option value="">selectionneur...</option>
+                                                @foreach ($filiales as $filiale)
+                                                    <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('filiale')
+                                                <span class="text-danger"> {{$message}} </span>
+                                            @enderror
+                                        </div> 
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group mb-3">
+                                            <label for="filiale">Services <span class="text-danger">*</span></label>
+                                            <select name="filiale" id="filiale" class="form-control" wire:model="departement">
+                                                <option value="">selectionneur...</option>
+                                                @foreach ($departements  as $departement)
+                                                    <option value="{{ $departement->id }}">{{ $departement->nom  }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('departement')
+                                                <span class="text-danger"> {{$message}} </span>
+                                            @enderror
+                                        </div> 
+                                    </div>
+                                @endif
+                            @else
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="filiale">Filiales <span class="text-danger">*</span></label>
+                                        <select name="filiale" id="filiale" class="form-control" wire:model.live="filiale">
+                                            <option value="">selectionneur...</option>
+                                            @foreach ($filiales as $filiale)
+                                                <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('filiale')
+                                            <span class="text-danger"> {{$message}} </span>
+                                        @enderror
+                                    </div> 
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group mb-3">
+                                        <label for="filiale">Services <span class="text-danger">*</span></label>
+                                        <select name="filiale" id="filiale" class="form-control" wire:model="departement">
+                                            <option value="">selectionneur...</option>
+                                            @foreach ($departements  as $departement)
+                                                <option value="{{ $departement->id }}">{{ $departement->nom  }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('departement')
+                                            <span class="text-danger"> {{$message}} </span>
+                                        @enderror
+                                    </div> 
+                                </div>
+                            @endif
                         </div>
                         
                     </div>

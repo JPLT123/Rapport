@@ -14,9 +14,9 @@ use Illuminate\Database\Eloquent\Model;
  * Class Rapport
  * 
  * @property int $id
+ * @property int|null $id_prochain_tache
  * @property int|null $id_tache
  * @property int|null $id_user
- * @property int|null $id_prochain_tache
  * @property string|null $tache_realiser
  * @property string|null $tache_suplementaire
  * @property Carbon|null $debut_heure
@@ -28,10 +28,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $date
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int|null $general
  * 
+ * @property Rapportgeneral|null $rapportgeneral
+ * @property Tacheprochain|null $tacheprochain
  * @property Tach|null $tach
  * @property User|null $user
- * @property Tacheprochain|null $tacheprochain
  * @property Collection|Importfile[] $importfiles
  *
  * @package App\Models
@@ -41,18 +43,19 @@ class Rapport extends Model
 	protected $table = 'rapport';
 
 	protected $casts = [
+		'id_prochain_tache' => 'int',
 		'id_tache' => 'int',
 		'id_user' => 'int',
-		'id_prochain_tache' => 'int',
 		'debut_heure' => 'datetime',
 		'fin_heure' => 'datetime',
-		'date' => 'datetime'
+		'date' => 'datetime',
+		'general' => 'int'
 	];
 
 	protected $fillable = [
+		'id_prochain_tache',
 		'id_tache',
 		'id_user',
-		'id_prochain_tache',
 		'tache_realiser',
 		'tache_suplementaire',
 		'debut_heure',
@@ -61,8 +64,19 @@ class Rapport extends Model
 		'lieu',
 		'observation',
 		'observationglobal',
-		'date'
+		'date',
+		'general'
 	];
+
+	public function rapportgeneral()
+	{
+		return $this->belongsTo(Rapportgeneral::class, 'general');
+	}
+
+	public function tacheprochain()
+	{
+		return $this->belongsTo(Tacheprochain::class, 'id_prochain_tache');
+	}
 
 	public function tach()
 	{
@@ -74,13 +88,14 @@ class Rapport extends Model
 		return $this->belongsTo(User::class, 'id_user');
 	}
 
-	public function tacheprochain()
-	{
-		return $this->belongsTo(Tacheprochain::class, 'id_prochain_tache');
-	}
-
 	public function importfiles()
 	{
 		return $this->hasMany(ImportFile::class, 'id_rapport');
+}
+
+	
+	public function planif()
+    {
+        return $this->belongsToMany(PlanifHebdomadaire::class, 'plant_tache', 'id_planif', 'id_tache');
 	}
 }

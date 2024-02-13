@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $id_user
  * @property int|null $id_rapport
  * @property string|null $links
+ * @property string|null $nom_fichier
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
@@ -30,14 +31,16 @@ class ImportFile extends Model
 
 	protected $casts = [
 		'id_user' => 'int',
-		'id_rapport' => 'int'
+		'id_rapport' => 'int',
+		'rapport' => 'int'
 	];
 
 	protected $fillable = [
 		'id_user',
 		'id_rapport',
-		'nom_fichier',
-		'links'
+		'rapport',
+		'links',
+		'nom_fichier'
 	];
 
 	public function rapport()
@@ -49,4 +52,10 @@ class ImportFile extends Model
 	{
 		return $this->belongsTo(User::class, 'id_user');
 	}
+	
+	public function rapportgeneral()
+	{
+		return $this->belongsTo(Rapportgeneral::class, 'rapport');
+	}
+
 }

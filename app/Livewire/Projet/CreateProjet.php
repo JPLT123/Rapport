@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Projet;
 
-use Livewire\Component;
-use App\Models\MembresProjet;
-
-use Illuminate\Support\Str;
-use App\Models\Projet;
-use App\Models\Filiale;
-use App\Models\Departement;
 use App\Models\User;
+use App\Models\Projet;
+
+use App\Models\Filiale;
+use App\Models\Service;
+use Livewire\Component;
+use App\Models\Departement;
+use Illuminate\Support\Str;
+use App\Models\MembresProjet;
 
 class CreateProjet extends Component
 {
@@ -21,8 +22,11 @@ class CreateProjet extends Component
     public $selectedFiliale;
     public $datefin;
     public $departement;
+    public $service;
     public $Manager;
     public $membre = [];
+    public $showFormOption1 = false;
+    public $showFormOption2 = false;
 
     public function render()
     {
@@ -36,9 +40,15 @@ class CreateProjet extends Component
             $usersQuery->where('id_filiale', $this->filiale);
         }
 
+        if ($this->service) {
+            $usersQuery->where('id_Service', $this->service);
+        }
+
         $users = $usersQuery->get();
 
         $filiales = Filiale::where("status", 'activer')->get();
+
+        $services = Service::where("status", 'activer')->get();
         
         $departementsQuery = Departement::where("status", 'activer');
 
@@ -52,20 +62,46 @@ class CreateProjet extends Component
             'filiales' => $filiales,
             'departements' => $departements,
             'users' => $users,
+            'services' => $services,
         ])->extends('layouts.guest')->section('content');
     }
 
+    public function showFormForOption1()
+    {
+        $this->showFormOption1 = true;
+        $this->showFormOption2 = false;
+    }
+
+    public function showFormForOption2()
+    {
+        $this->showFormOption1 = false;
+        $this->showFormOption2 = true;
+    }
 
     public function store()
     {
-        $this->validate([
-            "nom" => "required|string|max:255|unique:projets",
-            "description" => "required|string|max:255",
-            "filiale" => 'required|exists:filiales,id',
-            "datedebut" => "required",
-            "datefin" => "required",
-            "membre.*" => 'exists:users,id', // Validez que les membres sélectionnés existent
-        ]);
+        $rules = [];
+
+        if ($this->showFormOption1) {
+            $rules = [
+                "nom" => "required|string|max:255|unique:projets",
+                "description" => "required|string|max:255",
+                "service" => 'required|exists:filiales,id',
+                "datedebut" => "required",
+                "datefin" => "required",
+                "membre.*" => 'exists:users,id',
+            ];
+        } elseif ($this->showFormOption2) {
+            $rules = [
+                "nom" => "required|string|max:255|unique:projets",
+                "description" => "required|string|max:255",
+                "filiale" => 'required|exists:filiales,id',
+                "datedebut" => "required",
+                "datefin" => "required",
+                "membre.*" => 'exists:users,id',
+            ];
+        }
+        $this->validate($rules);
 
         $slug = Str::slug('projet ' . '-' . $this->nom);
 
@@ -73,6 +109,7 @@ class CreateProjet extends Component
             "nom" => $this->nom,
             "description" => $this->description,
             "id_filiale" => $this->filiale,
+            "service" => $this->service,
             "code" => $slug,
             "debutdate" => $this->datedebut,
             "findate" => $this->datefin

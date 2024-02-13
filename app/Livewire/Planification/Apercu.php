@@ -19,12 +19,14 @@ class Apercu extends Component
     public $tache;
     public $tache_prevues;
     public $projet;
+    public $service;
     
     public function render()
     {
         $Auth_user = Auth::user();
         $this->filiale = $Auth_user->filiale;
         $this->departement =  $Auth_user->departement;
+        $this->service =  $Auth_user->service;
         
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
