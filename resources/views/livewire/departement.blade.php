@@ -28,7 +28,8 @@
                             <div class="card-body border-bottom">
                                 <div class="row g-3">
                                     <div class="col-xxl-2 col-lg-4">
-                                        <input type="search" wire:model.live ="search" class="form-control" id="searchInput" placeholder="Search for ...">
+                                        <input type="search" wire:model.live ="search" class="form-control"
+                                            id="searchInput" placeholder="Search for ...">
                                     </div>
                                     <div class="col-xxl-2 col-lg-4">
                                         <select wire:model.live ="status" class="form-control select2">
@@ -45,7 +46,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                
+
                                 <div class="table-responsive">
                                     <table class="table table-bordered align-middle nowrap">
                                         <thead>
@@ -106,21 +107,22 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="col-11">
-                                    {{$Departements->links('pagination::bootstrap-5')}}
+                                <div class="col-11" wire:ignore>
+                                    {{ $Departements->links('pagination::bootstrap-5') }}
                                 </div>
                                 <!--end row-->
                             </div>
                         </div><!--end card-->
                     </div><!--end col-->
-            
+
                 </div><!--end row-->
 
             </div> <!-- container-fluid -->
         </div>
         <!-- End Page-content -->
     </div>
-    <div class="modal fade orderdetailsModal " id="addModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+    <div class="modal fade orderdetailsModal " id="addModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -132,7 +134,8 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom du departement:<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" aria-label="nom" aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror"
+                                    wire:model="nom" aria-label="nom" aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>
@@ -173,7 +176,8 @@
         </div>
     </div>
 
-    <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+    <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1"
+        role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -186,7 +190,10 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" required autocomplete="current-nom" placeholder="Entrer categorie produit" aria-label="nom" aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror"
+                                    wire:model="nom" required autocomplete="current-nom"
+                                    placeholder="Entrer categorie produit" aria-label="nom"
+                                    aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>

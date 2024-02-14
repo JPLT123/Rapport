@@ -26,29 +26,38 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row mb-2">
-                                    <div class="col-xxl-2 col-lg-4">
+                                    <div class="col-sm-4 col-lg-4">
                                         <div class="search-box me-2 mb-2 d-inline-block">
                                             <div class="position-relative">
-                                                <input type="text" class="form-control" wire:model.live ="search" placeholder="Search...">
+                                                <input type="text" class="form-control" wire:model.live ="search"
+                                                    placeholder="Search...">
                                                 <i class="bx bx-search-alt search-icon"></i>
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
-                                    <div class="search-box col-xxl-2 col-lg-2">
-                                        <select wire:model.live ="status" class="form-control select2">
-                                            <option value="">Status</option>
-                                            <option value="activer">Activer</option>
-                                            <option value="desactiver">Desactiver</option>
-                                            <option value="attente">En attente</option>
-                                        </select>
+                                    <div class="col-sm-2 col-lg-2">
+                                        <div class="search-box me-2 mb-2 d-inline-block">
+                                            <div class="position-relative">
+                                                <select wire:model.live ="status" class="form-control select2">
+                                                    <option value="">Status</option>
+                                                    <option value="activer">Activer</option>
+                                                    <option value="desactiver">Desactiver</option>
+                                                    <option value="attente">En attente</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="search-box col-xxl-2 col-lg-2">
-                                        <select wire:model.live ="filiale_id" class="form-control select2">
-                                            <option>Filiales</option>
-                                            @foreach ($filiales as $filiale)
-                                                <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
-                                            @endforeach
-                                        </select>
+                                    <div class="col-sm-2 col-lg-2">
+                                        <div class="search-box me-2 mb-2 d-inline-block">
+                                            <div class="position-relative">
+                                                <select wire:model.live ="filiale_id" class="form-control select2">
+                                                    <option>Filiales</option>
+                                                    @foreach ($filiales as $filiale)
+                                                        <option value="{{ $filiale->id }}">{{ $filiale->nom }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                     @if (in_array(1, $userRoles) || in_array(2, $userRoles))
@@ -59,13 +68,13 @@
                                         </div><!-- end col-->
                                     @endif
                                 </div>
-        
+
                                 <div style="width: 100%; font-size: 11px;" class="table-responsive">
                                     <table class="table align-middle table-nowrap table-check">
                                         <thead class="table-light">
                                             <tr>
                                                 <th scope="align-middle" style="width: 5px;">#</th>
-                                                <th scope="align-middle" >Nom Prenom</th>
+                                                <th scope="align-middle">Nom Prenom</th>
                                                 <th scope="align-middle">Email</th>
                                                 <th scope="align-middle">Telephone</th>
                                                 <th scope="align-middle">Adresse</th>
@@ -99,23 +108,36 @@
 
                                                 @if (in_array(1, $userRoles) || in_array(2, $userRoles))
                                                     @if ($user->status == 'activer')
-                                                        <td><button wire:click="confirmation('{{ $user->slug }}')" class="btn btn-soft-success btn-sm btn-rounded">Activer</button></td>
+                                                        <td><button wire:click="confirmation('{{ $user->slug }}')"
+                                                                class="btn btn-soft-success btn-sm btn-rounded">Activer</button>
+                                                        </td>
                                                     @elseif ($user->status == 'desactiver')
-                                                        <td><button wire:click="confirmation('{{ $user->slug }}')" class="btn btn-soft-danger btn-sm btn-rounded">Désactiver</button></td>
+                                                        <td><button wire:click="confirmation('{{ $user->slug }}')"
+                                                                class="btn btn-soft-danger btn-sm btn-rounded">Désactiver</button>
+                                                        </td>
                                                     @else
-                                                        <td><button wire:click="confirmation('{{ $user->slug }}')" class="btn btn-soft-warning btn-sm btn-rounded">En attente</button></td>
+                                                        <td><button wire:click="confirmation('{{ $user->slug }}')"
+                                                                class="btn btn-soft-warning btn-sm btn-rounded">En
+                                                                attente</button></td>
                                                     @endif
 
                                                     <td>
-                                                        <a href="{{ route('detail-user',['slug' => $user->slug]) }}" class="btn btn-primary btn-sm btn-rounded">View Details</a>
+                                                        <a href="{{ route('detail-user', ['slug' => $user->slug]) }}"
+                                                            class="btn btn-primary btn-sm btn-rounded">View Details</a>
                                                     </td>
                                                     <td>
                                                         <ul class="list-unstyled hstack gap-1 mb-0">
-                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                                                <a wire:click="edite('{{ $user->slug }}')" class="text-success"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                                            <li data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                title="Edit">
+                                                                <a wire:click="edite('{{ $user->slug }}')"
+                                                                    class="text-success"><i
+                                                                        class="mdi mdi-pencil font-size-18"></i></a>
                                                             </li>
-                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                                                <a wire:click="confirmationDelete('{{ $user->slug }}')" data-bs-toggle="modal" class="text-danger"><i class="mdi mdi-delete font-size-18"></i></a>
+                                                            <li data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                title="Delete">
+                                                                <a wire:click="confirmationDelete('{{ $user->slug }}')"
+                                                                    data-bs-toggle="modal" class="text-danger"><i
+                                                                        class="mdi mdi-delete font-size-18"></i></a>
                                                             </li>
                                                         </ul>
                                                     </td>
@@ -141,9 +163,10 @@
             </div> <!-- container-fluid -->
         </div>
         <!-- End Page-content -->
-        
+
     </div>
-    <div class="modal fade orderdetailsModal " id="addModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+    <div class="modal fade orderdetailsModal " id="addModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -166,40 +189,51 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Nom et Prenom: <span class="text-danger">*</span></label>
-                                    <input id="name" type="text" wire:model='name' autofocus autocomplete="name" class="form-control @error('name') is-invalid @enderror">
+                                    <label for="name" class="form-label">Nom et Prenom: <span
+                                            class="text-danger">*</span></label>
+                                    <input id="name" type="text" wire:model='name' autofocus
+                                        autocomplete="name" class="form-control @error('name') is-invalid @enderror">
                                     @error('name')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="adresse" class="form-label">Adresse : <span class="text-danger">*</span></label>
-                                    <input id="adresse" type="text" wire:model='adresse' autofocus autocomplete="adresse" class="form-control @error('adresse') is-invalid @enderror">
-                                    @error('adresse')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                </div>
-                            </div>
-    
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="telephone" class="form-label">Telephone : <span class="text-danger">*</span></label>
-                                    <input id="telephone" type="text" wire:model='telephone' autofocus autocomplete="telephone" class="form-control @error('telephone') is-invalid @enderror">
-                                    @error('telephone')
-                                        <span class="text-danger"> {{$message}} </span>
+                                        <span class="text-danger"> {{ $message }} </span>
                                     @enderror
                                 </div>
                             </div>
 
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email : <span class="text-danger">*</span></label>
-                                    <input id="email" type="text" wire:model='email' autofocus autocomplete="email" class="form-control @error('email') is-invalid @enderror">
+                                    <label for="adresse" class="form-label">Adresse : <span
+                                            class="text-danger">*</span></label>
+                                    <input id="adresse" type="text" wire:model='adresse' autofocus
+                                        autocomplete="adresse"
+                                        class="form-control @error('adresse') is-invalid @enderror">
+                                    @error('adresse')
+                                        <span class="text-danger"> {{ $message }} </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label for="telephone" class="form-label">Telephone : <span
+                                            class="text-danger">*</span></label>
+                                    <input id="telephone" type="text" wire:model='telephone' autofocus
+                                        autocomplete="telephone"
+                                        class="form-control @error('telephone') is-invalid @enderror">
+                                    @error('telephone')
+                                        <span class="text-danger"> {{ $message }} </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email : <span
+                                            class="text-danger">*</span></label>
+                                    <input id="email" type="text" wire:model='email' autofocus
+                                        autocomplete="email"
+                                        class="form-control @error('email') is-invalid @enderror">
                                     @error('email')
-                                        <span class="text-danger"> {{$message}} </span>
+                                        <span class="text-danger"> {{ $message }} </span>
                                     @enderror
                                 </div>
                             </div>
@@ -302,7 +336,7 @@
                                 </div>
                             @endif
                         </div>
-                        
+
                     </div>
 
                     <div class="d-flex justify-content-between p-3 border-top border-opacity-10">
@@ -317,7 +351,8 @@
         </div>
     </div>
 
-    <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+    <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1"
+        role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -331,40 +366,51 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Nom et Prenom: <span class="text-danger">*</span></label>
-                                    <input id="name" type="text" wire:model='name' autofocus autocomplete="name" class="form-control @error('name') is-invalid @enderror">
+                                    <label for="name" class="form-label">Nom et Prenom: <span
+                                            class="text-danger">*</span></label>
+                                    <input id="name" type="text" wire:model='name' autofocus
+                                        autocomplete="name" class="form-control @error('name') is-invalid @enderror">
                                     @error('name')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="adresse" class="form-label">Adresse : <span class="text-danger">*</span></label>
-                                    <input id="adresse" type="text" wire:model='adresse' autofocus autocomplete="adresse" class="form-control @error('adresse') is-invalid @enderror">
-                                    @error('adresse')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                </div>
-                            </div>
-    
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="telephone" class="form-label">Telephone : <span class="text-danger">*</span></label>
-                                    <input id="telephone" type="text" wire:model='telephone' autofocus autocomplete="telephone" class="form-control @error('telephone') is-invalid @enderror">
-                                    @error('telephone')
-                                        <span class="text-danger"> {{$message}} </span>
+                                        <span class="text-danger"> {{ $message }} </span>
                                     @enderror
                                 </div>
                             </div>
 
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email : <span class="text-danger">*</span></label>
-                                    <input id="email" type="text" wire:model='email' autofocus autocomplete="email" class="form-control @error('email') is-invalid @enderror">
+                                    <label for="adresse" class="form-label">Adresse : <span
+                                            class="text-danger">*</span></label>
+                                    <input id="adresse" type="text" wire:model='adresse' autofocus
+                                        autocomplete="adresse"
+                                        class="form-control @error('adresse') is-invalid @enderror">
+                                    @error('adresse')
+                                        <span class="text-danger"> {{ $message }} </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label for="telephone" class="form-label">Telephone : <span
+                                            class="text-danger">*</span></label>
+                                    <input id="telephone" type="text" wire:model='telephone' autofocus
+                                        autocomplete="telephone"
+                                        class="form-control @error('telephone') is-invalid @enderror">
+                                    @error('telephone')
+                                        <span class="text-danger"> {{ $message }} </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email : <span
+                                            class="text-danger">*</span></label>
+                                    <input id="email" type="text" wire:model='email' autofocus
+                                        autocomplete="email"
+                                        class="form-control @error('email') is-invalid @enderror">
                                     @error('email')
-                                        <span class="text-danger"> {{$message}} </span>
+                                        <span class="text-danger"> {{ $message }} </span>
                                     @enderror
                                 </div>
                             </div>
@@ -467,7 +513,7 @@
                                 </div>
                             @endif
                         </div>
-                        
+
                     </div>
 
                     <div class="d-flex justify-content-between p-3 border-top border-opacity-10">
