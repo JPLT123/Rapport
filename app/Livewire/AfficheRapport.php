@@ -3,10 +3,12 @@
 namespace App\Livewire;
 
 use Carbon\Carbon;
+use App\Models\Tach;
 use App\Models\User;
 use App\Models\Rapport;
 use Livewire\Component;
 use App\Models\Depenser;
+use App\Models\Rapportgeneral;
 
 class AfficheRapport extends Component
 {
@@ -16,34 +18,46 @@ class AfficheRapport extends Component
 
     public function mount($slug)
     {
-        $this->user = User::where('slug', $slug)->first();
+        $this->rapports = Rapportgeneral::find($slug);
     }
 
     public function render()
     {
         $this->dateActuelle = Carbon::now()->toDateString();
 
-        $this->rapports = Rapport::where('id_user', $this->user->id)
-                            ->where('date',$this->dateActuelle)->get();
+        $this->user = $this->rapports->user;
+        $tache1 = $this->rapports->rapports->pluck('id_tache')->toArray();
+        $tache2 = $this->rapports->rapports->pluck('tache_suplementaire')->toArray();
+        $tache3 = $this->rapports->tacheprochains->pluck('taches')->toArray();
+        
+        $taches = Tach::whereIn('id', $tache1)
+            ->get();
+            
+        $tachesuple = Tach::whereIn('id', $tache2)
+                    ->get();
 
-        $taches = $this->rapports->pluck('id_tache')->toArray();
+        $tacheprochain = Tach::whereIn('id', $tache3)
+                    ->get();
 
         // Utilisez la méthode 'whereIn' pour chercher les enregistrements avec des valeurs dans un tableau
-        $this->depenses = Depenser::whereIn('id_tache', $taches)->get();
-
+        $this->depenses = Depenser::whereIn('id_tache', $tache1)->get();
+        
         return view('livewire.affiche-rapport', [
             "user" => $this->user,
             "rapports" => $this->rapports,
             "depenses" => $this->depenses,
+            "taches" => $taches,
+            "tacheprochains" => $tacheprochain,
+            "tachesuples" => $tachesuple,
         ])->extends('layouts.app')->section('content');
     }
 
-    public function getContent()
-    {
-        return view('livewire.contenu-pdf', [
-            'user' => $this->user,
-            'rapports' => $this->rapports,
-            'depenses' => $this->depenses,
-        ])->render();
-    }
+    // public function getContent()
+    // {
+    //     return view('livewire.contenu-pdf', [
+    //         'user' => $this->user,
+    //         'rapports' => $this->rapports,
+    //         'depenses' => $this->depenses,
+    //     ])->render();
+    // }
 }

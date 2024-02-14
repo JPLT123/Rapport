@@ -25,7 +25,6 @@ class EnvoieRapport extends Mailable
      */
     public function envelope(): Envelope
     {
-        // $this->cc($this->data['ccEmail']);
         return new Envelope(
             subject: 'Envoie Rapport',
         );

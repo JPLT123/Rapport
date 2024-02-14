@@ -2,14 +2,17 @@
 
 namespace App\Livewire;
 
+use App\Models\User;
 use App\Models\Filiale;
 use Livewire\Component;
+use App\Models\Permission;
 use App\Models\Departement;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Auth;
 
 class DepartementFiliale extends Component
 {
@@ -20,26 +23,52 @@ class DepartementFiliale extends Component
     public $search;
     public $status;
     public $nom;
+    public $userRoles;
     public $description;
     public $filiale;
     public $id_Departement;
+    public $chef;
+    public $hierachie;
+    public $membres;
 
     public function render()
     {
-        $query = Departement::query()
-                    ->where('nom', 'like', '%' . $this->search . '%')
-                    ->whereIn("status", ['activer', 'desactiver']);
+        $Authuser = Auth::user();
+        $this->userRoles = $Authuser->roles->pluck('nom')->toArray(); 
+
+        if (in_array('Responsable', $this->userRoles)) {
+
+            $filialesResponsable = Filiale::where('hierachie',$Authuser->id)->pluck('id');
+        
+            $query = Departement::query()
+                ->whereIn("id_filiale", $filialesResponsable)
+                ->where('nom', 'like', '%' . $this->search . '%')
+                ->whereIn("status", ['activer', 'desactiver']);
+        }else{
+            $query = Departement::query()
+                ->where('nom', 'like', '%' . $this->search . '%')
+                ->whereIn("status", ['activer', 'desactiver']);
+        }
 
         if ($this->status) {
             $query->where('status', $this->status);
         }
 
         $filiale = Filiale::where("status", 'activer')->get();
+
         $Departement = $query->with('filiale')->paginate(10);
+        
+        $user = User::where('status', 'activer');
+        if ($this->filiale) {
+            $user->where('id_filiale', $this->filiale);
+        }
+
+        $this->chef = $user->get();
 
         return view('livewire.departement', [
             "Departements" => $Departement,
-            "filiales" => $filiale
+            "filiales" => $filiale,
+            "chef" =>$this->chef
         ])->extends('layouts.guest')->section('content');
 
     }
@@ -133,7 +162,7 @@ class DepartementFiliale extends Component
 
         $slug = Str::slug('Departement '.$this->nom);
 
-        Departement::create([
+        $departement = Departement::create([
             "nom" => $this->nom,
             "Description" => $this->description,
             "id_filiale" => $this->filiale,
@@ -153,6 +182,8 @@ class DepartementFiliale extends Component
             $this->id_Departement = $Departement->slug;
             $this->nom = $Departement->nom;
             $this->description = $Departement->Description;
+            $this->responsable = $Departement->hierachie;
+            $this->filiale = $Departement->id_filiale;
 
             $this->dispatch("showModalEdite");
         }
@@ -168,12 +199,21 @@ class DepartementFiliale extends Component
 
         $Departement = Departement::where('slug', $this->id_Departement)->first();
 
+        Permission::where("id_user", $Departement->hierachie)->update([
+            "id_role" => 4,
+        ]);
+
         if ($Departement) { 
 
             $Departement->update([
                 "nom" => $this->nom,
                 "Description" => $this->description,
                 "id_filiale" => $this->filiale,
+                "hierachie" => $this->responsable,
+            ]);
+
+            Permission::where("id_user", $this->responsable)->update([
+                "id_role" => 5,
             ]);
 
             $this->dispatch("showSuccessMessage", ["message" => "Opérations effectuées avec succès"]);
@@ -181,5 +221,65 @@ class DepartementFiliale extends Component
         } else {
             $this->dispatch("showWarningMessage", ["message" => "Departement non trouvée."]);
         }
+    }
+
+    public function ViewDepartement($slug)
+    {
+        $Departement = Departement::where('slug', $slug)->first();    
+        if ($Departement) {
+            $this->nom = $Departement->nom;
+            $this->description = $Departement->Description;
+            $this->date = $Departement->date_creation;
+            $this->hierachie = $Departement->hierachie;
+            $this->membres = $Departement->utilisateurs()
+                ->where('status', 'activer')
+                ->whereHas('permissions', function ($query) {
+                    $query->where('id_role', 4) // id_role 4 pour membre
+                        ->orWhere('id_role', 5); // id_role 5 pour responsable de service
+                })
+                ->get();
+
+            $this->dispatch('show_user_modal', []);
+        }
+
+    }
+
+    public function roles($userId)
+    {
+        $user = User::find($userId);
+    
+        if (!$user) {
+            // Gérer le cas où l'utilisateur n'est pas trouvé
+            return;
+        }
+    
+        // Obtenir l'ID du rôle actuel de l'utilisateur
+        $currentRoleId = $user->permissions->pluck('id_role')->first();
+    
+        if ($currentRoleId == 5) {
+            // Mise à jour du rôle de l'utilisateur
+            $user->permissions()->update(['id_role' => 4]);
+            
+            // Mise à jour uniquement des lignes liées à l'utilisateur
+            $user->departement->update(['hierachie' => null]);
+    
+        } elseif ($currentRoleId == 4) {
+            // Rechercher l'utilisateur actuellement responsable
+            $currentResponsible = $user->departement->hierachie;
+    
+            if ($currentResponsible) {
+                // Réduire le rôle de l'ancien responsable à membre
+                Permission::where('id_user',$currentResponsible)->update(['id_role' => 4]);
+                $user->departement->update(['hierachie' => null]);
+            }
+    
+            // Mettre à jour le rôle de l'utilisateur actuel à responsable
+            $user->permissions()->update(['id_role' => 5]);
+            $user->departement->update(['hierachie' => $user->id]);
+        }
+    
+        // Utilisez la méthode "dispatchNow" pour exécuter le job immédiatement
+        $this->dispatch("showSuccessMessage", ["message" => "Opérations effectuées avec succès"]);
+        $this->ModalEdite();
     }
 }

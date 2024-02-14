@@ -27,13 +27,19 @@
                                 <div class="text-center mb-2">
                                     <h4 class="card-title">PLANIFICATION HEBDOMADAIRE  DES ACTIVITES SEMAINE DU {{ $formatDateRange }}</h4>
                                     <div class="row m-4">
-                                        <div class="col-sm-5">
-                                            <h4 class="card-title">Entreprise : {{$filiale ? $filiale->nom : 'vide'}}</h4>
-                                        </div>
-                            
-                                        <div class="col-sm-7">
-                                            <h4 class="card-title">Departement : {{$departement ? $departement->nom : 'vide'}}</h4>
-                                        </div>
+                                        @if ($filiale != null)
+                                            <div class="col-sm-5">
+                                                <h4 class="card-title">Filiale : {{$filiale ? $filiale->nom : 'vide'}}</h4>
+                                            </div>
+                                
+                                            <div class="col-sm-7">
+                                                <h4 class="card-title">Service : {{$departement ? $departement->nom : 'vide'}}</h4>
+                                            </div>
+                                        @else
+                                            <div class="col-sm-5">
+                                                <h4 class="card-title">Departement : {{$service ? $service->nom : 'vide'}}</h4>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row">

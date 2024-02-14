@@ -78,13 +78,14 @@
                                     <tbody>
                                         @foreach ($projets as $projet)
                                             <tr>
-                                                <td><img src="{{ asset($projet->filiale->logo ? '/storage/' . $projet->filiale->logo : 'assets/images/image_produit.png') }}"
-                                                        alt="" class="avatar-sm"></td>
-                                                <td>
-                                                    <h5 class=" font-size-14"><a href="javascript: void(0);"
-                                                            class="text-dark">{{ $projet->nom }}</a></h5>
-                                                    <p class="text-muted text-truncate">
-                                                        {{ Str::limit($projet->description, $limit = 50, $end = '...') }}
+                                                @if ($projet->filiale != null)
+                                                    <td><img src="{{asset($projet->filiale->logo ? '/storage/'.$projet->filiale->logo : 'assets/images/image_produit.png')}}" alt="" class="avatar-sm"></td>
+                                                @else
+                                                    <td><img src="{{asset('assets\images\logo_elceto.png')}}" alt="" class="avatar-sm"></td>
+                                                @endif
+                                                <td >
+                                                    <h5 class=" font-size-14"><a href="javascript: void(0);" class="text-dark">{{$projet->nom}}</a></h5>
+                                                    <p class="text-muted text-truncate">{{Str::limit($projet->description, $limit = 50, $end = '...') }}
                                                     </p>
                                                 </td>
                                                 <td>{{ $projet->findate->format('j F Y') }}</td>

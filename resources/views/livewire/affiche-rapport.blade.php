@@ -1,7 +1,7 @@
 <div>
     <div id="content">
         <div  style="font-family: Arial, sans-serif; margin: 20px;">   
-            <div style="border: 1px solid #ccc; padding: 30px; max-width: 1000px; margin: 0 auto;">
+            <div style="border: 1px solid #ccc; padding: 30px; max-width: 2000px; margin: 0 auto;">
                 <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
                     <img src="{{asset('assets\images\logo_elceto.png')}}" alt="Logo de l'entreprise"  style="max-width: 100%; height: 60px; margin-right: 10px;">
                     <span>Elceto Holding S.A.S</span>
@@ -24,20 +24,10 @@
                     <span style="font-weight: bold;">Département:</span> {{$user->departement->nom}}
                 </div>
         
-                <div style="margin-bottom: 10px;">
+                {{-- <div style="margin-bottom: 10px;">
                     <span style="font-weight: bold;">Date:</span> 
-                    @php $dateAffichee = null; @endphp
-                    @foreach($rapports as $rapport)
-                    <tr>
-                        @if($rapport->date != $dateAffichee)
-                            <td>{{ ($rapport->date)->format('y-m-d') }}</td>
-                            @php $dateAffichee = $rapport->date; @endphp
-                        @else
-                            <td></td> <!-- cellule vide pour les lignes suivantes avec la même date -->
-                        @endif
-                    </tr>
-                @endforeach
-                </div>
+                    {{$rapports->date}}
+                </div> --}}
                 <div style="margin-bottom: 10px;">
                     <span style="font-weight: bold;">Projet:</span>   
                     @foreach ($user->planif_hebdomadaires as $item)
@@ -54,131 +44,170 @@
                 <br>
                 <h4 style="text-align: center"> Activités de la journée</h4>
                 <br>
-                <table style="width:100%; border-collapse:collapse; margin-bottom:10mm;">
-                    <tr>
-                        <th style="border:1px solid #ccc; padding:8px; text-align:center;  background-color: #cbf1ff;">Tâches Prévues</th>
-                        @foreach ($rapports as $item)
-                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->tach->tache_prevues }}</td>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Tâches Réalisées</th>
-                        @foreach ($rapports as $item)
-                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->tach->tache_prevues }}</td>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Tâches Supplémentaires</th>
-                        @foreach ($rapports as $item)
-                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->tach->tache_prevues }}</td>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Heure Début</th>
-                        @foreach ($rapports as $item)
-                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->tach->tache_prevues }}</td>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Heure Fin</th>
-                        @foreach ($rapports as $item)
-                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->tach->tache_prevues }}</td>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Lieu</th>
-                        @foreach ($rapports as $item)
-                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->tach->tache_prevues }}</td>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Matériels Utilisés</th>
-                        @foreach ($rapports as $item)
-                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->tach->tache_prevues }}</td>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Observations</th>
-                        @foreach ($rapports as $item)
-                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->tach->tache_prevues }}</td>
-                        @endforeach
-                    </tr>
-                </table>      
-                <h4 style="text-align: center">Depenses des Activités</h4>
                 <br>
+                <h5 >Rapport Journalier -  {{($rapports->date->format('y/m/d'))}}</h5>
+                <br>
+
+            <h6 style="font-size: 16px">Activités prevues :</h6>
+
+            <ul>
+                @foreach ($user->planif_hebdomadaires as $planif)
+                @if ($rapports->date == $planif->date)
+                    @foreach ($planif->plant_taches_relation as $tache)
+                        <li style="font-size: 14px">
+                            {{ $tache->tache_prevues }}
+                        </li>
+                    @endforeach
+                @endif
+                @endforeach
+            </ul>
+            <br>
+            <table style="width:100%; border-collapse:collapse; margin-bottom:10mm; ">
+                <tr>
+                    <th style="border:1px solid #ccc; text-align:center; background-color: #0055a4; color: white;">Tâches Réalisées</th>
+                    @foreach ($taches as $item)
+                    <td style="border:1px solid #ccc; text-align:center;">{{ $item->tache_prevues }}</td>
+                    @endforeach
+                    @foreach ($tachesuples as $item)
+                    <td style="border:1px solid #ccc; text-align:center;">{{ $item->tache_prevues }}</td>
+                    @endforeach
+                </tr>
+                <tr>
+                    <th style="border:1px solid #ccc; text-align:center; background-color: #0055a4; color: white;">Heure Début</th>
+                    @foreach ($rapports->rapports as $item)
+                    <td style="border:1px solid #ccc; text-align:center;">{{ ($item->debut_heure)->format('h:i A')}}</td>
+                    @endforeach
+                </tr>
+                <tr>
+                    <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #0055a4; color: white;">Heure Fin</th>
+                    @foreach ($rapports->rapports as $item)
+                    <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ ($item->fin_heure)->format('h:i A') }}</td>
+                    @endforeach
+                </tr>
+                <tr>
+                    <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #0055a4; color: white;">Lieu</th>
+                    @foreach ($rapports->rapports as $item)
+                    <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->lieu }}</td>
+                    @endforeach
+                </tr>
+
+            </table>      
+            <h6>Tache Supplémentaires</h6>
+            <ul>
+                @foreach ($tachesuples as $item)
+            <li>
+                {{ $item->tache_prevues }}
+            </li>
+            @endforeach
+         </ul>
+            <br>
+        <table style="width:100%; border-collapse:collapse; margin-bottom:10mm; ">
+            <tr>
+                <th style="border:1px solid #ccc; padding:8px; text-align:center;background-color: #0055a4; color: white;">materiels utiliser</th>
+                <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $rapports->materiels_utiliser }}</td>
+
+            </tr>
+
+            <tr>
+                <th style="border:1px solid #ccc; padding:8px; text-align:center;background-color: #0055a4; color: white;">Observation des activités</th>
+                <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $rapports->observation }}</td>
+
+            </tr>
+        </table> 
+        <br>                
+        <h4 style="text-align: center">Depenses des Activités</h4>
+        <br>
+                
                 @if ($depenses->isEmpty())
                 <p>Pas de dépenses effectuées</p>
                 @else
-                    <table style="width:100%; border-collapse:collapse; margin-bottom:10mm;">
-                        <tr>
-                            <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Designation</th>
+                    <table style="width: 800px; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #0055a4; color: white;">
+                                <th style="width: 200px; border: 1px solid #ccc; padding:8px; text-align:center;">Designations</th>
+                                <th style="width: 200px; border: 1px solid #ccc; padding:8px; text-align:center;">Coûts Réels</th>
+                                <th style="width: 200px; border: 1px solid #ccc; padding:8px; text-align:center;">Coûts Prévisionnels</th>
+                                <th style="width: 200px; border: 1px solid #ccc; padding:8px; text-align:center;">Observations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             @foreach ($depenses as $item)
-                            <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->Designation?? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam libero quas voluptatem ut ducimus quidem nemo odio pariatur dignissimos? Delectus veritatis deserunt nulla adipisci quas modi accusantium exercitationem beatae culpa.'}}</td>
+                            <tr>
+                                <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->Designation?? 'pas de designation'}}</td>
+                    
+                                <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->CoutReel}}</td>
+                    
+                                <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->Coutprevisionnel}}</td>
+                    
+                                <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->observation}}</td>
+                            </tr>
                             @endforeach
-                        </tr>
-                        <tr>
-                            <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Coûts Réels</th>
-                            @foreach ($depenses as $item)
-                            <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->CoutReel}}</td>
-                            @endforeach
-                        </tr>
-                        <tr>
-                            <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Coûts previsionnel</th>
-                            @foreach ($depenses as $item)
-                            <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->Coutprevisionnel}}</td>
-                            @endforeach
-                        </tr>
-                        <tr>
-                            <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Observation</th>
-                            @foreach ($depenses as $item)
-                            <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->observation}}</td>
-                            @endforeach
-                        </tr>
+                        </tbody>
                     </table>
                 @endif
+                <br>
+
                 <h4 style="text-align: center">Taches prevues pour demain</h4>
                 <br>
-                @if ($rapports->isEmpty())
-                    <p>Pas de rapports disponibles</p>
+                @if (!$rapports)
+                    <p>Pas de Taches prevues pour demain</p>
                 @else
-                    <table style="width:100%; border-collapse:collapse; margin-bottom:10mm;">
-                        <tr>
-                            <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Tâches prevus pour demain</th>
-                            @foreach ($rapports as $item)
-                            <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->tacheprochain->taches}}</td>
+                <table style="width:100%; border-collapse:collapse; margin-bottom:10mm; ">
+                   
+                    <tr >
+                        <th style="border:1px solid #ccc; padding:8px; text-align:center;background-color: #0055a4; color: white;">Tâches prevus</th>
+                        @foreach ($tacheprochains as $item)
+                            <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->tache_prevues }}</td>
+                        @endforeach
+                    </tr>
+                    
+                    <tr >
+                        <th style="border:1px solid #ccc; padding:8px; text-align:center;background-color: #0055a4; color: white;">Durée(en H)</th>
+                        
+                        @foreach ($rapports->tacheprochains as $item)
+                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ ($item->duree)->format('h:i A') }}</td>
+
+                        @endforeach
+                    </tr>
+                    
+                    <tr >
+                        <th style="border:1px solid #ccc; padding:8px; text-align:center;background-color: #0055a4; color: white;">Designation</th>
+                        
+                        @foreach ($rapports->tacheprochains as $item)
+                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->designation }}</td>
+
+                        @endforeach
+                    </tr>
+                    <tr >
+                        <th style="border:1px solid #ccc; padding:8px; text-align:center;background-color: #0055a4; color: white;">Valeur</th>
+                        
+                        @foreach ($rapports->tacheprochains as $item)
+                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->valeur }}</td>
+
+                        @endforeach
+                    </tr>
+                </table> 
+                    <table style="width: 800px; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #0055a4; color: white; ">
+                                <th style="width: 200px; border: 1px solid #ccc; padding:8px; text-align:center; ">Risques et atténuations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($rapports->tacheprochains as $item)
+                            <tr>
+                            
+                                <td style="border:1px solid #ccc; padding:8px; text-align:center; ">{{$item->risques}}</td>
+
+                            </tr>
                             @endforeach
-                        </tr>
-                        <tr>
-                            <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Durée(en H)</th>
-                            @foreach ($rapports as $item)
-                            <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{($item->tacheprochain->duree)->format('h:i A')}}</td>
-                            @endforeach
-                        </tr>
-                        <tr>
-                            <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Designation</th>
-                            @foreach ($rapports as $item)
-                            <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->tacheprochain->designation}}</td>
-                            @endforeach
-                        </tr>
-                        <tr>
-                            <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Valeur</th>
-                            @foreach ($rapports as $item)
-                            <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->tacheprochain->valeur}}</td>
-                            @endforeach
-                        </tr>
-                        <tr>
-                            <th style="border:1px solid #ccc; padding:8px; text-align:center; background-color: #cbf1ff;">Risques et atténuations</th>
-                            @foreach ($rapports as $item)
-                            <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{$item->tacheprochain->risques}}</td>
-                            @endforeach
-                        </tr>
+                        </tbody>
                     </table>
+<br>
                     <table>
                         <h4 style="text-align: center">Observation globale</h4>
                         <tr>
-                            @foreach ($rapports as $item)
-                                {{$item->observationglobal}}
-                            @endforeach
+                            {{$rapports->observationglobal}}
                         </tr>
                     </table>
                 @endif

@@ -20,15 +20,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Vérifier si le jour actuel est vendredi, samedi ou dimanche -->
-                {{-- @if (now()->dayOfWeek >= 4 && now()->dayOfWeek <= 7) --}}
-                    {{-- @if ($planificationTerminee)
-                        <div class="col-12 text-center">
-                            <h5>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque quidem, reprehenderit voluptatibus iste consequuntur quis a dolorem quas distinctio,</h5>
-                            <img src="assets\planifsrapport.png"  alt="">
-                        </div>
-                    @else
-                         --}}
                         <!-- end page title -->
                         <div class="row justify-content-center">
                             <div class="col-lg-10">
@@ -154,7 +145,7 @@
 
                                                 <div class="d-flex flex-wrap gap-2 m-4">
                                                     <button type="submit" class="btn btn-success waves-effect waves-light">Ajouter une planification</button>
-                                                    <a href="{{route('planification.verifier', ['slug' => $Auth_user->slug])}}" class="btn btn-primary waves-effect waves-light">Enregistrer</a>
+                                                    <a href="{{route('planification.verifier', ['slug' => $Auth_user->slug])}}" class="btn btn-primary waves-effect waves-light">Visualiser</a>
                                                     {{-- <button type="button" wire:click="add" class="btn btn-primary waves-effect waves-light">Enregistrer</button> --}}
                                                     <button type="reset" class="btn btn-secondary waves-effect waves-light">Annuler</button>
                                                 </div>
@@ -164,130 +155,6 @@
                                 </div>
                             </div>
                         </div>
-                    {{-- @endif --}}
-                {{-- @else
-                    <div class="text-center mt-2">
-                        <p class="mt-3"> Ce contenu est disponible uniquement les vendredis, samedis et dimanches.</p>
-                    <img class="mt-3" src="assets\planifsrapport.png" style="width: 55%" alt="">
-                    </div>
-                    <!-- Afficher un message si ce n'est pas vendredi, samedi ou dimanche -->
-                @endif --}}
-
-                {{-- <!-- end row -->
-                <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="modal-title" id="myExtraLargeModalLabel">Planification Hebdomadaire</h2>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <h4 class="m-3">Aperçu de la Planification</h4>
-                            <p class="card-title-desc m-2">
-                                Avant d'envoyer la planification à l'hiérarchie, veuillez prendre le temps de vérifier attentivement tous
-                                les détails pour vous assurer de son exactitude, car une fois envoyée, aucune possibilité de retour en arrière ne sera disponible.
-                            </p>
-                            <p class="card-title-desc m-2">
-                                En cliquant sur le bouton 'Annuler',toutes les informations saisies seront réinitialisées et aucune donnée ne sera sauvegardée.
-                            </p>
-                            <div class="modal-body">
-                                <div class="row">
-                    
-                                    <div class="col-xl-3 col-lg-4">
-                                        <div class="card">
-                                            <div>
-                                                <p class="card-title">Jour planifier</p>
-            
-                                                <ul class="list-unstyled fw-medium">
-                                                    @foreach ($step2 as $planif)
-                                                        <li><a wire:click='confirmerJour({{ $planif->id }})' class="btn text-muted py-2 d-block"><i class="mdi mdi-chevron-right me-1"></i> {{($planif->date)->format("l d/m/Y") ?? 'vide'}}</a></li>
-                                                    @endforeach
-                                                </ul>
-                                                
-                                            </div>
-                                        </div>
-                                        <!-- end card -->
-                                    </div>
-                
-                                    <div class="col-xl-9 col-lg-8">
-                                        <div class="card">
-                                            <!-- Tab panes -->
-                                            <div class="tab-content p-4">
-                                                <div class="tab-pane active" id="all-post" role="tabpanel">
-                                                     <div class="row justify-content-center">
-                                                            <div class="col-xl-8">
-                                                                <div>
-                                                                    <div class="row">
-                                                                        <div class="form-group mt-2">
-                                                                            @php
-                                                                                $projectNameDisplayed = false;
-                                                                            @endphp
-                                                                    
-                                                                            @foreach ($tachesPrevues as $item)
-                                                                                Afficher le nom du projet uniquement s'il n'a pas déjà été affiché
-                                                                                @if (!$projectNameDisplayed)
-                                                                                    <h4>Project</h4>
-                                                                                    {{ $item->projet->nom ?? 'Cliquez sur un jour ' }}
-                                                                                    @php
-                                                                                        $projectNameDisplayed = true;
-                                                                                    @endphp
-                                                                                @endif
-                                                                            @endforeach
-                                                                            Reste du contenu à l'intérieur de la boucle
-                                                                            <h5>Les tâches prévues :</h5>
-                                                                            <ul>
-                                                                                @forelse ($tachesPrevues as $tache)
-                                                                                    <li>{{ $tache->tache_prevues ?? 'Cliquez sur un jour ' }}</li>
-                                                                                @empty
-                                                                                    Aucune tâche trouvée.
-                                                                                @endforelse
-                                                                            </ul>
-                                                                        </div>
-                                    
-                                                                        <div class="col-sm-6">
-                                                                            <div class="mt-3">
-                                                                                <h5 for="resultat">Resultats attendus</h5>
-                                                                                <p>{{$resultat  ?? 'Cliquez sur un jour '}}</p>
-                                                                            </div>
-                                                                        </div>
-                                                            
-                                                                        <div class="col-sm-6">
-                                                                            <div class="mt-3">
-                                                                                <h5 for="ressources">Ressources necessaires</h5>
-                                                                                <p>
-                                                                                    {{$ressources ?? 'Cliquez sur un jour '}}
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                
-                                                                        <div class="col-sm-12">
-                                                                            <div class="mt-3">
-                                                                                <h5 for="observation">Observations/Recommandations :</h5>
-                                                                                <p>
-                                                                                    {{$observation ?? 'Cliquez sur un jour '}}
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="modal-footer">
-                                <button wire:click="transferData" class="btn btn-success waves-effect waves-light">Envoyer à l'hiérarchie</button>
-                                <button wire:click="closeModale" class="btn btn-secondary waves-effect">Annuler</button>
-                            </div>
-                            
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div>   --}}
             </div> <!-- container-fluid -->
         </div>
         <!-- End Page-content -->

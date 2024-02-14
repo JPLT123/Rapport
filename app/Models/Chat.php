@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id
  * @property int $user_id
- * @property int $recipient_id
  * @property string $content
+ * @property bool $is_seen
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
@@ -29,13 +29,13 @@ class Chat extends Model
 
 	protected $casts = [
 		'user_id' => 'int',
-		'recipient_id' => 'int'
+		'is_seen' => 'bool'
 	];
 
 	protected $fillable = [
 		'user_id',
-		'recipient_id',
-		'content'
+		'content',
+		'is_seen'
 	];
 
 	public function user()

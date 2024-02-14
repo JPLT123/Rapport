@@ -10,6 +10,7 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use App\Models\MembresProjet;
+use Illuminate\Support\Facades\Auth;
 
 class ListeProjet extends Component
 {
@@ -27,14 +28,33 @@ class ListeProjet extends Component
     public $id_Projet;
     public $users;
     public $manager;
+    public $userRoles;
     public $dateActuelle;
     public $usersnewMembres = [];
     public $membreprojet = [];
 
     public function render()
     {
-        $query = Projet::query()
-                    ->where('nom', 'like', '%' . $this->search . '%');
+        
+        $Authuser = Auth::user();
+        $this->userRoles = $Authuser->permissions->pluck('id_role')->toArray();
+
+        if (in_array(6, $this->userRoles)) {
+            $query = Projet::query()
+            ->where('service', $Authuser->id_Service)
+            ->where('nom', 'like', '%' . $this->search . '%');
+        }elseif (in_array(2, $this->userRoles)) {
+            $query = Projet::query()
+            ->where('id_filiale', $Authuser->id_filiale)
+            ->where('nom', 'like', '%' . $this->search . '%');
+        }elseif (in_array(5, $this->userRoles)) {
+            $query = Projet::query()
+            ->where('id_filiale', $Authuser->id_filiale)
+            ->where('nom', 'like', '%' . $this->search . '%');
+        }else {
+            $query = Projet::query()
+            ->where('nom', 'like', '%' . $this->search . '%');
+        }
 
         if ($this->status) {
             $query->where('status', $this->status);

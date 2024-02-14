@@ -39,9 +39,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property Carbon|null $updated_at
  * @property int|null $id_filiale
  * @property int|null $id_departement
+ * @property int|null $id_Service
  * 
  * @property Departement|null $departement
  * @property Filiale|null $filiale
+ * @property Service|null $service
  * @property Collection|Chat[] $chats
  * @property Collection|Essaieplanif[] $essaieplanifs
  * @property Collection|Importfile[] $importfiles
@@ -50,6 +52,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property Collection|PlanifHebdomadaire[] $planif_hebdomadaires
  * @property Collection|Planification[] $planifications
  * @property Collection|Rapport[] $rapports
+ * @property Collection|Rapportgeneral[] $rapportgenerals
  *
  * @package App\Models
  */
@@ -68,7 +71,8 @@ use HasApiTokens;
 		'email_verified_at' => 'datetime',
 		'current_team_id' => 'int',
 		'id_filiale' => 'int',
-		'id_departement' => 'int'
+		'id_departement' => 'int',
+		'id_Service' => 'int'
 	];
 
 	protected $hidden = [
@@ -90,7 +94,8 @@ use HasApiTokens;
 		'verification_code',
 		'status',
 		'id_filiale',
-		'id_departement'
+		'id_departement',
+		'id_Service'
 	];
 
 	public function departement()
@@ -101,6 +106,11 @@ use HasApiTokens;
 	public function filiale()
 	{
 		return $this->belongsTo(Filiale::class, 'id_filiale');
+	}
+
+	public function service()
+	{
+		return $this->belongsTo(Service::class, 'id_Service');
 	}
 
 	public function chat()
@@ -143,7 +153,12 @@ use HasApiTokens;
 		return $this->hasMany(Rapport::class, 'id_user');
 	}
 
-    public function projets()
+	public function rapportgenerals()
+	{
+		return $this->hasMany(Rapportgeneral::class, 'id_user');
+	}
+
+	public function projets()
     {
         return $this->belongsToMany(Projet::class, 'membres_projet', 'id_user', 'id_projet')
                     ->withPivot('is_chef');

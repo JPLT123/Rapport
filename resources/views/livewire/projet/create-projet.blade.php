@@ -67,26 +67,60 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        
                                         <div class="col-lg-6">
+                                            <div class="form-group mt-3 mb-3">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" wire:click="showFormForOption1" wire:model.live="showFormOption1" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                                    <label class="form-check-label" for="inlineRadio1">L'Entreprise Elceto Holding</label>
+                                                    
+                                                </div>
+                                            </div> 
+                                        </div>
+            
+                                        <div class="col-lg-6">
+                                            <div class="mt-3 mb-3">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" wire:click="showFormForOption2" wire:model.live="showFormOption2" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                                    <label class="form-check-label" for="inlineRadio2">Choisir une filiale</label>
+                                                </div>                                                          
+                                            </div>
+                                        </div>
+            
+                                        @if ($showFormOption1)
                                             <div class="form-group mb-3">
-                                                <label class="col-form-label">Filiale<span class="text-danger">*</span></label>
-                                                <div class="col-lg-12">
+                                                <label for="service">Departements <span class="text-danger">*</span></label>
+                                                <select name="service" id="service" class="form-control" wire:model.live="service">
+                                                    <option value="">selectionneur...</option>
+                                                    @foreach ($services as $service)
+                                                        <option value="{{ $service->id }}">{{ $service->nom  }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('service')
+                                                    <span class="text-danger"> {{$message}} </span>
+                                                @enderror
+                                            </div> 
+                                        @endif
+
+                                        @if ($showFormOption2)
+                                            <div class="col-lg-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="filiale">Filiales <span class="text-danger">*</span></label>
                                                     <select name="filiale" id="filiale" class="form-control" wire:model.live="filiale">
                                                         <option value="">Choose...</option>
                                                         @foreach ($filiales as $filiale)
-                                                            <option value="{{ $filiale->id }}">{{ $filiale->nom }}</option>
+                                                            <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
                                                         @endforeach
                                                     </select>
                                                     @error('filiale')
                                                         <span class="text-danger"> {{$message}} </span>
                                                     @enderror
-                                                </div>
+                                                </div> 
                                             </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group mb-3">
-                                                <label class="col-form-label">Département<span class="text-danger">*</span></label>
-                                                <div class="col-lg-12">
+            
+                                            <div class="col-lg-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="filiale">Services <span class="text-danger">*</span></label>
                                                     <select name="departement" id="departement" class="form-control" wire:model.live="departement">
                                                         <option value="">Choose...</option>
                                                         @foreach ($departements as $depart)
@@ -96,9 +130,9 @@
                                                     @error('departement')
                                                         <span class="text-danger"> {{$message}} </span>
                                                     @enderror
-                                                </div>
+                                                </div> 
                                             </div>
-                                        </div>
+                                        @endif
                                     </div>
                                     
                                     <div class="form-group mb-3">

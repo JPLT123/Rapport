@@ -20,10 +20,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $nom
  * @property string|null $ressources_necessaires
  * @property string|null $resultat_attendus
- * @property string|null $hierachie
  * @property string|null $observation
  * @property Carbon|null $date
- * @property string $status
+ * @property string|null $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
@@ -50,7 +49,6 @@ class PlanifHebdomadaire extends Model
 		'nom',
 		'ressources_necessaires',
 		'resultat_attendus',
-		'hierachie',
 		'observation',
 		'date',
 		'status'
@@ -75,5 +73,4 @@ class PlanifHebdomadaire extends Model
 	{
 		return $this->belongsToMany(Tach::class, 'plant_tache','id_planif','id_tache');
 	}
-
 }

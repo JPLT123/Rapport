@@ -70,23 +70,14 @@ class Create extends Component
 
         $formatDateRange = strtoupper($formatStartDate . " AU " . $formatEndDate);
 
-        // $hierachie = Essaieplanif::where('id_user',$this->Auth_user->id)->get();
-
-        // Vérifiez si l'utilisateur connecté a une planification pour la semaine suivante à une date spécifique
         $planificationTerminee = PlanifHebdomadaire::where('id_user', $this->Auth_user->id)
             ->whereBetween('date', [$formatStartDate, $formatEndDate])
             ->exists();
 
-        // Récupérer toutes les tâches dont les IDs correspondent à ceux de la table essaiepivot
-        // $this->tachesPrevues = Tach::whereIn('id', $essaiepivotIDs)
-        // ->where('id_projet', $this->id_projet)->get();
-        
         return view('livewire.planification.create',[
             "Alltaches" =>  $this->Alltaches,
             "Auth_user" => $this->Auth_user,
-            // "chef" => $this->chef,
             "formatDateRange" => $formatDateRange,
-            // "step2" => $hierachie,
             "planificationTerminee" => $planificationTerminee,
         ])->extends('layouts.guest')->section('content');
     }
@@ -95,42 +86,6 @@ class Create extends Component
     {
         $this->dispatch("show_Projet_modal");
     }
-    // public function closeModale(){
-
-    //     // Récupérer les données de la table source
-    //     $sourceData = Essaieplanif::where('id_user',$this->Auth_user->id)->get();
-
-    //     // Boucle sur les données et les transférer dans la table de destination
-    //     foreach ($sourceData as $Data) {
-    //         $Data->delete();
-    //     }
-
-    //     // Récupérer les données de la table source
-    //     $sourcepivot = Essaiepivot::where('id_user',$this->Auth_user->id)->get();
-
-    //     $essaiepivotIDs = Essaiepivot::pluck('id_planif');
-
-    //     // Récupérer toutes les tâches dont les IDs correspondent à ceux de la table essaiepivot
-    //     $planif = PlanifHebdomadaire::whereIn('slug', $essaiepivotIDs)->get();
-
-    //     // Boucle sur les données et les transférer dans la table de destination
-    //     foreach ($sourcepivot as $item) {
-    //             $item->delete();
-    //     }
-    //     $this->taches = [];
-    //     $this->createtaches = []; 
-    //     $this->reset();
-    //     $this->dispatch('closeModal', []);
-    // } 
-
-    // public function update()
-    // {
-    //     $this->dispatch("show_modal");
-    // }
-    // public function closeupdate(){
-
-    //     $this->dispatch('closeupdate', []);
-    // }
 
     public function addTache()
     {
@@ -185,9 +140,10 @@ class Create extends Component
                 ]);
 
             foreach ($this->createtaches as $item) {
-                $baseSlug = $item['tache_prevues'];
-                $slug = $baseSlug;
-
+                // Générez le slug à partir du nom d'utilisateur
+                $username = preg_replace('/\s+/', '', Auth::user()->name);
+                // Remplacez cela par le nom d'utilisateur réel
+                $slug = generateUserSlug($username);
                 
                 $tache = Tach::create([
                     'tache_prevues' => $item['tache_prevues'],
@@ -231,87 +187,6 @@ class Create extends Component
         $this->createtaches = []; 
         $this->reset();
     }
-
-    // public function confirmerJour($id)
-    // {
-    //     $planif = PlanifHebdomadaire::find($id);
-
-    //     $this->id_planif = $planif->id;
-    //     $this->id_projet = $planif->id_projet;
-    //     $this->ressources = $planif->ressources_necessaires;
-    //     $this->resultat = $planif->resultat_attendus;
-    //     $this->observation = $planif->observation;
-    // }
-
-    // public function transferData()
-    // {
-    //     // Récupérer les données de la table source
-    //     $sourceData = Essaieplanif::where('id_user',$this->Auth_user->id)->get();
-
-    //     // Boucle sur les données et les transférer dans la table de destination
-    //     foreach ($sourceData as $Data) {
-
-    //         $planification = PlanifHebdomadaire::create([
-    //             'id_user' => $Data['id_user'],
-    //             'id_projet' => $Data['id_projet'],
-    //             'ressources_necessaires' => $Data['ressources_necessaires'],
-    //             'resultat_attendus' => $Data['resultat_attendus'],
-    //             'observation' => $Data['observation'],
-    //             'date' => $Data['date'],
-    //                             'slug' => $Data['slug'],
-    //         ]);
-
-    //         $Data->delete();
-    //     }
-
-    //     // Récupérer les données de la table source
-    //     $sourcepivot = Essaiepivot::where('id_user',$this->Auth_user->id)->get();
-
-    //     $essaiepivotIDs = Essaiepivot::pluck('id_planif');
-
-    //     // Récupérer toutes les tâches dont les IDs correspondent à ceux de la table essaiepivot
-    //     $planif = PlanifHebdomadaire::whereIn('slug', $essaiepivotIDs)->get();
-
-    //     // Boucle sur les données et les transférer dans la table de destination
-    //     foreach ($sourcepivot as $item) {
-    //         // Recherche de la correspondance dans la collection $planif
-    //         $planifItem = $planif->where('slug', $item['id_planif'])->first();
-
-    //         // Vérification si la correspondance a été trouvée
-    //         if ($planifItem) {
-    //             PlantTache::create([
-    //                 'id_tache' => $item['id_tache'],
-    //                 'id_planif' => $planifItem->id,
-    //             ]);
-
-    //             $item->delete();
-    //         }
-    //     }
-
-
-    //     $statusTache = PlantTache::pluck('id_tache');
-    //         foreach ($statusTache as $item) {
-    //             Tach::where('id', $item)->update([
-    //                 'status' => 'Attente'
-    //             ]);
-    //         }
-
-            
-    //         $this->hierachie = $this->filiale->hierachie;
-    //         if ($this->Auth_user->id !== $this->hierachie) {
-    //             $user = User::find($this->hierachie);
-    //             $data = [
-    //                 'Auth_user' => $this->Auth_user,
-    //             ];
-    //             $email = $user->email;
-    //             Mail::to($email)->send(new ConfirmationEmail($data)); 
-    //         }
-            
-    //     // Message de succès
-    //     $this->dispatch("successEvent",[]);        
-    //     $this->closeModale();
-
-    // }
 
 }
 

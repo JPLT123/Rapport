@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $id_planif
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property bool|null $status
  * 
  * @property PlanifHebdomadaire|null $planif_hebdomadaire
  * @property Tach|null $tach
@@ -29,12 +30,14 @@ class PlantTache extends Model
 
 	protected $casts = [
 		'id_tache' => 'int',
-		'id_planif' => 'int'
+		'id_planif' => 'int',
+		'status' => 'bool'
 	];
 
 	protected $fillable = [
 		'id_tache',
-		'id_planif'
+		'id_planif',
+		'status'
 	];
 
 	public function planif_hebdomadaire()

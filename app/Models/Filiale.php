@@ -26,7 +26,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int|null $id_Service
  * 
+ * @property Service|null $service
  * @property Collection|Departement[] $departements
  * @property Collection|Projet[] $projets
  * @property Collection|User[] $users
@@ -38,7 +40,8 @@ class Filiale extends Model
 	protected $table = 'filiales';
 
 	protected $casts = [
-		'date_creation' => 'datetime'
+		'date_creation' => 'datetime',
+		'id_Service' => 'int'
 	];
 
 	protected $fillable = [
@@ -51,8 +54,14 @@ class Filiale extends Model
 		'hierachie',
 		'date_creation',
 		'description',
-		'status'
+		'status',
+		'id_Service'
 	];
+
+	public function service()
+	{
+		return $this->belongsTo(Service::class, 'id_Service');
+	}
 
 	public function departements()
 	{
@@ -69,6 +78,7 @@ class Filiale extends Model
 		return $this->hasMany(User::class, 'id_filiale');
 	}
 
+	
 	public function TerminerProjects()
 	{
 		return $this->hasMany(Projet::class, 'id_filiale')
@@ -80,5 +90,4 @@ class Filiale extends Model
 		return $this->hasMany(Projet::class, 'id_filiale')
 					->where('projets.status', 'attente');
 	}
-
 }

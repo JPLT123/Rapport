@@ -19,6 +19,7 @@ class PlanifChef extends Component
     public $chef;
     public $departement;
     public $projet;
+    public $service;
     public $Auth_user;
     public $taches = [];
 
@@ -28,6 +29,7 @@ class PlanifChef extends Component
         $this->filiale = $this->Auth_user->filiale;
         $this->chef = $this->Auth_user->membres_projets;
         $this->departement =  $this->Auth_user->departement;
+        $this->service =  $this->Auth_user->service;
         return view('livewire.planification.planif-chef')->extends('layouts.guest')->section('content');
     }
 
@@ -63,33 +65,34 @@ class PlanifChef extends Component
             'resultat' => 'required|string|max:255',
             'observation' => 'required|string|max:255',
             'date' => 'required|string|max:255',
-            'taches.*.tache_prevues' => 'required|string|max:255|unique:taches,tache_prevues',
+            'taches.*.tache_prevues' => 'required|string|max:255',
             'projet' => 'required|exists:projets,id',
         ]);
 
-        // Générez le slug à partir du nom d'utilisateur
-        $username = preg_replace('/\s+/', '', Auth::user()->name);
-        // Remplacez cela par le nom d'utilisateur réel
-        $slug = generateUserSlug($username);
+        foreach ($this->taches as $index => $item) {
 
-            foreach ($this->taches as $index => $item) {
-                $tache = Tach::create([
-                    'tache_prevues' => $item['tache_prevues'],
-                    'id_projet' => $item['projet'],
-                    'slug' => $slug,
-                ]);
-            }
-
-            Planification::create([
-                'id_user' => $this->Auth_user->id,
-                'id_projet' => $this->projet,
-                'ressources_necessaires' => $this->ressources,
-                'resultat_attendus' => $this->resultat,
-                'observation' => $this->observation,
-                'hierachie' => $this->filiale->hierachie,
-                'date' => $this->date,
-                'slug' => $uniqueSlug,
+            // Générez le slug à partir du nom d'utilisateur
+            $username = preg_replace('/\s+/', '', Auth::user()->name);
+            // Remplacez cela par le nom d'utilisateur réel
+            $slug = generateUserSlug($username);
+            
+            $tache = Tach::create([
+                'tache_prevues' => $item['tache_prevues'],
+                'id_projet' => $item['projet'],
+                'slug' => $slug,
             ]);
+        }
+
+        Planification::create([
+            'id_user' => $this->Auth_user->id,
+            'id_projet' => $this->projet,
+            'ressources_necessaires' => $this->ressources,
+            'resultat_attendus' => $this->resultat,
+            'observation' => $this->observation,
+            'hierachie' => $this->filiale->hierachie,
+            'date' => $this->date,
+            'slug' => $slug,
+        ]);
 
 
         $this->dispatch("showSuccessMessage",message:"Operations effectuer avec success");

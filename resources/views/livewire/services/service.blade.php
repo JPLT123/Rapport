@@ -8,12 +8,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">Services</h4>
+                            <h4 class="mb-sm-0 font-size-18">Departements</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
                                     <li class="breadcrumb-item"><a href="javascript: void(0);">Dashborad</a></li>
-                                    <li class="breadcrumb-item active">Services</li>
+                                    <li class="breadcrumb-item active">Departements</li>
                                 </ol>
                             </div>
 
@@ -28,8 +28,7 @@
                             <div class="card-body border-bottom">
                                 <div class="row g-3">
                                     <div class="col-xxl-2 col-lg-4">
-                                        <input type="search" wire:model.live ="search" class="form-control"
-                                            id="searchInput" placeholder="Search for ...">
+                                        <input type="search" wire:model.live ="search" class="form-control" id="searchInput" placeholder="Search for ...">
                                     </div>
                                     <div class="col-xxl-2 col-lg-4">
                                         <select wire:model.live ="status" class="form-control select2">
@@ -38,91 +37,75 @@
                                             <option value="desactiver">Desactiver</option>
                                         </select>
                                     </div>
-                                    @if (in_array("Admin", $userRoles)|| in_array("Responsable", $userRoles))
-                                        <div class="col-xxl-2 col-lg-4">
-                                            <button type="button" class="btn btn-soft-info mx-1 w-100" data-bs-toggle="modal" data-bs-target="#addModal"><i class="mdi mdi-plus-outline align-middle"></i> Ajouter</button>
-                                        </div>
-                                    @endif
+                                    <div class="col-xxl-2 col-lg-4">
+                                        <button type="button" class="btn btn-soft-info mx-1 w-100" data-bs-toggle="modal" data-bs-target="#addModal"><i class="mdi mdi-plus-outline align-middle"></i> Ajouter</button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-body">
-
+                                
                                 <div class="table-responsive">
                                     <table class="table table-bordered align-middle nowrap">
                                         <thead>
                                             <tr>
                                                 <th scope="col">No</th>
-                                                <th scope="col">Noms</th>
-                                                <th scope="col">Descriptions</th>
-                                                <th scope="col">Filiales</th>
+                                                <th scope="col">Nom</th>
+                                                <th scope="col">Description</th>
                                                 <th scope="col">Status</th>
-                                                <th scope="col">Actions</th>
+                                                <th scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @php
                                                 $Num = 1;
                                             @endphp
-                                            @foreach ($Departements as $Departement)
+                                            @foreach ($services as $service)
                                                 <tr>
                                                     <td scope="row">
                                                         {{$Num++}}
                                                     </td>
-                                                    <td> {{ $Departement->nom }} </td>
+                                                    <td> {{ $service->nom }} </td>
                                                     <td>
-                                                        <p class="text-muted text-truncate">{{Str::limit($Departement->Description, $limit = 20, $end = '...') }}
+                                                        <p class="text-muted text-truncate">{{Str::limit($service->Description, $limit = 50, $end = '...') }}
                                                     </td>
-                                                    <td> {{ $Departement->filiale->nom}} </td>
-                                                    @if (in_array("Admin", $userRoles) || in_array("Responsable", $userRoles))
-                                                        @if ($Departement->status == 'activer')
-                                                            <td><button wire:click="confirmation('{{ $Departement->slug }}')" class="btn btn-soft-success btn-sm">Active</button></td>
-                                                        @else
-                                                            <td><button wire:click="confirmation('{{ $Departement->slug }}')" class="btn btn-soft-danger btn-sm">desactiver</button></td>
-                                                        @endif
-                                                        <td>
-                                                            <ul class="list-unstyled hstack gap-1 mb-0">
-                                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                                    <a wire:click="ViewDepartement('{{ $Departement->slug }}')" class="btn btn-sm btn-soft-primary"><i class="mdi mdi-eye-outline"></i></a>
-                                                                </li>
-                                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                                                    <a wire:click="edite('{{ $Departement->slug }}')" class="btn btn-sm btn-soft-info"><i class="mdi mdi-pencil-outline"></i></a>
-                                                                </li>
-                                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                                                    <a wire:click="confirmationDelete('{{ $Departement->slug }}')" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger"><i class="mdi mdi-delete-outline"></i></a>
-                                                                </li>
-                                                            </ul>
-                                                        </td>
+                                                    @if ($service->status == 'activer')
+                                                        <td><button wire:click="confirmation('{{ $service->slug }}')" class="btn btn-soft-success btn-sm">Active</button></td>
                                                     @else
-                                                        <td><a class="badge bg-dark bg-soft text-white font-size-14">{{$Departement->status}}</a></td>
-                                                        <td>
-                                                            <ul class="list-unstyled hstack gap-1 mb-0">
-                                                                <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
-                                                                    <a wire:click="ViewDepartement('{{ $Departement->slug }}')" class="btn btn-sm btn-soft-primary"><i class="mdi mdi-eye-outline"></i></a>
-                                                                </li>
-                                                            </ul>
-                                                        </td>
+                                                        <td><button wire:click="confirmation('{{ $service->slug }}')" class="btn btn-soft-danger btn-sm">desactiver</button></td>
                                                     @endif
+                                                    <td>
+                                                        <ul class="list-unstyled hstack gap-1 mb-0">
+                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                                                <a wire:click="Viewservice('{{ $service->slug }}')" class="btn btn-sm btn-soft-primary"><i class="mdi mdi-eye-outline"></i></a>
+                                                            </li>
+                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                                <a wire:click="edite('{{ $service->slug }}')" class="btn btn-sm btn-soft-info"><i class="mdi mdi-pencil-outline"></i></a>
+                                                            </li>
+                                                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                                <a wire:click="confirmationDelete('{{ $service->slug }}')" data-bs-toggle="modal" class="btn btn-sm btn-soft-danger"><i class="mdi mdi-delete-outline"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="col-11" wire:ignore>
-                                    {{ $Departements->links('pagination::bootstrap-5') }}
+                                <div class="col-11">
+                                    {{$services->links('pagination::bootstrap-5')}}
                                 </div>
                                 <!--end row-->
                             </div>
                         </div><!--end card-->
                     </div><!--end col-->
-
+            
                 </div><!--end row-->
 
             </div> <!-- container-fluid -->
         </div>
         <!-- End Page-content -->
     </div>
-    <div class="modal fade orderdetailsModal " id="addModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
-        aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+    <div class="modal fade orderdetailsModal " id="addModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -134,8 +117,7 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom du departement:<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror"
-                                    wire:model="nom" aria-label="nom" aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" aria-label="nom" aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>
@@ -151,7 +133,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="form-group mb-3">
+                        {{-- <div class="form-group mb-3">
                                                                 <label for="filiale">Filiale <span class="text-danger">*</span></label>
                                     <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
                                         <option value="">selectionneur...</option>
@@ -162,7 +144,7 @@
                                     @error('filiale')
                                         <span class="text-danger"> {{$message}} </span>
                                     @enderror
-                                                        </div>
+                                                        </div> --}}
                     </div>
                     <div class="d-flex justify-content-between p-3 border-top border-opacity-10">
 
@@ -176,8 +158,7 @@
         </div>
     </div>
 
-    <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1"
-        role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+    <div class="modal fade orderdetailsModal " id="editModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -190,10 +171,7 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror"
-                                    wire:model="nom" required autocomplete="current-nom"
-                                    placeholder="Entrer categorie produit" aria-label="nom"
-                                    aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" required autocomplete="current-nom" placeholder="Entrer categorie produit" aria-label="nom" aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>
@@ -209,7 +187,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="form-group mb-3">
+                        {{-- <div class="form-group mb-3">
                                                                 <label for="filiale">Filiale <span class="text-danger">*</span></label>
                                     <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
                                         <option value="">selectionneur...</option>
@@ -220,7 +198,7 @@
                                     @error('filiale')
                                         <span class="text-danger"> {{$message}} </span>
                                     @enderror
-                                                        </div>
+                                                        </div> --}}
                     </div>
 
                     <div class="d-flex justify-content-between p-3 border-top border-opacity-10">
@@ -234,7 +212,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade orderdetailsModal " id="viewModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -278,15 +256,16 @@
                                             <td>
                                                 <div>
                                                     @foreach ($membre->permissions as $user)
-                                                       @if (in_array("Admin", $userRoles))
-                                                            @if ($user->role->nom == 'Membre')
-                                                                <a href="#" wire:click="roles({{ $membre->id }})" class="badge bg-primary bg-soft text-primary font-size-14">Membre</a>
-                                                            @else
-                                                                <a href="#" wire:click="roles({{ $membre->id }})" class="badge bg-success bg-soft text-success font-size-14">Responsable</a>
-                                                            @endif
-                                                       @else
-                                                            <a class="badge bg-dark bg-soft text-white font-size-14">{{$user->role->nom}}</a>
-                                                       @endif
+                                                        @if ($user->role->nom == 'Membre')
+                                                            <a href="#" wire:click="roles({{ $membre->id }})" class="badge bg-info bg-soft text-info font-size-11">Membre</a>
+                                                        @else
+                                                            <a href="#" wire:click="roles({{ $membre->id }})" class="badge bg-info bg-soft text-info font-size-11">Responsable</a>
+                                                        @endif
+                                                        @if ($user->role->nom == 'Membre')
+                                                            <a href="#" wire:click="permission({{ $membre->id }})" class="badge bg-success bg-soft text-success font-size-11">Accorder la permission</a>
+                                                        @elseif($user->role->nom == 'Chef projet')
+                                                            <a href="#" wire:click="permission({{ $membre->id }})" class="badge bg-danger bg-soft text-danger font-size-11">Retirer la permission</a>
+                                                        @endif
                                                     @endforeach
                                                 </div>
                                             </td>

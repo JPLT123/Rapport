@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string|null $slug
  * @property string|null $tache_prevues
- * @property string $status
+ * @property string|null $status
  * @property int|null $id_projet
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at

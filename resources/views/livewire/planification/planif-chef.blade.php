@@ -29,17 +29,25 @@
                             <div class="card-body">
                                 <h4 class="card-title mb-2">Create New Planification</h4>
                                 <div class="form-group row mb-4">
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <h4 class="card-title">Entreprise : {{$filiale ? $filiale->nom : 'vide'}}</h4>
+                                    @if ($filiale != null)
+                                        <div class="col-sm-6">
+                                            <div class="mb-3">
+                                                <h4 class="card-title">Entreprise : {{$filiale ? $filiale->nom : 'vide'}}</h4>
+                                            </div>
                                         </div>
-                                    </div>
-                        
-                                    <div class="col-sm-6">
-                                        <div class="mb-4">
-                                            <h4 class="card-title">Departement : {{$departement ? $departement->nom : 'vide'}}</h4>
+                            
+                                        <div class="col-sm-6">
+                                            <div class="mb-4">
+                                                <h4 class="card-title">Service : {{$departement ? $departement->nom : 'vide'}}</h4>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        <div class="col-sm-6">
+                                            <div class="mt-3 mb-4">
+                                                <h4 class="card-title">Departement : {{$service ? $service->nom : 'vide'}}</h4>
+                                            </div>
+                                        </div>
+                                    @endif
                                     @if(session()->has('success'))
                                         <div class="alert alert-success">
                                             {{ session('success') }}
