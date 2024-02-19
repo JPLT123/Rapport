@@ -33,7 +33,6 @@ class RapportJournalier extends Component
     public $coutsPrevionnels;
     public $observation;
     public $observationDepenses;
-    public $tachesDemain;
     public $tachesSuplementaire;
     public $hierachie;
     public $filiale;
@@ -46,19 +45,25 @@ class RapportJournalier extends Component
     public $Auth_user;
     public $showFormOption1 = false;
     public $tacheId;
+    public $projet;
     public $planifications;
     public $dateActuelle;
+    public $Actuelleprojet;
     public $showFormOption2 = false;
     public $addtaches = [];
     public $Depenses = [];
     public $tachesProchain = [];
+    public $tachesDemain = [];
     public $permission ;
+    public $service ;
+    public $rapport ;
 
     public function render()
     {
             $this->Auth_user = Auth::user();
             $this->filiale = $this->Auth_user->filiale;
             $this->departement =  $this->Auth_user->departement;
+            $this->service =  $this->Auth_user->service;
             $this->permission = DB::table('users')
                 ->join('permissions', 'users.id', '=', 'permissions.id_user')
                 ->join('role', 'permissions.id_role', '=', 'role.id')
@@ -95,6 +100,23 @@ class RapportJournalier extends Component
         ];
     }
 
+    public function tachesplus()
+    {
+        $this->tachesDemain[] = [
+            'taches' => '',
+            'duree' => '',
+            'designation' => '',
+            'valeur' => '',
+        ];
+    }
+
+    public function removetachesplus($index)
+    {
+        unset($this->tachesDemain[$index]);
+        $this->tachesDemain = array_values($this->tachesDemain);
+    }
+
+    
     public function removetaches($index)
     {
         unset($this->addtaches[$index]);
@@ -169,7 +191,7 @@ class RapportJournalier extends Component
 
         foreach ($this->taches as $id => $tache) {
             if (isset($tache['isChecked']) ) {
-                $rapport = Rapport::create([
+                $this->rapport = Rapport::create([
                     'id_tache' => $id,
                     'debut_heure' => $tache['debutHeure'],
                     'fin_heure' => $tache['finHeure'],
@@ -185,93 +207,171 @@ class RapportJournalier extends Component
         
         // $projet = $rapport->tach->id;
         // dd($projet);
-        $projet = $rapport->tach->id_projet;
-        // Générez le slug à partir du nom d'utilisateur
-        $username = preg_replace('/\s+/', '', Auth::user()->name);
-        // Remplacez cela par le nom d'utilisateur réel
-        $slug = generateUserSlug($username);
-        
-        foreach ($this->addtaches as $item) {
-            
-            $tache = Tach::create([
-                'tache_prevues' => $item['tachesSuplementaire'],
-                'status' => 'Terminer',
-                'id_projet' => $projet,
-                'slug' =>  $slug
-            ]);  
-    
-            Rapport::create([
-                'tache_suplementaire' => $tache->id,
-                'debut_heure' => $item['debutHeure'],
-                'fin_heure' => $item['finHeure'],
-                'lieu' => $item['lieu'],
-                'general' => $General->id,
-            ]);
-
+        if ($this->rapport !== null) {
+            $this->Actuelleprojet = $this->rapport->tach->id_projet;
         }
-
-        foreach ($this->files as $file) {
-            $filename = $file->store('uploads'); // Sauvegarde le fichier dans le dossier "uploads" (ajustez selon vos besoins)
-
-            ImportFile::create([
-                'id_user' => $user,
-                'rapport' => $General->id,
-                'nom_fichier' => 'fichier-joint-'.$this->dateActuelle,
-                'links' => $filename,
-            ]);
-        }       
-        
-        foreach ($this->Depenses as $item) {
-            // $this->validate([
-            //     'designationDepenses' => 'required|string|max:255',
-            //     'coutsReels' => 'required|string|max:255',
-            //     'observationglobal' => 'required|string|max:255',
-            //     'coutsPrevionnels' => 'required|date_format:H:i',
-            //     'observationDepenses' => 'required|date_format:H:i',
-            //     'tacheId' => 'required|string|max:255',
-            // ]);
-
+        if ($this->permission == 'Employer') {
             
-        // Générez le slug à partir du nom d'utilisateur
-        $username = preg_replace('/\s+/', '', Auth::user()->name);
-        // Remplacez cela par le nom d'utilisateur réel
-        $slug = generateUserSlug($username);
+            foreach ($this->addtaches as $item) {
+                // Générez le slug à partir du nom d'utilisateur
+                $username = preg_replace('/\s+/', '', Auth::user()->name);
+                // Remplacez cela par le nom d'utilisateur réel
+                $slug = generateUserSlug($username);
+            
+                $tache = Tach::create([
+                    'tache_prevues' => $item['tachesSuplementaire'],
+                    'status' => 'Terminer',
+                    'id_projet' => $item['projet'],
+                    'slug' =>  $slug
+                ]);  
+                
+        
+                Rapport::create([
+                    'tache_suplementaire' => $tache->id,
+                    'debut_heure' => $item['debutHeure'],
+                    'fin_heure' => $item['finHeure'],
+                    'lieu' => $item['lieu'],
+                    'general' => $General->id,
+                ]);
 
-            Depenser::create([
-                'slug' => $slug,
-                'Designation' => $item['designationDepenses'],
-                'CoutReel' => $item['coutsReels'],
-                'Coutprevisionnel' => $item['coutsPrevionnels'],
-                'observation' => $item['observationDepenses'],
-                'id_tache' => $item['tacheId']
-            ]);
-        }        
+                
+                foreach ($this->Depenses as $item) {
+                    // $this->validate([
+                    //     'designationDepenses' => 'required|string|max:255',
+                    //     'coutsReels' => 'required|string|max:255',
+                    //     'observationglobal' => 'required|string|max:255',
+                    //     'coutsPrevionnels' => 'required|date_format:H:i',
+                    //     'observationDepenses' => 'required|date_format:H:i',
+                    //     'tacheId' => 'required|string|max:255',
+                    // ]);
 
-        foreach ($this->tachesProchain as $id => $tache) {
-            if ($tache['isChecked']) {
-                if ($this->showFormOption2 != null) {
-                    Tacheprochain::create([
-                        'taches' => $id, // Utilisez $id pour obtenir l'ID de la tâche
-                        'duree' => $tache['duree'],
-                        'designation' => $this->designationprochain,
-                        'valeur' => $this->valeur,
-                        'rapport' => $General->id,
-                        'risques' => $this->risques
-                    ]); 
-                } else {
-                    Tacheprochain::create([
-                        'taches' => $id, // Utilisez $id pour obtenir l'ID de la tâche
-                        'duree' => $tache['duree'],
-                        'designation' => "Il n'y a pas de désignation spécifiée",
-                        'valeur' => "Il n'y a pas de valeur spécifiée",
-                        'rapport' => $General->id,
-                        'risques' => $this->risques
-                    ]); 
-                }
+                    
+                    // Générez le slug à partir du nom d'utilisateur
+                    $username = preg_replace('/\s+/', '', Auth::user()->name);
+                    // Remplacez cela par le nom d'utilisateur réel
+                    $slug = generateUserSlug($username);
+
+                    Depenser::create([
+                        'slug' => $slug,
+                        'Designation' => $item['designationDepenses'],
+                        'CoutReel' => $item['coutsReels'],
+                        'Coutprevisionnel' => $item['coutsPrevionnels'],
+                        'observation' => $item['observationDepenses'],
+                        'id_tache' =>  $tache->id
+                    ]);
+                } 
             }
+            foreach ($this->files as $file) {
+                $filename = $file->store('uploads'); // Sauvegarde le fichier dans le dossier "uploads" (ajustez selon vos besoins)
+
+                ImportFile::create([
+                    'id_user' => $user,
+                    'rapport' => $General->id,
+                    'nom_fichier' => 'fichier-joint-'.$this->dateActuelle,
+                    'links' => $filename,
+                ]);
+            }       
+             
+            foreach ($this->tachesDemain as $id => $tache) {
+                Tacheprochain::create([
+                    'taches' =>$tache['taches'],
+                    'duree' => $tache['duree'],
+                    'designation' => $tache['designation'],
+                    'valeur' => $tache['valeur'],
+                    'rapport' => $General->id,
+                    'risques' => $this->risques
+                ]);
+                
+            }
+        } else {
             
+            foreach ($this->addtaches as $item) {
+                // Générez le slug à partir du nom d'utilisateur
+                $username = preg_replace('/\s+/', '', Auth::user()->name);
+                // Remplacez cela par le nom d'utilisateur réel
+                $slug = generateUserSlug($username);
+            
+                $tache = Tach::create([
+                    'tache_prevues' => $item['tachesSuplementaire'],
+                    'status' => 'Terminer',
+                    'id_projet' => $this->projet,
+                    'slug' =>  $slug
+                ]); 
+                
+        
+                Rapport::create([
+                    'tache_suplementaire' => $tache->id,
+                    'debut_heure' => $item['debutHeure'],
+                    'fin_heure' => $item['finHeure'],
+                    'lieu' => $item['lieu'],
+                    'general' => $General->id,
+                ]);
+
+            }
+            foreach ($this->files as $file) {
+                $filename = $file->store('uploads'); // Sauvegarde le fichier dans le dossier "uploads" (ajustez selon vos besoins)
+
+                ImportFile::create([
+                    'id_user' => $user,
+                    'rapport' => $General->id,
+                    'nom_fichier' => 'fichier-joint-'.$this->dateActuelle,
+                    'links' => $filename,
+                ]);
+            }       
+            
+            foreach ($this->Depenses as $item) {
+                // $this->validate([
+                //     'designationDepenses' => 'required|string|max:255',
+                //     'coutsReels' => 'required|string|max:255',
+                //     'observationglobal' => 'required|string|max:255',
+                //     'coutsPrevionnels' => 'required|date_format:H:i',
+                //     'observationDepenses' => 'required|date_format:H:i',
+                //     'tacheId' => 'required|string|max:255',
+                // ]);
+
+                
+                // Générez le slug à partir du nom d'utilisateur
+                $username = preg_replace('/\s+/', '', Auth::user()->name);
+                // Remplacez cela par le nom d'utilisateur réel
+                $slug = generateUserSlug($username);
+
+                Depenser::create([
+                    'slug' => $slug,
+                    'Designation' => $item['designationDepenses'],
+                    'CoutReel' => $item['coutsReels'],
+                    'Coutprevisionnel' => $item['coutsPrevionnels'],
+                    'observation' => $item['observationDepenses'],
+                    'id_tache' => $item['tacheId']
+                ]);
+            }  
+            
+            
+            foreach ($this->tachesProchain as $id => $tache) {
+                if ($tache['isChecked']) {
+                    if ($this->showFormOption2 != null) {
+                        Tacheprochain::create([
+                            'taches' => $id, // Utilisez $id pour obtenir l'ID de la tâche
+                            'duree' => $tache['duree'],
+                            'designation' => $this->designationprochain,
+                            'valeur' => $this->valeur,
+                            'rapport' => $General->id,
+                            'risques' => $this->risques
+                        ]); 
+                    } else {
+                        Tacheprochain::create([
+                            'taches' => $id, // Utilisez $id pour obtenir l'ID de la tâche
+                            'duree' => $tache['duree'],
+                            'designation' => "Il n'y a pas de désignation spécifiée",
+                            'valeur' => "Il n'y a pas de valeur spécifiée",
+                            'rapport' => $General->id,
+                            'risques' => $this->risques
+                        ]); 
+                    }
+                }
+                
+            }
         }
-     
+      
         if ($this->Auth_user->id_departement !== null) {
             if ($this->permission == "Membre") {
                 $Auth_user = Auth::user();

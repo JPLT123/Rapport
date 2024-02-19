@@ -134,8 +134,7 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom du departement:<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror"
-                                    wire:model="nom" aria-label="nom" aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" aria-label="nom" aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>
@@ -152,17 +151,17 @@
                             @enderror
                         </div>
                         <div class="form-group mb-3">
-                                                                <label for="filiale">Filiale <span class="text-danger">*</span></label>
-                                    <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
-                                        <option value="">selectionneur...</option>
-                                        @foreach ($filiales as $filiale)
-                                        <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('filiale')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                                        </div>
+                            <label for="filiale">Filiale <span class="text-danger">*</span></label>
+                            <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
+                                <option value="">selectionneur...</option>
+                                @foreach ($filialesAll as $filiale)
+                                <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
+                                @endforeach
+                            </select>
+                            @error('filiale')
+                                <span class="text-danger"> {{$message}} </span>
+                            @enderror
+                        </div>
                     </div>
                     <div class="d-flex justify-content-between p-3 border-top border-opacity-10">
 
@@ -190,10 +189,7 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror"
-                                    wire:model="nom" required autocomplete="current-nom"
-                                    placeholder="Entrer categorie produit" aria-label="nom"
-                                    aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" required autocomplete="current-nom" placeholder="Entrer categorie produit" aria-label="nom" aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>
@@ -210,17 +206,17 @@
                             @enderror
                         </div>
                         <div class="form-group mb-3">
-                                                                <label for="filiale">Filiale <span class="text-danger">*</span></label>
-                                    <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
-                                        <option value="">selectionneur...</option>
-                                        @foreach ($filiales as $filiale)
-                                        <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('filiale')
-                                        <span class="text-danger"> {{$message}} </span>
-                                    @enderror
-                                                        </div>
+                            <label for="filiale">Filiale <span class="text-danger">*</span></label>
+                            <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
+                                <option value="">selectionneur...</option>
+                                @foreach ($filialesAll as $filiale)
+                                <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
+                                @endforeach
+                            </select>
+                            @error('filiale')
+                                <span class="text-danger"> {{$message}} </span>
+                            @enderror
+                        </div>
                     </div>
 
                     <div class="d-flex justify-content-between p-3 border-top border-opacity-10">

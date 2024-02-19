@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
+ * @property Collection|Consultant[] $consultants
  * @property Collection|Permission[] $permissions
  *
  * @package App\Models
@@ -31,6 +32,11 @@ class Role extends Model
 		'nom',
 		'description'
 	];
+
+	public function consultants()
+	{
+		return $this->hasMany(Consultant::class, 'id_role');
+	}
 
 	public function permissions()
 	{

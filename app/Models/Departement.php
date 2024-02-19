@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $hierachie
  * 
  * @property Filiale|null $filiale
+ * @property Collection|Consultant[] $consultants
  * @property Collection|User[] $users
  *
  * @package App\Models
@@ -55,10 +56,14 @@ class Departement extends Model
 		return $this->hasMany(User::class, 'id_departement');
 	}
 
-
 	public function filiale()
 	{
 		return $this->belongsTo(Filiale::class, 'id_filiale');
 	}
 
+	public function consultants()
+	{
+		return $this->hasMany(Consultant::class, 'id_departement');
 	}
+
+}

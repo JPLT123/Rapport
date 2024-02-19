@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $updated_at
  * @property string|null $hierachie
  * 
+ * @property Collection|Consultant[] $consultants
  * @property Collection|Filiale[] $filiales
  * @property Collection|Projet[] $projets
  * @property Collection|User[] $users
@@ -45,6 +46,11 @@ class Service extends Model
 		'status',
 		'hierachie'
 	];
+
+	public function consultants()
+	{
+		return $this->hasMany(Consultant::class, 'id_service');
+	}
 
 	public function filiales()
 	{

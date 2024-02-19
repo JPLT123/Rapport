@@ -54,6 +54,17 @@ class Planification extends Model
 		'status'
 	];
 
+	public function projet()
+	{
+		return $this->belongsTo(Projet::class, 'id_projet');
+	}
+
+	public function user()
+	{
+		return $this->belongsTo(User::class, 'id_user');
+	}
+
+	
 	public function plan_projets_relation()
 	{
 		return $this->belongsToMany(Projet::class, 'plan_projets', 'id_projet', 'id_planif');

@@ -9,12 +9,15 @@ use App\Models\Rapport;
 use Livewire\Component;
 use App\Models\Depenser;
 use App\Models\Rapportgeneral;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AfficheRapport extends Component
 {
     public $dateActuelle;
     public $user;
     public $rapports;
+    public $permission;
 
     public function mount($slug)
     {
@@ -39,8 +42,23 @@ class AfficheRapport extends Component
         $tacheprochain = Tach::whereIn('id', $tache3)
                     ->get();
 
-        // Utilisez la méthode 'whereIn' pour chercher les enregistrements avec des valeurs dans un tableau
-        $this->depenses = Depenser::whereIn('id_tache', $tache1)->get();
+        
+        $this->permission = DB::table('users')
+        ->join('permissions', 'users.id', '=', 'permissions.id_user')
+        ->join('role', 'permissions.id_role', '=', 'role.id')
+        ->where('users.id', Auth::user()->id)
+        ->value('role.nom');
+
+        if ($this->permission == 'Employer') {
+                
+            // Utilisez la méthode 'whereIn' pour chercher les enregistrements avec des valeurs dans un tableau
+            $this->depenses = Depenser::whereIn('id_tache', $tache2)->get();
+        } else {
+                
+            // Utilisez la méthode 'whereIn' pour chercher les enregistrements avec des valeurs dans un tableau
+            $this->depenses = Depenser::whereIn('id_tache', $tache1)->get();
+        }
+        
         
         return view('livewire.affiche-rapport', [
             "user" => $this->user,

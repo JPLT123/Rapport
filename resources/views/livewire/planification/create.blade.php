@@ -71,47 +71,57 @@
                                                         @enderror
                                                     </div>
 
-                                                    <div class="form-group m-4">
-                                                        <label for="taches" class="col-form-label">Les tâches prévues pour la semaine<span class="text-danger">*</span></label>
-                                                        <ul class="list-unstyled user-list validate m-2" id="taskassignee">
-                                                            @foreach ($Alltaches as $item)
-                                                                <li>
-                                                                    <div class="form-check form-check-primary mb-2 d-flex align-items-center">
-                                                                        <input wire:model="taches" class="form-check-input" name="taches[]" type="checkbox" id="taches-{{ $item->id }}" value="{{ $item->id }}">
-                                                                        <label class="form-check-label ms-2" for="taches-{{ $item->id }}">{{ $item->tache_prevues }}</label>
-                                                                    </div>
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
-                                                        @error('taches')
+                                                    @if (in_array(7, $userRoles))
+                                                    <div class=" mt-4 mb-4">
+                                                        <input class="form-control mt-4 mb-4" name="file"  type="file" wire:model="file">
+
+                                                        @error('file')
                                                             <span class="text-danger">{{ $message }}</span>
                                                         @enderror
                                                     </div>
-
-                                                    <div class="col-sm-12">
-                                                        @foreach ($createtaches as $index => $tache)
-                                                            <label for="tache[{{ $index }}][tache_prevues]">Taches prevues <span class="text-danger">*</span></label>
-                                                            <div data-repeater-list="inner-group" class="inner form-group">
-                                                                <div data-repeater-item class="inner ms-md-auto">
-                                                                    <div class="mb-3 row align-items-center">
-                                                                        <div class="col-md-8">
-                                                                            <input wire:model="createtaches.{{ $index }}.tache_prevues" type="text" name="tache[{{ $index }}][tache_prevues]" class="form-control" required>
+                                                    @else
+                                                        <div class="form-group m-4">
+                                                            <label for="taches" class="col-form-label">Les tâches prévues pour la semaine<span class="text-danger">*</span></label>
+                                                            <ul class="list-unstyled user-list validate m-2" id="taskassignee">
+                                                                @foreach ($Alltaches as $item)
+                                                                    <li>
+                                                                        <div class="form-check form-check-primary mb-2 d-flex align-items-center">
+                                                                            <input wire:model="taches" class="form-check-input" name="taches[]" type="checkbox" id="taches-{{ $item->id }}" value="{{ $item->id }}">
+                                                                            <label class="form-check-label ms-2" for="taches-{{ $item->id }}">{{ $item->tache_prevues }}</label>
                                                                         </div>
-                                                                        <div class="col-md-3">
-                                                                            <div class="mt-2 mt-md-0 d-grid">
-                                                                                <input data-repeater-delete wire:click.prevent="removeTache({{ $index }})" type="button" class="btn btn-danger inner" value="Delete" />
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                            @error('taches')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+
+                                                        <div class="col-sm-12">
+                                                            @foreach ($createtaches as $index => $tache)
+                                                                <label for="tache[{{ $index }}][tache_prevues]">Taches prevues <span class="text-danger">*</span></label>
+                                                                <div data-repeater-list="inner-group" class="inner form-group">
+                                                                    <div data-repeater-item class="inner ms-md-auto">
+                                                                        <div class="mb-3 row align-items-center">
+                                                                            <div class="col-md-8">
+                                                                                <input wire:model="createtaches.{{ $index }}.tache_prevues" type="text" name="tache[{{ $index }}][tache_prevues]" class="form-control" required>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                <div class="mt-2 mt-md-0 d-grid">
+                                                                                    <input data-repeater-delete wire:click.prevent="removeTache({{ $index }})" type="button" class="btn btn-danger inner" value="Delete" />
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        @endforeach
-                                                        <div class="row mb-3 justify-content-end">
-                                                            <div class="col-lg-12">
-                                                                <input data-repeater-create wire:click.prevent="addTache" type="button" class="btn btn-success inner" value="Add Taches" />
+                                                            @endforeach
+                                                            <div class="row mb-3 justify-content-end">
+                                                                <div class="col-lg-12">
+                                                                    <input data-repeater-create wire:click.prevent="addTache" type="button" class="btn btn-success inner" value="Add Taches" />
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    @endif
 
                                                     <div class="col-sm-6">
                                                         <div class="mb-3">
@@ -145,7 +155,9 @@
 
                                                 <div class="d-flex flex-wrap gap-2 m-4">
                                                     <button type="submit" class="btn btn-success waves-effect waves-light">Ajouter une planification</button>
-                                                    <a href="{{route('planification.verifier', ['slug' => $Auth_user->slug])}}" class="btn btn-primary waves-effect waves-light">Visualiser</a>
+                                                    @if (!in_array(7, $userRoles))
+                                                         <a href="{{route('planification.verifier', ['slug' => $Auth_user->slug])}}" class="btn btn-primary waves-effect waves-light">Visualiser</a>
+                                                    @endif
                                                     {{-- <button type="button" wire:click="add" class="btn btn-primary waves-effect waves-light">Enregistrer</button> --}}
                                                     <button type="reset" class="btn btn-secondary waves-effect waves-light">Annuler</button>
                                                 </div>

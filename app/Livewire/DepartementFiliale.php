@@ -26,10 +26,12 @@ class DepartementFiliale extends Component
     public $userRoles;
     public $description;
     public $filiale;
+    public $filiales;
     public $id_Departement;
     public $chef;
     public $hierachie;
     public $membres;
+    public $filialesAll;
 
     public function render()
     {
@@ -54,7 +56,7 @@ class DepartementFiliale extends Component
             $query->where('status', $this->status);
         }
 
-        $filiale = Filiale::where("status", 'activer')->get();
+        $this->filialesAll = Filiale::where("status", 'activer')->get();
 
         $Departement = $query->with('filiale')->paginate(10);
         
@@ -67,7 +69,7 @@ class DepartementFiliale extends Component
 
         return view('livewire.departement', [
             "Departements" => $Departement,
-            "filiales" => $filiale,
+            "filialesAll" => $this->filialesAll,
             "chef" =>$this->chef
         ])->extends('layouts.guest')->section('content');
 
@@ -199,21 +201,12 @@ class DepartementFiliale extends Component
 
         $Departement = Departement::where('slug', $this->id_Departement)->first();
 
-        Permission::where("id_user", $Departement->hierachie)->update([
-            "id_role" => 4,
-        ]);
-
         if ($Departement) { 
 
             $Departement->update([
                 "nom" => $this->nom,
                 "Description" => $this->description,
                 "id_filiale" => $this->filiale,
-                "hierachie" => $this->responsable,
-            ]);
-
-            Permission::where("id_user", $this->responsable)->update([
-                "id_role" => 5,
             ]);
 
             $this->dispatch("showSuccessMessage", ["message" => "Opérations effectuées avec succès"]);
@@ -231,6 +224,7 @@ class DepartementFiliale extends Component
             $this->description = $Departement->Description;
             $this->date = $Departement->date_creation;
             $this->hierachie = $Departement->hierachie;
+            $this->filiales = $Departement->filiale;
             $this->membres = $Departement->utilisateurs()
                 ->where('status', 'activer')
                 ->whereHas('permissions', function ($query) {

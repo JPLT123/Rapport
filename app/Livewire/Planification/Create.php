@@ -2,16 +2,20 @@
 
 namespace App\Livewire\Planification;
 
+use Artisan;
 use Carbon\Carbon;
 use App\Models\Tach;
 use App\Models\User;
 use App\Models\Filiale;
 use Livewire\Component;
+use App\Models\ImportFile;
 use App\Models\PlantTache;
 use App\Models\Essaiepivot;
 use Illuminate\Support\Str;
 use App\Models\Essaieplanif;
 use App\Models\MembresProjet;
+use App\Models\Planification;
+use Livewire\WithFileUploads;
 use App\Mail\ConfirmationEmail;
 use App\Models\PlanifHebdomadaire;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +24,8 @@ use Illuminate\Support\Facades\Mail;
 
 class Create extends Component
 {
+    use WithFileUploads;
+    
     public $ressources;
     public $resultat;
     public $hierachie;
@@ -33,6 +39,9 @@ class Create extends Component
     public $projet;
     public $Alltaches;
     public $Auth_user;
+    public $userRoles;
+    public $file;
+    public $email;
     public $tachesPrevues;
     public $taches = [];
     public $newtache = [];
@@ -57,6 +66,7 @@ class Create extends Component
 
         $this->Auth_user = Auth::user();
 
+        $this->userRoles = $this->Auth_user->permissions->pluck('id_role')->toArray();
         $this->chef = User::where('status', 'activer')
                   ->where('id', '!=', $this->Auth_user->id)
                   ->get();
@@ -124,56 +134,117 @@ class Create extends Component
         ->first();
 
         if (!$existingessaie) {
-            // Générez le slug à partir du nom d'utilisateur
-            $username = preg_replace('/\s+/', '', Auth::user()->name);
-            // Remplacez cela par le nom d'utilisateur réel
-            $slug = generateUserSlug($username);
-
-            $planification = PlanifHebdomadaire::create([
-                'id_user' => Auth::user()->id,
-                'id_projet' => $this->projet,
-                'ressources_necessaires' => $this->ressources,
-                'resultat_attendus' => $this->resultat,
-                'observation' => $this->observation,
-                'date' => $this->date,
-                'slug' => $slug,
-                ]);
-
-            foreach ($this->createtaches as $item) {
+            if ($this->file !== null) {
                 // Générez le slug à partir du nom d'utilisateur
                 $username = preg_replace('/\s+/', '', Auth::user()->name);
                 // Remplacez cela par le nom d'utilisateur réel
                 $slug = generateUserSlug($username);
-                
-                $tache = Tach::create([
-                    'tache_prevues' => $item['tache_prevues'],
-                    'id_projet' => $item['id_projet'],
+
+                // Dans votre méthode pour gérer le téléchargement de fichiers
+                $filePath = $this->file->store('uploads');
+
+                $date = Carbon::now()->toDateString();
+
+                $file = ImportFile::create([
+                    'id_user' => Auth::user()->id,
+                    'nom_fichier' => 'fichier-joint-' . $date, // Utilisation de la date actuelle dans le nom du fichier
+                    'links' => $filePath,
+                ]);
+
+
+                $planification = PlanifHebdomadaire::create([
+                    'id_user' => Auth::user()->id,
+                    'id_projet' => $this->projet,
+                    'ressources_necessaires' => $this->ressources,
+                    'resultat_attendus' => $this->resultat,
+                    'observation' => $this->observation,
+                    'date' => $this->date,
+                    'importfile' => $file->id,
                     'slug' => $slug,
                 ]);
 
-                $this->newtache[] =$tache->id;
+                $permission = DB::table('users')
+                ->join('permissions', 'users.id', '=', 'permissions.id_user')
+                ->join('role', 'permissions.id_role', '=', 'role.id')
+                ->where('users.id', Auth::user()->id)
+                ->value('role.nom');
 
-                $this->taches[] = $tache->id;
+                
+                $user = Auth::user();
+                $dateActuelle = Carbon::now()->toDateString();
+                
+                if ($permission == "Employer") {
+                    $Efiles = $file->id;
 
-            }
+                    $Efile = ImportFile::find($Efiles); // Récupère le fichier avec l'ID spécifié
+                    $filePath = storage_path('app/' . $Efile->links); // Obtient le chemin du fichier à partir de la propriété "links" de l'objet $Efile
+                    
+                    $this->email = User::where('status', 'activer')
+                        ->whereIn('id', function($query) {
+                            $query->select('id_user')->from('permissions')->where('id_role', 1);
+                        })->value('email');
 
-            foreach ($this->taches as $item) {
-            
-                PlantTache::create([
-                    'id_tache' => $item,
-                    'id_planif' => $planification->id,
+                        // Send email with attachment
+                        Mail::raw("Email d'envoie de planification du consultant ".$user->name, function ($message) use ($filePath) {
+                            $message->to($this->email)
+                                    ->subject('Email de planification')
+                                    ->attach($filePath);
+                        });
+    
+                }
+            } else {
+                    
+                // Générez le slug à partir du nom d'utilisateur
+                $username = preg_replace('/\s+/', '', Auth::user()->name);
+                // Remplacez cela par le nom d'utilisateur réel
+                $slug = generateUserSlug($username);
+
+                $planification = PlanifHebdomadaire::create([
                     'id_user' => Auth::user()->id,
+                    'id_projet' => $this->projet,
+                    'ressources_necessaires' => $this->ressources,
+                    'resultat_attendus' => $this->resultat,
+                    'observation' => $this->observation,
+                    'date' => $this->date,
+                    'slug' => $slug,
+                    ]);
+
+                foreach ($this->createtaches as $item) {
+                    // Générez le slug à partir du nom d'utilisateur
+                    $username = preg_replace('/\s+/', '', Auth::user()->name);
+                    // Remplacez cela par le nom d'utilisateur réel
+                    $slug = generateUserSlug($username);
+                    
+                    $tache = Tach::create([
+                        'tache_prevues' => $item['tache_prevues'],
+                        'id_projet' => $item['id_projet'],
+                        'slug' => $slug,
+                    ]);
+
+                    $this->newtache[] =$tache->id;
+
+                    $this->taches[] = $tache->id;
+
+                }
+
+                foreach ($this->taches as $item) {
+                
+                    PlantTache::create([
+                        'id_tache' => $item,
+                        'id_planif' => $planification->id,
+                        'id_user' => Auth::user()->id,
+                    ]);
+                }
+                
+                if ($this->newtache !== null) {
+                    PlantTache::whereIn('id_tache', $this->newtache)->update([
+                        'status' => true
+                    ]);
+                }
+                Tach::whereIn('id', $this->taches)->update([
+                    'status' => 'Attente'
                 ]);
             }
-            
-            if ($this->newtache !== null) {
-                PlantTache::whereIn('id_tache', $this->newtache)->update([
-                    'status' => true
-                ]);
-            }
-            Tach::whereIn('id', $this->taches)->update([
-                'status' => 'Attente'
-            ]);
 
         $this->dispatch("showInfoMessage",message:"Operations effectuer avec success");
             

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Filiale;
 use App\Models\Service;
 use Livewire\Component;
+use App\Models\Consultant;
 use App\Models\Permission;
 use App\Models\Departement;
 use Illuminate\Support\Str;
@@ -45,6 +46,8 @@ class ListeUser extends Component
     public $userRoles;
     public $showFormOption1 = false;
     public $showFormOption2 = false;
+    public $showFormOption3 = false;
+
 
     public function render()
     {
@@ -119,6 +122,8 @@ class ListeUser extends Component
             $user = $query->paginate(10);
         }
 
+        $roles = Role::whereNotIn('nom', ['Employer', 'Chef projet','Admin'])->get();
+
         $filiale = Filiale::where("status", 'activer')->get();
         
         $services = Service::where("status", 'activer')->get();
@@ -131,13 +136,13 @@ class ListeUser extends Component
 
         $departements = $departementsQuery->get();
 
-        $role = Role::all();
+        // $role = Role::all();
 
         return view('livewire.gestion-utilisateur.liste-user', [
             "users" => $user,
             "filiales" => $filiale,
             "departements" => $departements,
-            "roles" => $role,
+            "roles" => $roles,
             "services" => $services
         ])->extends('layouts.guest')->section('content');
     }
@@ -153,6 +158,11 @@ class ListeUser extends Component
     {
         $this->showFormOption1 = false;
         $this->showFormOption2 = true;
+    }
+    
+    public function showFormForOption3()
+    {
+        $this->showFormOption3 = !$this->showFormOption3;
     }
 
     public function ModalAdd(){
@@ -246,6 +256,27 @@ class ListeUser extends Component
                 "filiale" => 'required|exists:filiales,id',
                 "departement" => 'required|exists:departement,id',
             ];
+        }elseif ($this->showFormOption3) {
+            if ($this->showFormOption1) {
+                $rules = [
+                    "name" => "required|string|max:255",
+                    "adresse" => "required|max:255",
+                    "email" => "required|email|unique:users",
+                    "telephone" => ['required','regex:/^(00224|\+224)?(?:61|62|65|66)[0-9]{1}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}$/','unique:users'],
+                    "service" => 'required|exists:services,id',
+                    "role" => 'required|exists:role,id',
+                ];
+            } elseif ($this->showFormOption2) {
+                $rules = [
+                    "name" => "required|string|max:255",
+                    "adresse" => "required|max:255",
+                    "email" => "required|email|unique:users",
+                    "telephone" => ['required','regex:/^(00224|\+224)?(?:61|62|65|66)[0-9]{1}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}[-.\s]?[0-9]{2}$/','unique:users'],
+                    "filiale" => 'required|exists:filiales,id',
+                    "departement" => 'required|exists:departement,id',
+                    "role" => 'required|exists:role,id',
+                ];
+            }
         }
 
         if (empty($rules)) {
@@ -271,10 +302,26 @@ class ListeUser extends Component
             "password" => Hash::make($this->password),
         ]);
 
-        Permission::create([
-            'id_user' => $user->id,
-            'id_role' => 4
-        ]);
+        if ($this->showFormOption3) {
+            $role = Permission::create([
+                'id_user' => $user->id,
+                'id_role' => 7
+            ]);
+
+            Consultant::create([
+                'id_user' => $user->id,
+                'id_role' => $this->role,
+                'id_filiale' => $this->filiale,
+                "id_service" => $this->service,
+                "id_departement" => $this->departement,
+            ]);
+        } else {
+            Permission::create([
+                'id_user' => $user->id,
+                'id_role' => 4
+            ]);
+        }
+        
         
         Mail::to($user->email)->send(new VerificationCodeMail($user->verification_code));
     
