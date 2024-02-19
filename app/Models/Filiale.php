@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $id_Service
  * 
  * @property Service|null $service
+ * @property Collection|Consultant[] $consultants
  * @property Collection|Departement[] $departements
  * @property Collection|Projet[] $projets
  * @property Collection|User[] $users
@@ -63,6 +64,11 @@ class Filiale extends Model
 		return $this->belongsTo(Service::class, 'id_Service');
 	}
 
+	public function consultants()
+	{
+		return $this->hasMany(Consultant::class, 'id_filiale');
+	}
+
 	public function departements()
 	{
 		return $this->hasMany(Departement::class, 'id_filiale');
@@ -76,18 +82,5 @@ class Filiale extends Model
 	public function users()
 	{
 		return $this->hasMany(User::class, 'id_filiale');
-	}
-
-	
-	public function TerminerProjects()
-	{
-		return $this->hasMany(Projet::class, 'id_filiale')
-					->where('projets.status', 'Terminer');
-	}
-
-	public function pendingProjects()
-	{
-		return $this->hasMany(Projet::class, 'id_filiale')
-					->where('projets.status', 'attente');
 	}
 }

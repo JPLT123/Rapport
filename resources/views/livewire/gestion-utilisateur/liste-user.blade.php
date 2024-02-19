@@ -152,7 +152,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <ul class="pagination pagination-rounded justify-content-end mb-2" wire:ignore >
+                                <ul class="pagination pagination-rounded justify-content-end mb-2"  wire:ignore>
                                     {{$users->links('pagination::bootstrap-5')}}
                                 </ul>
                             </div>
@@ -302,6 +302,36 @@
                                                 <span class="text-danger"> {{$message}} </span>
                                             @enderror
                                         </div> 
+                                    </div>
+                                @endif
+
+                                
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" wire:click="showFormForOption3">
+                                            <label class="form-check-label" for="inlineRadio2">Souhaitez-vous que l'utilisateur en cours de création soit un consultant ?</label>
+                                        </div>                                                          
+                                    </div>
+                                </div>
+
+                                @if ($showFormOption3)
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label for="role" class="form-label">Role du consultant: <span class="text-danger">*</span></label>
+                                            <select name="role" id="role" wire:model='role' class="form-control">
+                                                <option value="">Selectionner un role... </option>
+                                                @foreach ($roles as $item)
+                                                    <option value="{{ $item->id }}">
+                                                        {{ $item->nom }}
+                                                        <img src="assets\user.png" alt="">
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('role')
+                                                <span class="text-danger"> {{ $message }} </span>
+                                            @enderror
+                                        </div>
                                     </div>
                                 @endif
                             @else

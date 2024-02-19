@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $updated_at
  * 
  * @property User|null $user
+ * @property Collection|Importfile[] $importfiles
  * @property Collection|Rapport[] $rapports
  * @property Collection|Tacheprochain[] $tacheprochains
  *

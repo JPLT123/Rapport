@@ -16,18 +16,24 @@
                     <span style="font-weight: bold;">Nom:</span> {{$user->name}}
                 </div>
         
-                <div style="margin-bottom: 10px;">
-                    <span style="font-weight: bold;">Filiale:</span> {{$user->filiale->nom}}
-                </div>
+                @if ($user->filiale !== null)
+                    <div style="margin-bottom: 10px;">
+                        <span style="font-weight: bold;">Filiale:</span> {{$user->filiale->nom}}
+                    </div>
+            
+                    <div style="margin-bottom: 10px;">
+                        <span style="font-weight: bold;">Département:</span> {{$user->departement->nom}}
+                    </div>
+                @else
+                    <div style="margin-bottom: 10px;">
+                        <span style="font-weight: bold;">Filiale:</span> Elceto Holding
+                    </div>
+            
+                    <div style="margin-bottom: 10px;">
+                        <span style="font-weight: bold;">Département:</span> {{$user->service->nom}}
+                    </div>
+                @endif
         
-                <div style="margin-bottom: 10px;">
-                    <span style="font-weight: bold;">Département:</span> {{$user->departement->nom}}
-                </div>
-        
-                {{-- <div style="margin-bottom: 10px;">
-                    <span style="font-weight: bold;">Date:</span> 
-                    {{$rapports->date}}
-                </div> --}}
                 <div style="margin-bottom: 10px;">
                     <span style="font-weight: bold;">Projet:</span>   
                     @foreach ($user->planif_hebdomadaires as $item)
@@ -156,11 +162,17 @@
                    
                     <tr >
                         <th style="border:1px solid #ccc; padding:8px; text-align:center;background-color: #0055a4; color: white;">Tâches prevus</th>
-                        @foreach ($tacheprochains as $item)
-                            <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->tache_prevues }}</td>
-                        @endforeach
+                        @if ($permission == 'Employer')
+                            @foreach ($rapports->tacheprochains as $item)
+                                <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->taches }}</td>
+                            @endforeach
+                        @else
+                            @foreach ($tacheprochains as $item)
+                                <td style="border:1px solid #ccc; padding:8px; text-align:center;">{{ $item->tache_prevues }}</td>
+                            @endforeach
+                        @endif
                     </tr>
-                    
+
                     <tr >
                         <th style="border:1px solid #ccc; padding:8px; text-align:center;background-color: #0055a4; color: white;">Durée(en H)</th>
                         

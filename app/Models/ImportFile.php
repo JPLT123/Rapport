@@ -19,9 +19,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $nom_fichier
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int|null $rapport
  * 
- * @property Rapport|null $rapport
  * @property User|null $user
+ * @property Rapportgeneral|null $rapportgeneral
  *
  * @package App\Models
  */
@@ -38,9 +39,9 @@ class ImportFile extends Model
 	protected $fillable = [
 		'id_user',
 		'id_rapport',
-		'rapport',
 		'links',
-		'nom_fichier'
+		'nom_fichier',
+		'rapport'
 	];
 
 	public function rapport()
@@ -52,10 +53,14 @@ class ImportFile extends Model
 	{
 		return $this->belongsTo(User::class, 'id_user');
 	}
-	
+
 	public function rapportgeneral()
 	{
 		return $this->belongsTo(Rapportgeneral::class, 'rapport');
 	}
-
+	
+	public function planif_hebdomadaires()
+	{
+		return $this->hasMany(PlanifHebdomadaire::class, 'importfile');
+	}
 }

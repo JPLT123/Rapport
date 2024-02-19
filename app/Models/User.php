@@ -45,6 +45,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property Filiale|null $filiale
  * @property Service|null $service
  * @property Collection|Chat[] $chats
+ * @property Collection|Consultant[] $consultants
  * @property Collection|Essaieplanif[] $essaieplanifs
  * @property Collection|Importfile[] $importfiles
  * @property Collection|MembresProjet[] $membres_projets
@@ -116,6 +117,11 @@ use HasApiTokens;
 	public function chat()
 	{
 		return $this->hasMany(Chat::class);
+	}
+
+	public function consultants()
+	{
+		return $this->hasMany(Consultant::class, 'id_user');
 	}
 
 	public function essaieplanifs()

@@ -51,7 +51,8 @@ class PlanifHebdomadaire extends Model
 		'resultat_attendus',
 		'observation',
 		'date',
-		'status'
+		'status',
+		'importfile'
 	];
 
 	public function projet()
@@ -62,6 +63,11 @@ class PlanifHebdomadaire extends Model
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'id_user');
+	}
+
+	public function importfile()
+	{
+		return $this->belongsTo(ImportFile::class, 'importfile');
 	}
 
 	public function plant_taches()

@@ -22,15 +22,13 @@
                 </div>
                 <!-- end page title -->
 
-
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="card job-filter">
                             <div class="card-body">
                                 <div class="row g-3">
                                     <div class="col-xxl-2 col-sm-4">
-                                        <input type="search" wire:model.live ="search" class="form-control"
-                                            id="searchInput" placeholder="Search for ...">
+                                        <input type="search" wire:model.live ="search" class="form-control" id="searchInput" placeholder="Search for ...">
                                     </div>
                                     <div class="col-xxl-2 col-sm-4">
                                         <select wire:model.live ="status" class="form-control select2">
@@ -51,7 +49,7 @@
                     <!--end col-->
                 </div>
                 <!--end row-->
-
+                
                 <div class="row">
                     @foreach ($Filiales as $Filiale)
                     <div class="col-xl-3 col-md-6">
@@ -114,7 +112,8 @@
                                 </div>
                             </div>
                         </div>
-                        <!--end col-->
+                    </div>
+                    <!--end col-->
                     @endforeach
 
                 </div><!--end row-->
@@ -162,19 +161,50 @@
                                         <div class="input-group auth-pass-inputgroup">
                                             <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" required autocomplete="current-nom" aria-label="nom" aria-describedby="nom-addon">
                                         </div>
+                                        @error('nom')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label for="adresse" class="form-label">Adresse : <span
-                                                    class="text-danger">*</span></label>
-                                            <input id="adresse" type="text" wire:model='adresse' autofocus
-                                                autocomplete="adresse"
-                                                class="form-control @error('adresse') is-invalid @enderror">
-                                            @error('adresse')
-                                                <span class="text-danger"> {{ $message }} </span>
-                                            @enderror
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="adresse" class="form-label">Adresse : <span class="text-danger">*</span></label>
+                                        <input id="adresse" type="text" wire:model='adresse' autofocus autocomplete="adresse" class="form-control @error('adresse') is-invalid @enderror">
+                                        @error('adresse')
+                                            <span class="text-danger"> {{$message}} </span>
+                                        @enderror
+                                    </div>
+                                </div>
+        
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="telephone" class="form-label">Telephone : <span class="text-danger">*</span></label>
+                                        <input id="telephone" type="text" wire:model='telephone' autofocus autocomplete="telephone" class="form-control @error('telephone') is-invalid @enderror">
+                                        @error('telephone')
+                                            <span class="text-danger"> {{$message}} </span>
+                                        @enderror
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email : <span class="text-danger">*</span></label>
+                                        <input id="email" type="text" wire:model='email' autofocus autocomplete="email" class="form-control @error('email') is-invalid @enderror">
+                                        @error('email')
+                                            <span class="text-danger"> {{$message}} </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group mb-3">
+                                        <label for="date">Date de creation :<span class="text-danger">*</span></label>
+                                        <div class="input-group auth-pass-inputgroup">
+                                            <input type="date" class="form-control @error('date') is-invalid @enderror" wire:model="date" required autocomplete="current-date" placeholder="Entrer categorie produit" aria-label="date" aria-describedby="date-addon">
                                         </div>
+                                        @error('date')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -195,6 +225,17 @@
                                         @enderror
                                     </div>
                                 </div>
+                                <div class="form-group mb-3">
+                                    <label for="description">Description :<span class="text-danger">*</span></label>
+                                    <div class="input-group auth-pass-inputgroup">
+                                        <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" aria-label="description" aria-describedby="description-addon">
+                                        
+                                    </div>
+                                    @error('description')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                               </div>
                             </div>
                             <div class="col-lg-6 col-sm-6">
                                 <div class="form-group ">
@@ -205,8 +246,7 @@
                                         <label for="images">
                                             <div  class="text-center mt-3">
                                                 <img src="{{ $images ? $images->temporaryUrl() : 'assets/images/image_produit.png' }}"
-                                                    class="img-fluid text-center" alt="Responsive image"
-                                                    style="width: 100%; height:200px;" />
+                                                    class="img-fluid text-center" alt="Responsive image" style="width: 100%; height:200px;"/>
                                             </div>
                                         </label>
                                         <input type="file" wire:model="images" id="images" hidden>
@@ -215,7 +255,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-
+                                
                             </div>
                         </div>
                     </div>

@@ -504,13 +504,53 @@
                                                                 <div data-repeater-list="group-a">
                                                                     <div data-repeater-item class="row mt-3">
 
-                                                                        <div  class="mb-3 col-md-4">
-                                                                            <label for="tache[{{ $index }}][tachesSuplementaire]">Taches suplementaire</label>
-                                                                            <input type="text" wire:model="addtaches.{{ $index }}.tachesSuplementaire" id="tache[{{ $index }}][tachesSuplementaire]" class="form-control" />
-                                                                            @error('tachesSuplementaire') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                        @if ($permission == 'Employer')
+                                                                            <div class="mb-3 col-md-4">
+                                                                                <select wire:model="addtaches.{{ $index }}.projet" class="inner form-control" name="projet" id="projet">
+                                                                                    <option value="">Selectionner le projet...</option>
+                                                                                    @foreach ($Auth_user->membres_projets as $user)
+                                                                                        <option value="{{$user->projet->id}}">{{$user->projet->nom}}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                                @error('addtaches.{{ $index }}.projet')
+                                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                                @enderror
+                                                                            </div>
+                                                                            
+                                                                            <div  class="mb-3 col-md-4">
+                                                                                <label for="tache[{{ $index }}][tachesSuplementaire]">Taches </label>
+                                                                                <input type="text" wire:model="addtaches.{{ $index }}.tachesSuplementaire" id="tache[{{ $index }}][tachesSuplementaire]" class="form-control" />
+                                                                                @error('tachesSuplementaire') <span class="text-danger">{{ $message }}</span> @enderror
 
-                                                                        </div>
+                                                                            </div>
 
+                                                                            
+                                                                            <div class="col-md-4">
+                                                                                <div class="mb-3">
+                                                                                    <label for="tache[{{ $index }}][lieu]">Lieu <span class="text-danger">*</span></label>
+                                                                                    <input type="text" wire:model="addtaches.{{ $index }}.lieu" class="form-control" id="tache[{{ $index }}][lieu]" >
+                                                                                    @error('lieu') <span class="text-danger">{{ $message }}</span> @enderror
+
+                                                                                </div>
+                                                                            </div>
+                                                                        @else
+                                                                             
+                                                                            <div  class="mb-3 col-md-4">
+                                                                                <label for="tache[{{ $index }}][tachesSuplementaire]">Taches suplementaire</label>
+                                                                                <input type="text" wire:model="addtaches.{{ $index }}.tachesSuplementaire" id="tache[{{ $index }}][tachesSuplementaire]" class="form-control" />
+                                                                                @error('tachesSuplementaire') <span class="text-danger">{{ $message }}</span> @enderror
+
+                                                                            </div>
+                                                                            
+                                                                            <div class="col-md-2">
+                                                                                <div class="mb-3">
+                                                                                    <label for="tache[{{ $index }}][lieu]">Lieu <span class="text-danger">*</span></label>
+                                                                                    <input type="text" wire:model="addtaches.{{ $index }}.lieu" class="form-control" id="tache[{{ $index }}][lieu]" >
+                                                                                    @error('lieu') <span class="text-danger">{{ $message }}</span> @enderror
+
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
                                                                         <div  class="mb-3 col-md-2">
                                                                             <label for="tache[{{ $index }}][debutHeure]">Heure de Début <span class="text-danger">*</span></label>
                                                                             <input type="time" wire:model="addtaches.{{ $index }}.debutHeure" id="tache[{{ $index }}][debutHeure]" class="form-control" placeholder="start time" />
@@ -525,14 +565,6 @@
 
                                                                         </div>
 
-                                                                        <div class="col-md-2">
-                                                                            <div class="mb-3">
-                                                                                <label for="tache[{{ $index }}][lieu]">Lieu <span class="text-danger">*</span></label>
-                                                                                <input type="text" wire:model="addtaches.{{ $index }}.lieu" class="form-control" id="tache[{{ $index }}][lieu]" >
-                                                                                @error('lieu') <span class="text-danger">{{ $message }}</span> @enderror
-
-                                                                            </div>
-                                                                        </div>
                                                                         
                                                                     <div class="col-md-2 mt-4">
                                                                         <div class="d-grid">
@@ -543,7 +575,11 @@
                                                                 </div>
                                                             </section>
                                                         @endforeach
-                                                        <input data-repeater-create type="button" wire:click.prevent="Ajoutaches" class="btn btn-primary mb-4 mt-3" value="Tâches supplémentaires"/>
+                                                        @if ($permission == 'Employer')
+                                                            <input data-repeater-create type="button" wire:click.prevent="Ajoutaches" class="btn btn-primary mb-4 mt-3" value="Ajoutez les tâches"/>
+                                                        @else
+                                                            <input data-repeater-create type="button" wire:click.prevent="Ajoutaches" class="btn btn-primary mb-4 mt-3" value="Tâches supplémentaires"/>
+                                                        @endif
 
                                                         <div class="row">
                                                             <div class="col-lg-4">
@@ -575,64 +611,112 @@
                                         </section>
 
                                         @if ($showFormOption1)
-                                            @foreach ($Depenses as $index => $Depense)
-                                                <h5> Depenses de l'activites</h5>
-                                                <section>
-                                                    <div class="row">
-                                                        <div class="mb-3 col-md-4">
-                                                            <label for="Depenses[{{ $index }}][tacheId]"> Tâches Prévues <span class="text-danger">*</span> </label>
-                                                            <!-- Assurez-vous que tacheId est correctement défini dans votre tableau $Depenses -->
-                                                            <select class="form-control" type="text" wire:model="Depenses.{{ $index }}.tacheId" id="Depenses[{{ $index }}][tacheId]">
-                                                                <option value=""> Sélectionner... </option>
-                                                                @foreach ($planifs as $tache)
-                                                                    @foreach ($tache->plant_taches as $item)
-                                                                        <option value="{{ $item->tach->id }}"> {{ $item->tach->tache_prevues }} </option>
+                                            @if ($permission == 'Employer')
+                                                @foreach ($Depenses as $index => $Depense)
+                                                    <h5> Depenses de l'activites</h5>
+                                                    <section>
+                                                        <div class="row">
+                                                            <div class="col-lg-3">
+                                                                <div class="mb-3">
+                                                                    <label for="Depense[{{ $index }}][designationDepenses]">Designation Dépenses <span class="text-danger">*</span>:</label>
+                                                                    <input wire:model="Depenses.{{ $index }}.designationDepenses" type="text" class="form-control"  id="Depense[{{ $index }}][designationDepenses]">
+                                                                    @error('designationDepenses') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-2">
+                                                                <div class="mb-3">
+                                                                    <label for="Depense[{{ $index }}][coutsReels]">Couts Reels <span class="text-danger">*</span></label>
+                                                                    <input type="text" wire:model="Depenses.{{ $index }}.coutsReels" class="form-control" id="Depense[{{ $index }}][coutsReels]" placeholder="Enter Couts Reels">
+                                                                    @error('coutsReels') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-3">
+                                                                <div class="mb-3">
+                                                                    <label for="Depense[{{ $index }}][coutsPrevionnels]">Couts previonnels <span class="text-danger">*</span></label>
+                                                                    <input type="text" wire:model="Depenses.{{ $index }}.coutsPrevionnels" class="form-control" id="Depense[{{ $index }}][coutsPrevionnels]" placeholder="Enter Couts previonnels">
+                                                                    @error('coutsPrevionnels') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-10">
+                                                                <div class="mb-3">
+                                                                    <label for="Depense[{{ $index }}][observationDepenses]">Observation<span class="text-danger">*</span></label>
+                                                                    <textarea wire:model="Depenses.{{ $index }}.observationDepenses" id="Depense[{{ $index }}][observationDepenses]" class="form-control" cols="500" rows="2" ></textarea>
+                                                                    @error('observationDepenses') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-2 align-self-center">
+                                                                <div class="d-grid">
+                                                                    <input data-repeater-delete type="button" wire:click.prevent="removeDepenses({{ $index }})" class="btn btn-danger" value="Delete"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </section>
+                                                @endforeach
+                                            @else
+                                                @foreach ($Depenses as $index => $Depense)
+                                                    <h5> Depenses de l'activites</h5>
+                                                    <section>
+                                                        <div class="row">
+                                                            <div class="mb-3 col-md-4">
+                                                                <label for="Depenses[{{ $index }}][tacheId]"> Tâches Prévues <span class="text-danger">*</span> </label>
+                                                                <!-- Assurez-vous que tacheId est correctement défini dans votre tableau $Depenses -->
+                                                                <select class="form-control" type="text" wire:model="Depenses.{{ $index }}.tacheId" id="Depenses[{{ $index }}][tacheId]">
+                                                                    <option value=""> Sélectionner... </option>
+                                                                    @foreach ($planifs as $tache)
+                                                                        @foreach ($tache->plant_taches as $item)
+                                                                            <option value="{{ $item->tach->id }}"> {{ $item->tach->tache_prevues }} </option>
+                                                                        @endforeach
                                                                     @endforeach
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
+                                                                </select>
+                                                            </div>
 
-                                                        <div class="col-lg-3">
-                                                            <div class="mb-3">
-                                                                <label for="Depense[{{ $index }}][designationDepenses]">Designation Dépenses <span class="text-danger">*</span>:</label>
-                                                                <input wire:model="Depenses.{{ $index }}.designationDepenses" type="text" class="form-control"  id="Depense[{{ $index }}][designationDepenses]">
-                                                                @error('designationDepenses') <span class="text-danger">{{ $message }}</span> @enderror
+                                                            <div class="col-lg-3">
+                                                                <div class="mb-3">
+                                                                    <label for="Depense[{{ $index }}][designationDepenses]">Designation Dépenses <span class="text-danger">*</span>:</label>
+                                                                    <input wire:model="Depenses.{{ $index }}.designationDepenses" type="text" class="form-control"  id="Depense[{{ $index }}][designationDepenses]">
+                                                                    @error('designationDepenses') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-lg-2">
-                                                            <div class="mb-3">
-                                                                <label for="Depense[{{ $index }}][coutsReels]">Couts Reels <span class="text-danger">*</span></label>
-                                                                <input type="text" wire:model="Depenses.{{ $index }}.coutsReels" class="form-control" id="Depense[{{ $index }}][coutsReels]" placeholder="Enter Couts Reels">
-                                                                @error('coutsReels') <span class="text-danger">{{ $message }}</span> @enderror
+                                                            <div class="col-lg-2">
+                                                                <div class="mb-3">
+                                                                    <label for="Depense[{{ $index }}][coutsReels]">Couts Reels <span class="text-danger">*</span></label>
+                                                                    <input type="text" wire:model="Depenses.{{ $index }}.coutsReels" class="form-control" id="Depense[{{ $index }}][coutsReels]" placeholder="Enter Couts Reels">
+                                                                    @error('coutsReels') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-lg-3">
-                                                            <div class="mb-3">
-                                                                <label for="Depense[{{ $index }}][coutsPrevionnels]">Couts previonnels <span class="text-danger">*</span></label>
-                                                                <input type="text" wire:model="Depenses.{{ $index }}.coutsPrevionnels" class="form-control" id="Depense[{{ $index }}][coutsPrevionnels]" placeholder="Enter Couts previonnels">
-                                                                @error('coutsPrevionnels') <span class="text-danger">{{ $message }}</span> @enderror
+                                                            <div class="col-lg-3">
+                                                                <div class="mb-3">
+                                                                    <label for="Depense[{{ $index }}][coutsPrevionnels]">Couts previonnels <span class="text-danger">*</span></label>
+                                                                    <input type="text" wire:model="Depenses.{{ $index }}.coutsPrevionnels" class="form-control" id="Depense[{{ $index }}][coutsPrevionnels]" placeholder="Enter Couts previonnels">
+                                                                    @error('coutsPrevionnels') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-10">
-                                                            <div class="mb-3">
-                                                                <label for="Depense[{{ $index }}][observationDepenses]">Observation<span class="text-danger">*</span></label>
-                                                                <textarea wire:model="Depenses.{{ $index }}.observationDepenses" id="Depense[{{ $index }}][observationDepenses]" class="form-control" cols="500" rows="2" ></textarea>
-                                                                @error('observationDepenses') <span class="text-danger">{{ $message }}</span> @enderror
+                                                        <div class="row">
+                                                            <div class="col-lg-10">
+                                                                <div class="mb-3">
+                                                                    <label for="Depense[{{ $index }}][observationDepenses]">Observation<span class="text-danger">*</span></label>
+                                                                    <textarea wire:model="Depenses.{{ $index }}.observationDepenses" id="Depense[{{ $index }}][observationDepenses]" class="form-control" cols="500" rows="2" ></textarea>
+                                                                    @error('observationDepenses') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-md-2 align-self-center">
-                                                            <div class="d-grid">
-                                                                <input data-repeater-delete type="button" wire:click.prevent="removeDepenses({{ $index }})" class="btn btn-danger" value="Delete"/>
+                                                            <div class="col-md-2 align-self-center">
+                                                                <div class="d-grid">
+                                                                    <input data-repeater-delete type="button" wire:click.prevent="removeDepenses({{ $index }})" class="btn btn-danger" value="Delete"/>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </section>
-                                            @endforeach
+                                                    </section>
+                                                @endforeach
+                                            @endif
                                             <button class="btn btn-primary mt-3 mb-3" wire:click.prevent="addDepenses" type="button" >Ajout Depense</button>
                                         @endif
                                         
@@ -645,6 +729,54 @@
                                         <section>
                                             <div data-repeater-list="outer-group" class="outer">
                                                 <div data-repeater-item class="outer">
+                                                @if ($permission == 'Employer')
+                                                
+                                                    @foreach ($tachesDemain as $index => $tache)
+                                                        <section>
+                                                            <div data-repeater-list="group-a">
+                                                                <div data-repeater-item class="row mt-3">
+
+                                                                    <div  class="mb-3 col-md-4">
+                                                                        <label for="tache[{{ $index }}][tachesSuplementaire]">Taches Pour demain</label>
+                                                                        <input type="text" wire:model="tachesDemain.{{ $index }}.taches" id="tache[{{ $index }}][taches]" class="form-control" />
+                                                                        @error('tachesDemain.{{ $index }}.taches') <span class="text-danger">{{ $message }}</span> @enderror
+
+                                                                    </div>
+
+                                                                    <div  class="mb-3 col-md-2">
+                                                                        <label for="tache[{{ $index }}][duree]">Durée <span class="text-danger">*</span></label>
+                                                                        <input type="time" wire:model="tachesDemain.{{ $index }}.duree" id="tache[{{ $index }}][duree]" class="form-control" placeholder="start time" />
+                                                                        @error('tachesDemain.{{ $index }}.duree') <span class="text-danger">{{ $message }}</span> @enderror
+
+                                                                    </div>
+                                                                    
+                                                                    <div  class="mb-3 col-md-2">
+                                                                        <label for="tache[{{ $index }}][designation]">Dedignation</label>
+                                                                        <input type="text" wire:model="tachesDemain.{{ $index }}.designation" id="tache[{{ $index }}][designation]" class="form-control" />
+                                                                        @error('tachesDemain.{{ $index }}.designation') <span class="text-danger">{{ $message }}</span> @enderror
+
+                                                                    </div>
+                                                                    
+                                                                    <div  class="mb-3 col-md-2">
+                                                                        <label for="tache[{{ $index }}][valeur]">Valeur</label>
+                                                                        <input type="text" wire:model="tachesDemain.{{ $index }}.valeur" id="tache[{{ $index }}][valeur]" class="form-control" />
+                                                                        @error('tachesDemain.{{ $index }}.valeur') <span class="text-danger">{{ $message }}</span> @enderror
+
+                                                                    </div>
+
+                                                                <div class="col-md-2 mt-4">
+                                                                    <div class="d-grid">
+                                                                        <input data-repeater-delete type="button" wire:click.prevent="removetachesplus({{ $index }})" class="btn btn-danger" value="Delete"/>
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    @endforeach
+                                                    <input data-repeater-create type="button" wire:click.prevent="tachesplus" class="btn btn-primary mb-4 mt-3" value="Ajoutez les tâches pour demain"/>
+                                                
+                                                @else
+                                                    
                                                     @foreach ($planification as $planif)
                                                         @foreach ($planif->plant_taches_relation as $tache)
                                                             @if ($tache->status == 'En Cour')
@@ -659,13 +791,13 @@
                                                                     <div class="col-md-3 mb-3">
                                                                         <label>Durée (en H) <span class="text-danger">*</span>:</label>
                                                                         <input type="time" wire:model="tachesProchain.{{ $tache->id }}.duree" class="form-control" placeholder="Heure de début" />                                                                   
-                                                                         @error('tachesProchain.*.duree') <span class="text-danger">{{ $message }}</span> @enderror
+                                                                        @error('tachesProchain.*.duree') <span class="text-danger">{{ $message }}</span> @enderror
                                                                     </div>
                                                                 </div>
                                                             @endif
                                                         @endforeach
                                                     @endforeach
-                                                    
+                                                
                                                     <div class="mb-3">
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" wire:click="showFormForOption2">
@@ -689,6 +821,7 @@
                                                             </div>
                                                         </div>
                                                     @endif
+                                                @endif
                                                     <div class="inner-repeater mb-4">
                                                         <div data-repeater-list="inner-group" class="inner mb-3">
                                                             <label for="tachesProchain[risques]">Risques et atténuations <span class="text-danger">*</span>:</label>
