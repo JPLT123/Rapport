@@ -58,14 +58,14 @@
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <label>La date d'activites <span class="text-danger">*</span></label>
-                                                <input type="date" wire:model='date' class="form-control" placeholder="Start Date" name="date" />
+                                                <input type="date" wire:model.defer='date' class="form-control" placeholder="Start Date" name="date" />
                                                 @error('date')
                                                     <span class="text-danger"> {{$message}} </span>
                                                 @enderror
                                             </div>
                                             <div class="col-md-6 col-12">
                                                 <label>Le projet <span class="text-danger">*</span></label>
-                                                <select wire:model="projet" name="projet" id="projet" class="form-control select2">
+                                                <select wire:model.defer="projet" name="projet" id="projet" class="form-control select2">
                                                     <option for="projet">Selectionner le projet... </option>
                                                     @foreach ($chef as $item)
                                                         @if ($item->is_chef == true)
@@ -89,7 +89,7 @@
                                                             <div data-repeater-item class="inner ms-md-auto">
                                                                 <div class="mb-3 row align-items-center">
                                                                     <div class="col-md-8">
-                                                                        <input wire:model="taches.{{ $index }}.tache_prevues" type="text" name="tache[{{ $index }}][tache_prevues]" class="form-control" required>
+                                                                        <input wire:model.defer="taches.{{ $index }}.tache_prevues" type="text" name="tache[{{ $index }}][tache_prevues]" class="form-control" required>
                                                                         @error('taches.*.tache_prevues')
                                                                             <span class="text-danger"> {{$message}} </span>
                                                                         @enderror
@@ -114,14 +114,14 @@
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
                                                         <label for="resultat">Resultats attendus <span class="text-danger">*</span></label>
-                                                        <input id="resultat" name="resultat" type="text" wire:model="resultat" class="form-control" placeholder="Résultats attendus">
+                                                        <input id="resultat" name="resultat" type="text" wire:model.defer="resultat" class="form-control" placeholder="Résultats attendus">
                                                         @error('resultat')
                                                         <span class="text-danger"> {{$message}} </span>
                                                         @enderror
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="ressources">Ressources necessaires <span class="text-danger">*</span></label>
-                                                        <input id="ressources" name="ressources" type="text" wire:model="ressources" class="form-control" placeholder="Ressources necessaires">
+                                                        <input id="ressources" name="ressources" type="text" wire:model.defer="ressources" class="form-control" placeholder="Ressources necessaires">
                                                         @error('ressources')
                                                             <span class="text-danger"> {{$message}} </span>
                                                         @enderror
@@ -131,7 +131,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
                                                         <label for="observation">Observations/Recommandations <span class="text-danger">*</span></label>
-                                                        <textarea class="form-control" id="observation"  wire:model="observation" rows="5" placeholder="(Noter les risques,identifies,mesures d'attenuation, defis, recommandations etc.)"></textarea>
+                                                        <textarea class="form-control" id="observation"  wire:model.defer="observation" rows="5" placeholder="(Noter les risques,identifies,mesures d'attenuation, defis, recommandations etc.)"></textarea>
                                                         @error('observation')
                                                             <span class="text-danger"> {{$message}} </span>
                                                         @enderror

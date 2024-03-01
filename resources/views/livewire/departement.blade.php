@@ -134,7 +134,7 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom du departement:<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" aria-label="nom" aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model.defer="nom" aria-label="nom" aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>
@@ -143,8 +143,8 @@
                         <div class="form-group mb-3">
                             <label for="description">Description :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                {{-- <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" aria-label="description" aria-describedby="description-addon"> --}}
-                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model="description" id="description" cols="30" rows="3"></textarea>
+                                {{-- <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model.defer="description" required autocomplete="current-description" aria-label="description" aria-describedby="description-addon"> --}}
+                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model.defer="description" id="description" cols="30" rows="3"></textarea>
                             </div>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
@@ -152,7 +152,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="filiale">Filiale <span class="text-danger">*</span></label>
-                            <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
+                            <select name="filiale" id="filiale" class="form-control" wire:model.defer="filiale">
                                 <option value="">selectionneur...</option>
                                 @foreach ($filialesAll as $filiale)
                                 <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
@@ -189,7 +189,7 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" required autocomplete="current-nom" placeholder="Entrer categorie produit" aria-label="nom" aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model.defer="nom" required autocomplete="current-nom" placeholder="Entrer categorie produit" aria-label="nom" aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>
@@ -198,8 +198,8 @@
                         <div class="form-group mb-3">
                             <label for="description">Description :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                {{-- <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" placeholder="Entrer categorie produit" aria-label="description" aria-describedby="description-addon"> --}}
-                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model="description" id="description" cols="30" rows="3"></textarea>
+                                {{-- <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model.defer="description" required autocomplete="current-description" placeholder="Entrer categorie produit" aria-label="description" aria-describedby="description-addon"> --}}
+                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model.defer="description" id="description" cols="30" rows="3"></textarea>
                             </div>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
@@ -207,7 +207,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="filiale">Filiale <span class="text-danger">*</span></label>
-                            <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
+                            <select name="filiale" id="filiale" class="form-control" wire:model.defer="filiale">
                                 <option value="">selectionneur...</option>
                                 @foreach ($filialesAll as $filiale)
                                 <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
@@ -245,8 +245,12 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-6">
-                            <img src="{{asset('assets\images\logo_elceto.png')}}" alt="" class="rounded-circle avatar-lg">
-                            {{-- <h6>Elceto Holding</h6> --}}
+                            @if ($filiales && $filiales->logo)
+                            <img src="{{ asset('/storage/'.$filiales->logo) }}" alt="" class="rounded-circle avatar-lg">
+                        @else
+                            <img src="{{ asset('assets/images/logo_elceto.png') }}" alt="" class="rounded-circle avatar-lg">
+                        @endif
+                                                    {{-- <h6>Elceto Holding</h6> --}}
                         </div>
                         <div class="col-6">
                             <h5>{{$nom}}</h5>

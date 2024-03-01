@@ -166,6 +166,9 @@ class ListeUser extends Component
     }
 
     public function ModalAdd(){
+        $this->showFormOption1 = false;
+        $this->showFormOption2 = false;
+        $this->showFormOption3 = false;
         $this->reset();
     
         $this->dispatch('closeModalAdd', []);
@@ -173,6 +176,9 @@ class ListeUser extends Component
     
     public function ModalEdite(){
         
+        $this->showFormOption1 = false;
+        $this->showFormOption2 = false;
+        $this->showFormOption3 = false;
         $this->reset('name','email','telephone','adresse','filiale');
         $this->dispatch('closeModal', []);
     }
@@ -389,9 +395,12 @@ class ListeUser extends Component
 
             if ($this->showFormOption1) {
                 $dataToUpdate["id_Service"] = $this->service;
+                $dataToUpdate["id_filiale"] = null;
+                $dataToUpdate["id_departement"] = null;
             } elseif ($this->showFormOption2) {
                 $dataToUpdate["id_filiale"] = $this->filiale;
                 $dataToUpdate["id_departement"] = $this->departement;
+                $dataToUpdate["id_Service"] = null;
 
                 // Vérifier si le champ "filiale" est rempli et que le service n'est pas null, alors mettez le service à null
                 if (!empty($this->filiale) && !is_null($user->service)) {

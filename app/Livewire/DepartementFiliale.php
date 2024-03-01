@@ -112,10 +112,15 @@ class DepartementFiliale extends Component
         ]);
 
         //supprimer les users du departement
-        $Users = $Departement->users;
-            foreach ($Users as $user) {
-                $user->update(['status' => 'supprimer']);
+        $Users = $Departement->utilisateurs;
+        foreach ($Users as $user) {
+            $roles = $user->roles->pluck('nom')->toArray(); 
+            if (!in_array('Admin', $roles)) {
+                if ($user->status !== 'attente' && $user->status !== 'supprimer') {
+                    $user->update(['status' => 'supprimer']);
+                } 
             }
+        }
 
         // Affiche un message de succès
         $this->dispatch("showSuccessMessage", ["message" => "Departement supprimé avec succès."]);
@@ -143,15 +148,15 @@ class DepartementFiliale extends Component
         
         $Departement->update(['status' => $nouveauStatut]);
         
-        $utilisateurs = $Departement->utilisateurs;
-        
-        foreach ($utilisateurs as $utilisateur) {
-            foreach ($utilisateur->roles as $role) {
-                if ($role->nom !== 'Admin') {
-                    $utilisateur->update(['status' => $nouveauStatut]);
-                }
+        $users = $Departement->utilisateurs;
+        foreach ($users as $user) {
+            $roles = $user->roles->pluck('nom')->toArray(); 
+            if (!in_array('Admin', $roles)) {
+                if ($user->status !== 'attente' && $user->status !== 'supprimer') {
+                    $user->update(['status' => $nouveauStatut]);
+                } 
             }
-        }
+        } 
         
     }
     

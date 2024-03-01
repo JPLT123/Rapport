@@ -191,5 +191,15 @@ use HasApiTokens;
 		return $this->belongsToMany(Projet::class, 'membres_projet', 'id_user', 'id_projet')
 					->where('projets.status', 'attente');
 	}
+	
+	public function Semaine()
+	{
+		return $this->hasMany(RapportSemaine::class, 'id_user');
+	}
+
+	public function tachesSupplementaires()
+    {
+        return $this->hasMany(TacheSupplementaire::class, 'id_user');
+    }
 
 }

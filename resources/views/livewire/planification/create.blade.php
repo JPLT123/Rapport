@@ -55,14 +55,27 @@
                                                         <label>Le projet <span class="text-danger">*</span></label>
                                                         <select for="projet" wire:model.live="projet" name="projet" id="projet" class="form-control select2">
                                                             <option for="projet">Selectionner le projet... </option>
-                                                            @foreach ($Auth_user->membres_projets as $user)
-                                                                <option value="{{$user->projet->id}}">{{$user->projet->nom}}</option>
-                                                            @endforeach
+                                                            @php
+                                                                $projetsUrgents = $Auth_user->membres_projets->filter(function($user) {
+                                                                    return $user->projet->urgence;
+                                                                });
+                                                            @endphp
+                                                            @if ($projetsUrgents->isNotEmpty())
+                                                                @foreach ($projetsUrgents as $user)
+                                                                    <option value="{{$user->projet->id}}">{{$user->projet->nom}}</option>
+                                                                @endforeach
+                                                            @else
+                                                                @foreach ($Auth_user->membres_projets as $user)
+                                                                    <option value="{{$user->projet->id}}">{{$user->projet->nom}}</option>
+                                                                @endforeach
+                                                            @endif
                                                         </select>
                                                         @error('projet')
                                                             <span class="text-danger"> {{$message}} </span>
                                                         @enderror
                                                     </div>
+                                                    
+                                                    
                                                     <div class="col-md-6 col-12 ">
                                                         <label  class="mt-3" for="date">Date d' activités <span class="text-danger">*</span></label>
                                                         <input type="date" wire:model="date" class="form-control" placeholder="Date de début" id="date" name="date" />

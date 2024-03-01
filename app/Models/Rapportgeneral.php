@@ -53,6 +53,11 @@ class Rapportgeneral extends Model
 		return $this->belongsTo(User::class, 'id_user');
 	}
 
+	public function importfiles()
+	{
+		return $this->hasMany(Importfile::class, 'rapport');
+	}
+
 	public function rapports()
 	{
 		return $this->hasMany(Rapport::class, 'general');
@@ -61,10 +66,5 @@ class Rapportgeneral extends Model
 	public function tacheprochains()
 	{
 		return $this->hasMany(Tacheprochain::class, 'rapport');
-	}
-
-	public function ImportFile()
-	{
-		return $this->hasMany(ImportFile::class, 'rapport');
 	}
 }

@@ -82,12 +82,14 @@ class Services extends Component
             "status" => "supprimer"
         ]);
 
-        // //supprimer les users du Service
-        // $Users = $Service->users;
-        //     foreach ($Users as $user) {
-        //         $user->update(['status' => 'supprimer']);
-        //     }
-
+        //supprimer les users du Service
+        $Users = $Service->users;
+        foreach ($Users as $user) {
+            $roles = $user->roles->pluck('nom')->toArray(); 
+            if (!in_array('Admin', $roles)) {
+                $user->update(['status' => 'supprimer']);
+            }
+        }
         // Affiche un message de succès
         $this->dispatch("showSuccessMessage", ["message" => "Service supprimé avec succès."]);
     }
@@ -114,15 +116,26 @@ class Services extends Component
         
         $Service->update(['status' => $nouveauStatut]);
         
-        $utilisateurs = $Service->utilisateurs;
+        $utilisateurs = $Service->users;
         
-        // foreach ($utilisateurs as $utilisateur) {
-        //     foreach ($utilisateur->roles as $role) {
-        //         if ($role->nom !== 'Admin') {
-        //             $utilisateur->update(['status' => $nouveauStatut]);
-        //         }
-        //     }
-        // }
+        foreach ($utilisateurs as $utilisateur) {
+            $utilisateur->update(['status' => $nouveauStatut]);
+        }
+
+        $Projets = $Service->projets;
+        foreach ($Projets as $Projet) {
+            $Projet->update(['status' => ($nouveauStatut === 'activer') ? 'activer' : 'Suspendu']);
+        }
+
+        $users = $Service->users;
+        foreach ($users as $user) {
+            $roles = $user->roles->pluck('nom')->toArray(); 
+            if (!in_array('Admin', $roles)) {
+                if ($user->status !== 'attente' && $user->status !== 'supprimer') {
+                    $user->update(['status' => $nouveauStatut]);
+                } 
+            }
+        } 
         
     }
     

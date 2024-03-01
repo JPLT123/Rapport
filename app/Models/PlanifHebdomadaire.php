@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int|null $importfile
  * 
  * @property Projet|null $projet
  * @property User|null $user
@@ -39,7 +40,8 @@ class PlanifHebdomadaire extends Model
 	protected $casts = [
 		'id_projet' => 'int',
 		'id_user' => 'int',
-		'date' => 'datetime'
+		'date' => 'datetime',
+		'importfile' => 'int'
 	];
 
 	protected $fillable = [

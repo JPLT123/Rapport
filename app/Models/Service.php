@@ -58,9 +58,9 @@ class Service extends Model
 	}
 
 	public function projets()
-	{
-		return $this->hasMany(Projet::class, 'service');
-	}
+    {
+        return $this->hasMany(Projet::class, 'service');
+    }
 
 	public function users()
 	{

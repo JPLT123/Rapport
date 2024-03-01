@@ -28,6 +28,15 @@
                         @if (in_array(4, $ConsultantRoles))
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="bx bx-task"></i>
+                                    <span key="t-tasks">Tasks</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{route('liste-tache')}}" key="t-task-list">additional tasks</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
                                     <i class="bx bx-archive-in"></i>
                                     <span key="t-dashboards">Report Management</span>
                                 </a>
@@ -60,6 +69,9 @@
                                         </a>
                                         <ul class="sub-menu" aria-expanded="false">
                                             <li><a href="{{route('rapport-journalier')}}" key="t-create-task">rapport journalier</a></li>
+                                            @if (!in_array(4, $userRoles))
+                                                <li><a href="{{route('rapport-semaine')}}" key="t-create-task">rapport semaine</a></li>
+                                            @endif
                                         </ul>
                                     </li>
                                 </ul>
@@ -116,7 +128,6 @@
                                     @endif
                                 </ul>
                             </li>
-                            
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
                                     <i class="bx bx-task"></i>
@@ -125,6 +136,8 @@
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{route('liste-tache')}}" key="t-task-list">Task List</a></li>
                                     <li><a href="{{route('create-tache')}}" key="t-create-task">Create Task</a></li>
+                                    <li><a href="{{route('taches-supplementaire')}}" key="t-task-list">view additional tasks</a></li>
+                                    <li><a href="{{route('form-taches')}}" key="t-task-list">additional tasks</a></li>
                                 </ul>
                             </li>
 
@@ -162,6 +175,9 @@
                                         </a>
                                         <ul class="sub-menu" aria-expanded="false">
                                             <li><a href="{{route('rapport-journalier')}}" key="t-create-task">rapport journalier</a></li>
+                                            @if (!in_array(4, $userRoles))
+                                                <li><a href="{{route('rapport-semaine')}}" key="t-create-task">rapport semaine</a></li>
+                                            @endif
                                         </ul>
                                     </li>
                                 </ul>
@@ -169,6 +185,16 @@
                         @endif
                     @else
                         @if (in_array(4, $userRoles))
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="bx bx-task"></i>
+                                    <span key="t-tasks">Tasks</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{route('form-taches')}}" key="t-task-list">additional tasks</a></li>
+                                </ul>
+                            </li>
+
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
                                     <i class="bx bx-archive-in"></i>
@@ -268,6 +294,8 @@
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{route('liste-tache')}}" key="t-task-list">Task List</a></li>
                                     <li><a href="{{route('create-tache')}}" key="t-create-task">Create Task</a></li>
+                                    <li><a href="{{route('taches-supplementaire')}}" key="t-task-list">view additional tasks</a></li>
+                                    <li><a href="{{route('form-taches')}}" key="t-task-list">additional tasks</a></li>
                                 </ul>
                             </li>
 
@@ -287,14 +315,11 @@
                                             <li><a href="{{route('planification.apercu')}}" key="t-tui-calendar">Planification Overview</a></li>
                                             <li><a href="{{route('planification.create')}}" key="t-full-calendar">Create New </a></li>
                                             
-                                            {{-- @if (!empty(array_intersect(["Responsable", "Admin"], $userRoles)))
-                                            
-                                                <li>
-                                                    <a href="{{route('histoire-planification')}}" class="waves-effect">
-                                                        <span key="t-chat">Historique Planification</span>
-                                                    </a>
-                                                </li>
-                                            @endif --}}
+                                            {{-- <li>
+                                                <a href="{{route('histoire-planification')}}" class="waves-effect">
+                                                    <span key="t-chat">Historique Planification</span>
+                                                </a>
+                                            </li> --}}
                                         </ul>
                                     </li>
             
@@ -305,6 +330,9 @@
                                         </a>
                                         <ul class="sub-menu" aria-expanded="false">
                                             <li><a href="{{route('rapport-journalier')}}" key="t-create-task">rapport journalier</a></li>
+                                            @if (!in_array(4, $userRoles))
+                                                <li><a href="{{route('rapport-semaine')}}" key="t-create-task">rapport semaine</a></li>
+                                            @endif
                                         </ul>
                                     </li>
                                 </ul>

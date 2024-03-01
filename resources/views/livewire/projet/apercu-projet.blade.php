@@ -27,11 +27,11 @@
                         <div class="card">
                             <div class="card-body">
                                 @php
-                                    $nomComplet = $projets ? $projets->filiale->nom : 'le filiale vide';
+                                    $nomComplet = $projets->filiale ? $projets->filiale->nom : 'le filiale vide';
                                     $initiale = strtoupper(substr($nomComplet, 0, 1));
                                 @endphp
                                 <div class="d-flex">
-                                    @if ($projets->filiale->logo)
+                                    @if ($projets->filiale !== null)
                                         <div class="flex-shrink-0 me-4">
                                             <img src="{{asset($projets ? '/storage/'.$projets->filiale->logo :null)}}" alt="" class="avatar-sm">
                                         </div>
@@ -45,7 +45,13 @@
 
                                     <div class="flex-grow-1 overflow-hidden">
                                         <h5 class="text-truncate font-size-18">{{$projets ? $projets->nom : 'nom du projet vide'}}</h5>
-                                        <p class="text-muted"> {{$nomComplet}}</p>
+                                        @if ($nomComplet == 'le filiale vide')
+                                            <p class="text-muted">{{ $projets->Service->nom }} </p>
+                                        @else
+                                            <p class="text-muted"> {{$nomComplet}}</p>
+                                        @endif
+                                        {{-- <p class="text-muted"> {{$nomComplet}}</p> --}}
+
                                     </div>
                                 </div>
 
@@ -84,7 +90,7 @@
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Team Members</h4>
 
-                                <div class="table-responsive">
+                                <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
                                     <table class="table align-middle table-nowrap">
                                         <tbody>
                                             @foreach ($projets->membres_projets as $item)
@@ -129,7 +135,7 @@
                 <!-- end row -->
 
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-8">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Overview</h4>
@@ -377,122 +383,30 @@
     </div>
 </div>
 <script>
-    var series = <?php echo json_encode($Serie); ?>;
+    var daysCompleted = <?php echo json_encode($daysCompleted); ?>;
+    var workersCount = <?php echo json_encode($workersCount); ?>;
+    var dates = Object.keys(daysCompleted);
+
     var options = {
-        series: series.map(function(serie) {
-            return {
-                name: serie.name,
-                data: [{
-                    x: serie.data.x,
-                    y: serie.data.y
-                }]
-            };
-        }),
+        series: [
+            {
+                name: 'Days Completed',
+                type: 'column',
+                data: Object.values(daysCompleted)
+            },
+            {
+                name: 'Workers Count',
+                type: 'line',
+                data: Object.values(workersCount)
+            }
+        ],
         chart: {
             height: 350,
-            type: 'scatter',
-            zoom: {
-                enabled: true,
-                type: 'xy'
-            }
+            type: 'line',
         },
-        xaxis: {
-            tickAmount: 10,
-            labels: {
-                formatter: function(val) {
-                    return parseFloat(val).toFixed(1);
-                }
-            }
-        },
-        yaxis: {
-            tickAmount: 7
-        }
+        // Autres options de configuration du graphique...
     };
 
     var chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
-// {{-- <script>
-//      var options = {
-//           series: [{
-//             name: "Session Duration",
-//             data: [45, 52, 38, 24, 33, 26, 21, 20, 6, 8, 15, 10]
-//           },
-//           {
-//             name: "Page Views",
-//             data: [35, 41, 62, 42, 13, 18, 29, 37, 36, 51, 32, 35]
-//           },
-//           {
-//             name: 'Total Visits',
-//             data: [87, 57, 74, 99, 75, 38, 62, 47, 82, 56, 45, 47]
-//           }
-//         ],
-//           chart: {
-//           height: 350,
-//           type: 'line',
-//           zoom: {
-//             enabled: false
-//           },
-//         },
-//         dataLabels: {
-//           enabled: false
-//         },
-//         stroke: {
-//           width: [5, 7, 5],
-//           curve: 'straight',
-//           dashArray: [0, 8, 5]
-//         },
-//         title: {
-//           text: 'Page Statistics',
-//           align: 'left'
-//         },
-//         legend: {
-//           tooltipHoverFormatter: function(val, opts) {
-//             return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
-//           }
-//         },
-//         markers: {
-//           size: 0,
-//           hover: {
-//             sizeOffset: 6
-//           }
-//         },
-//         xaxis: {
-//           categories: ['01 Jan', '02 Jan', '03 Jan', '04 Jan', '05 Jan', '06 Jan', '07 Jan', '08 Jan', '09 Jan',
-//             '10 Jan', '11 Jan', '12 Jan'
-//           ],
-//         },
-//         tooltip: {
-//           y: [
-//             {
-//               title: {
-//                 formatter: function (val) {
-//                   return val + " (mins)"
-//                 }
-//               }
-//             },
-//             {
-//               title: {
-//                 formatter: function (val) {
-//                   return val + " per session"
-//                 }
-//               }
-//             },
-//             {
-//               title: {
-//                 formatter: function (val) {
-//                   return val;
-//                 }
-//               }
-//             }
-//           ]
-//         },
-//         grid: {
-//           borderColor: '#f1f1f1',
-//         }
-//         };
-
-//         var chart = new ApexCharts(document.querySelector("#chart"), options);
-//         chart.render();
-      
-// </script> --}}

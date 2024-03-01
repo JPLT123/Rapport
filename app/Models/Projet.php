@@ -53,7 +53,9 @@ class Projet extends Model
 		'debutdate',
 		'findate',
 		'status',
-		'service'
+		'service',
+		'status',
+		'urgence'
 	];
 
 	public function filiale()
@@ -86,9 +88,9 @@ class Projet extends Model
 		return $this->hasMany(Tach::class, 'id_projet');
 	}
 
-	public function service()
+	public function Service()
 	{
-		return $this->belongsTo(Service::class, 'id_Service');
+		return $this->belongsTo(Service::class, 'service');
 	}
 
 	public function membres_projets_relation()

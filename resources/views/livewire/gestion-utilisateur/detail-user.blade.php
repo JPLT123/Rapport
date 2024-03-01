@@ -27,7 +27,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-5">
                                         @php
                                             $nomComplet = $user ? $user->name : 'Nom Utilisateur Vide';
                                             $initiale = strtoupper(substr($nomComplet, 0, 1));
@@ -53,8 +53,12 @@
                                                     <p class="mb-2">Welcome to Dashboard</p>
                                                     <h5 class="mb-1">{{ $nomComplet }}</h5>
                                                     <p class="mb-0">
-                                                        {{ $user ? $user->filiale->nom : 'filiale Vide' }}/
-                                                        {{ $user ? $user->departement->nom : 'departement Vide' }}</p>
+                                                        @if ($user->filiale !== null)
+                                                            {{ $user ? $user->filiale->nom : 'filiale Vide' }}/
+                                                            {{ $user ? $user->departement->nom : 'service Vide' }}</p>
+                                                        @else
+                                                            {{ $user ? $user->service->nom : 'departement Vide' }}
+                                                        @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -106,11 +110,11 @@
                 </div>
                 <!-- end row -->
 
-                {{-- <div class="row">
-                    <div class="col-xl-8">
+                <div class="row">
+                    <div class="col-xl-7">
                         <div class="card">
                             <div class="card-body">
-                                <div class="clearfix">
+                                {{-- <div class="clearfix">
                                     <div class="float-end">
                                         <div class="input-group input-group-sm">
                                             <select class="form-select form-select-sm">
@@ -123,93 +127,23 @@
                                         </div>
                                     </div>
                                     <h4 class="card-title mb-4">Echeances</h4>
-                                </div>
+                                </div> --}}
 
                                 <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="text-muted">
-                                            <div class="mb-4">
-                                                <p>This month</p>
-                                                <h4>$2453.35</h4>
-                                                <div><span class="badge badge-soft-success font-size-12 me-1"> + 0.2% </span> From previous period</div>
-                                            </div>
-
-                                            <div>
-                                                <a href="javascript: void(0);" class="btn btn-primary waves-effect waves-light btn-sm">View Details <i class="mdi mdi-chevron-right ms-1"></i></a>
-                                            </div>
-
-                                            <div class="mt-4">
-                                                <p class="mb-2">Last month</p>
-                                                <h5>$2281.04</h5>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-8">
-                                        <div id="line-chart" class="apex-charts" data-colors='["--bs-primary"]' dir="ltr"></div>
+                                    <div class="col-lg-12">
+                                        <div id="lineChart" class="apex-charts" data-colors='["--bs-primary"]' dir="ltr"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4">
+                    
+                    <div class="col-lg-5">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Attached Files</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-nowrap align-middle table-hover mb-0">
-                                        <tbody>
-                                            @foreach ($user->importfiles as $fichier)
-                                                <tr>
-                                                    <td style="width: 45px;">
-                                                        <div class="avatar-sm">
-                                                            <span class="avatar-title rounded-circle bg-primary bg-soft text-primary font-size-24">
-                                                                <i class="bx bxs-file-doc"></i>
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-size-14 mb-1"><a href="javascript: void(0);" class="text-dark">{{ $fichier->nom_fichier ?? 'Document'}}.Zip</a></h5>
-                                                        <small>Size : {{ formatSizeUnits(filesize(storage_path('app/' . $fichier->links))) }}</small>
-                                                    </td>
-                                                    <td>
-                                                        <div class="text-center">
-                                                            <a wire:click="telecharger({{$fichier->id}})" class="text-dark"><i class="bx bx-download h3 m-0"></i></a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-
-                                            @php
-                                            // Fonction pour formater la taille du fichier
-                                            function formatSizeUnits($size)
-                                            {
-                                                $units = [' B', ' KB', ' MB', ' GB', ' TB'];
-                                                for ($i = 0; $size >= 1024 && $i < count($units) - 1; $i++) {
-                                                    $size /= 1024;
-                                                }
-                                                return round($size, 2) . $units[$i];
-                                            }
-                                            @endphp
-
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-                <!-- end row -->
-
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mb-4">Attached Files</h4>
-                                <div class="table-responsive">
+                                <div class="table-responsive"  style="max-height: 309px; overflow-y: auto;">
                                     <table class="table table-nowrap align-middle table-hover mb-0">
                                         <tbody>
                                             @foreach ($user->importfiles as $fichier)
@@ -258,7 +192,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-6">
+                </div>
+                <!-- end row -->
+
+                <div class="row">
+                    
+                    <div class="col-lg-7">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Attached Files</h4>
+                                
+                                <div>
+                                    <div id="coulumnchart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-5">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Rapport</h4>
@@ -266,40 +216,37 @@
 
                                 <h5>Fichier rapport</h5>
                                 <div class="mt-4">
-                                    <div data-simplebar style="max-height: 250px;">
+                                    <div data-simplebar style="max-height: 309px; overflow-y: auto;">
                                         <div class="table-responsive">
                                             <table class="table table-nowrap align-middle table-hover mb-0">
                                                 <tbody>
                                                     @php $dateAffichee = null; @endphp
-                                                    @foreach ($user->rapports as $rapport)
+                                                    @foreach ($user->rapportgenerals as $rapport)
                                                         <tr>
 
-                                                            @if ($rapport->date != $dateAffichee)
-                                                                <td style="width: 45px;">
-                                                                    <div class="avatar-sm">
-                                                                        <span
-                                                                            class="avatar-title rounded-circle bg-primary bg-soft text-primary font-size-24">
-                                                                            <i class="bx bxs-file-doc"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <h5 class="font-size-14 mb-1"><a
-                                                                            href="javascript: void(0);"
-                                                                            class="text-dark">rapport du
-                                                                            {{ $rapport->date->format('y-m-d') ?? 'vide' }}</a>
-                                                                    </h5>
-                                                                </td>
+                                                            <td style="width: 45px;">
+                                                                <div class="avatar-sm">
+                                                                    <span
+                                                                        class="avatar-title rounded-circle bg-primary bg-soft text-primary font-size-24">
+                                                                        <i class="bx bxs-file-doc"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <h5 class="font-size-14 mb-1"><a
+                                                                        href="javascript: void(0);"
+                                                                        class="text-dark">rapport du
+                                                                        {{ $rapport->date->format('y-m-d') ?? 'vide' }}</a>
+                                                                </h5>
+                                                            </td>
 
-                                                                <td>
-                                                                    <div class="text-center">
-                                                                        <a href="{{ route('affiche-rapport-par-date', ['slug' => $rapport->id]) }}"
-                                                                            class="text-dark btn"><i
-                                                                                class="bx bx-download h3 m-0"></i></a>
-                                                                    </div>
-                                                                </td>
-                                                                @php $dateAffichee = $rapport->date; @endphp
-                                                            @endif
+                                                            <td>
+                                                                <div class="text-center">
+                                                                    <a href="{{ route('affiche-rapport-par-date', ['slug' => $rapport->id]) }}"
+                                                                        class="text-dark btn"><i
+                                                                            class="bx bx-download h3 m-0"></i></a>
+                                                                </div>
+                                                            </td>
 
                                                         </tr>
                                                     @endforeach
@@ -534,3 +481,91 @@
         </footer>
     </div>
 </div>
+<script>
+    var seriesData = <?php echo json_encode($jours_travailles); ?>;
+    var totale = <?php echo json_encode($mois); ?>;
+    var options = {
+          series: [{
+            name: "Day",
+            data: seriesData
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: 'Product Trends by Month',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories: totale,
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#lineChart"), options);
+        chart.render();
+</script>
+
+<script>
+    var data = <?php echo json_encode($data); ?>;
+    var months = <?php echo json_encode($months); ?>;
+
+    var options = {
+          series: data,
+          chart: {
+          type: 'bar',
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            endingShape: 'rounded'
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: months,
+        },
+        yaxis: {
+          title: {
+            text: '$ (thousands)'
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return "$ " + val + " thousands"
+            }
+          }
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#coulumnchart"), options);
+        chart.render();
+</script>

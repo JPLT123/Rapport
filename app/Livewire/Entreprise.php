@@ -36,6 +36,7 @@ class Entreprise extends Component
     public $Departements;
     public $responsable;
     public $userRoles;
+    public $identifiant;
 
     public function render()
     {
@@ -132,7 +133,7 @@ class Entreprise extends Component
         // Affiche un message de succès
         $this->dispatch("showSuccessMessage", ["message" => "Utilisateur supprimé avec succès."]);
     }
-    
+
     public function confirmation($slug, $fonctions = null, $message = null)
     {
         $this->dispatch("confirmation",
@@ -167,14 +168,14 @@ class Entreprise extends Component
 
         $users = $Filiale->users;
         foreach ($users as $user) {
-            if ($user->status !== 'attente' && $user->status !== 'supprimer' ) {
-                foreach ($user->roles as $role) {
-                    if ($role->nom !== 'Admin') {
-                        $user->update(['status' => $nouveauStatut]);
-                    }
-                }
+            $roles = $user->roles->pluck('nom')->toArray(); 
+            if (!in_array('Admin', $roles)) {
+                if ($user->status !== 'attente' && $user->status !== 'supprimer') {
+                    $user->update(['status' => $nouveauStatut]);
+                } 
             }
-        }
+        }  
+
     }
     
     public function store(){

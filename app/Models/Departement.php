@@ -66,4 +66,4 @@ class Departement extends Model
 		return $this->hasMany(Consultant::class, 'id_departement');
 	}
 
-}
+	}
