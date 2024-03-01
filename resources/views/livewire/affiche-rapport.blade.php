@@ -215,7 +215,7 @@
                             @endforeach
                         </tbody>
                     </table>
-<br>
+                    <br>
                     <table>
                         <h4 style="text-align: center">Observation globale</h4>
                         <tr>

@@ -15,17 +15,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->call(function () {
-            // Logique pour récupérer les utilisateurs à rappeler et envoyer l'e-mail
-            $usersToRemind = User::where('status','activer')->get();
-    
-            foreach ($usersToRemind as $user) {
-                Mail::to($user->email)->send(new RappelEmail('N\'oubliez pas votre rapport de la journee !'));
-            }
-        })->dailyAt('16:30');
-    }
+      
+        $schedule->command('reminders:daily')->dailyAt('15:00');
 
+        $schedule->command('reminders:weekly-planning-reminders')
+        ->mondays()
+        ->at('09:00');
+
+        $schedule->command('tasks:reject-pending')->weekly();
+    }
+    
     /**
      * Register the commands for the application.
      */

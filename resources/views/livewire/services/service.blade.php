@@ -117,7 +117,7 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom du departement:<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" aria-label="nom" aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model.defer="nom" aria-label="nom" aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>
@@ -126,8 +126,8 @@
                         <div class="form-group mb-3">
                             <label for="description">Description :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                {{-- <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" aria-label="description" aria-describedby="description-addon"> --}}
-                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model="description" id="description" cols="30" rows="3"></textarea>
+                                {{-- <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model.defer="description" required autocomplete="current-description" aria-label="description" aria-describedby="description-addon"> --}}
+                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model.defer="description" id="description" cols="30" rows="3"></textarea>
                             </div>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
@@ -135,7 +135,7 @@
                         </div>
                         {{-- <div class="form-group mb-3">
                                                                 <label for="filiale">Filiale <span class="text-danger">*</span></label>
-                                    <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
+                                    <select name="filiale" id="filiale" class="form-control" wire:model.defer="filiale">
                                         <option value="">selectionneur...</option>
                                         @foreach ($filiales as $filiale)
                                         <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
@@ -171,7 +171,7 @@
                         <div class="form-group mb-3">
                             <label for="nom">Nom :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model="nom" required autocomplete="current-nom" placeholder="Entrer categorie produit" aria-label="nom" aria-describedby="nom-addon">
+                                <input type="nom" class="form-control @error('nom') is-invalid @enderror" wire:model.defer="nom" required autocomplete="current-nom" placeholder="Entrer categorie produit" aria-label="nom" aria-describedby="nom-addon">
                             </div>
                             @error('nom')
                                 <span class="text-danger">{{ $message }}</span>
@@ -180,8 +180,8 @@
                         <div class="form-group mb-3">
                             <label for="description">Description :<span class="text-danger">*</span></label>
                             <div class="input-group auth-pass-inputgroup">
-                                {{-- <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model="description" required autocomplete="current-description" placeholder="Entrer categorie produit" aria-label="description" aria-describedby="description-addon"> --}}
-                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model="description" id="description" cols="30" rows="3"></textarea>
+                                {{-- <input type="description" class="form-control @error('description') is-invalid @enderror" wire:model.defer="description" required autocomplete="current-description" placeholder="Entrer categorie produit" aria-label="description" aria-describedby="description-addon"> --}}
+                                <textarea class="form-control @error('description') is-invalid @enderror" wire:model.defer="description" id="description" cols="30" rows="3"></textarea>
                             </div>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
@@ -189,7 +189,7 @@
                         </div>
                         {{-- <div class="form-group mb-3">
                                                                 <label for="filiale">Filiale <span class="text-danger">*</span></label>
-                                    <select name="filiale" id="filiale" class="form-control" wire:model="filiale">
+                                    <select name="filiale" id="filiale" class="form-control" wire:model.defer="filiale">
                                         <option value="">selectionneur...</option>
                                         @foreach ($filiales as $filiale)
                                         <option value="{{ $filiale->id }}">{{ $filiale->nom  }}</option>
@@ -256,16 +256,29 @@
                                             <td>
                                                 <div>
                                                     @foreach ($membre->permissions as $user)
-                                                        @if ($user->role->nom == 'Membre')
-                                                            <a href="#" wire:click="roles({{ $membre->id }})" class="badge bg-info bg-soft text-info font-size-11">Membre</a>
+                                                       @if ($user->role->nom !== 'Employer')
+                                                            @if ($user->role->nom == 'Membre')
+                                                                <a href="#" wire:click="roles({{ $membre->id }})" class="badge bg-info bg-soft text-info font-size-11">Membre</a>
+                                                            @else
+                                                                <a href="#" wire:click="roles({{ $membre->id }})" class="badge bg-info bg-soft text-info font-size-11">Responsable</a>
+                                                            @endif
+                                                            @if ($user->role->nom == 'Membre')
+                                                                <a href="#" wire:click="permission({{ $membre->id }})" class="badge bg-success bg-soft text-success font-size-11">Accorder la permission</a>
+                                                            @elseif($user->role->nom == 'Chef projet')
+                                                                <a href="#" wire:click="permission({{ $membre->id }})" class="badge bg-danger bg-soft text-danger font-size-11">Retirer la permission</a>
+                                                            @endif
                                                         @else
-                                                            <a href="#" wire:click="roles({{ $membre->id }})" class="badge bg-info bg-soft text-info font-size-11">Responsable</a>
-                                                        @endif
-                                                        @if ($user->role->nom == 'Membre')
-                                                            <a href="#" wire:click="permission({{ $membre->id }})" class="badge bg-success bg-soft text-success font-size-11">Accorder la permission</a>
-                                                        @elseif($user->role->nom == 'Chef projet')
-                                                            <a href="#" wire:click="permission({{ $membre->id }})" class="badge bg-danger bg-soft text-danger font-size-11">Retirer la permission</a>
-                                                        @endif
+                                                            @if ($user->role->nom == 'Membre')
+                                                                <a href="#" wire:click="roles({{ $membre->id }})" class="badge bg-info bg-soft text-info font-size-11">Consultant</a>
+                                                            @else
+                                                                <a href="#" wire:click="roles({{ $membre->id }})" class="badge bg-info bg-soft text-info font-size-11">Consultant</a>
+                                                            @endif
+                                                            @if ($user->role->nom == 'Membre')
+                                                                <a href="#" wire:click="permission({{ $membre->id }})" class="badge bg-success bg-soft text-success font-size-11">Accorder la permission</a>
+                                                            @elseif($user->role->nom == 'Chef projet')
+                                                                <a href="#" wire:click="permission({{ $membre->id }})" class="badge bg-danger bg-soft text-danger font-size-11">Retirer la permission</a>
+                                                            @endif
+                                                       @endif
                                                     @endforeach
                                                 </div>
                                             </td>

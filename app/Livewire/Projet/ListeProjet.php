@@ -7,10 +7,12 @@ use App\Models\User;
 use App\Models\Projet;
 use App\Models\Filiale;
 use Livewire\Component;
+use App\Mail\UrgenceProjet;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use App\Models\MembresProjet;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ListeProjet extends Component
 {
@@ -75,7 +77,11 @@ class ListeProjet extends Component
             $completionPercentage = ($totalTasksCount > 0) ? ($completedTasksCount / $totalTasksCount) * 100 : 0;
     
             if ($totalTasksCount > 0) {
-                if ($completionPercentage == 100) {
+                if ($projet->urgence == true && $projet->status !== 'Suspendu'  && $completionPercentage !== 100) {
+                $projet->update([
+                    'status' => 'urgence'
+                ]);
+            } elseif ($completionPercentage == 100) {
                     $projet->update([
                         'status' => 'Terminer'
                     ]);
@@ -248,4 +254,84 @@ class ListeProjet extends Component
         }
     }
 
+    public function Urgence($slug)
+    {
+        $projet = Projet::where('code', $slug)->first();
+    
+        if ($projet) {
+            $this->id_Projet = $projet->code;
+            $this->membre = $projet->membres_projets->where('status','activer');
+            $members = $projet->membres_projets->where('status','activer')->pluck('id_user');
+            $this->newmembre = User::whereNotIn('id', $members)->get();
+
+            $this->dispatch("show_Projet_urgence_modal");
+        }
+    }
+
+    
+    public function UrgenceUpdate()
+    {
+        
+        $this->validate([
+            "usersnewMembres.*" => 'exists:users,id', 
+        ]);
+       
+        $projet = Projet::where('code', $this->id_Projet)->first();
+
+        if ($projet) { 
+
+            $projet->update([
+                "status" => 'urgence',
+                "urgence" => true,
+            ]);
+        // Obtenez les IDs des membres d'équipe actuellement associés au projet avec le statut 'activer'
+        $enseignesActuels = $projet->membres_projets->where('status', 'activer')->pluck('id_user')->toArray();
+
+        // Mettez à jour le statut des membres actuels qui ne sont plus membres du projet à "desactiver" pour ce projet spécifique
+        MembresProjet::where('id_projet', $projet->id)
+            ->whereNotIn('id_user', $this->usersnewMembres) // Exclut les nouveaux membres
+            ->update(['status' => 'desactiver']);
+
+        // Mettez à jour is_chef à false pour les membres actuels qui ne font plus partie de l'équipe
+        MembresProjet::where('id_projet', $projet->id)
+            ->whereNotIn('id_user', $this->usersnewMembres) // Exclut les nouveaux membres
+            ->update(["is_chef" => false]);
+
+        // Ajoutez les nouveaux membres au projet avec le statut 'activer' par défaut
+        foreach ($this->usersnewMembres as $enseigneId) {
+            // Vérifiez si le membre est déjà actif dans l'enseigne groupe
+            $membreActifDansEnseigneGroupe = in_array($enseigneId, $enseignesActuels);
+
+            // Mettez à jour le statut et is_chef en fonction du membre
+            MembresProjet::updateOrCreate(
+                ['id_projet' => $projet->id, 'id_user' => $enseigneId],
+                ['status' => 'activer', 'is_chef' => ($membreActifDansEnseigneGroupe) ? false : true]
+            );
+
+            // Mettez à jour is_chef à false pour les nouveaux membres ajoutés
+            MembresProjet::where('id_user', $enseigneId)->update(["is_chef" => false]);
+
+        }
+
+        // Mettez à jour is_chef à true pour le manager
+        MembresProjet::where('id_projet', $projet->id)
+            ->where('id_user', $this->manager)
+            ->update(["is_chef" => true]);
+
+        $EmailUsers = User::whereIn('id',$this->usersnewMembres)->get();
+        $responsable = User::find($this->manager);
+        foreach ($EmailUsers as $EmailUser) {
+            $data = [
+                'name' => $EmailUser->name,
+                'projet' => $projet->nom,
+                'responsable' => $responsable->name
+            ];
+            Mail::to($EmailUser->email)->send(new UrgenceProjet($data));
+        }
+            $this->dispatch("showSuccessMessage", ["message" => "Opérations effectuées avec succès"]);
+            $this->ModalEdite();
+        } else {
+            $this->dispatch("showWarningMessage", ["message" => "Projet non trouvé."]);
+        }
+    }
 }

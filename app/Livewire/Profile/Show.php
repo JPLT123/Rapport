@@ -6,6 +6,7 @@ use PDF;
 use App\Models\Tach;
 use App\Models\Projet;
 use Livewire\Component;
+use App\Models\ImportFile;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
 
@@ -78,5 +79,27 @@ public function generatePdf()
         ])->extends('layouts.guest')->section('content');
     }
     
+    public function telecharger($id)
+    {
+        // Récupérez le lien du fichier depuis la base de données
+        $importFile = ImportFile::find($id);
+
+        if ($importFile) {
+            // Obtenez le chemin complet du fichier depuis le modèle
+            $cheminFichier = storage_path('app/' . $importFile->links);
+
+            // Déterminez le type MIME du fichier à partir de son extension
+            $typeMIME = mime_content_type($cheminFichier);
+
+            // Retourne une réponse de téléchargement avec le type MIME correct
+            return response()->download($cheminFichier, $importFile->nom_fichier ?? 'Document'.'.zip', [
+                'Content-Type' => $typeMIME,
+                'Content-Disposition' => 'attachment'
+            ]);
+        } else {
+            // Le fichier n'existe pas dans la base de données, renvoie une réponse d'erreur JSON
+            return response()->json(['error' => 'Erreur lors du téléchargement du fichier'], 404);
+        }
+    }
     
 }

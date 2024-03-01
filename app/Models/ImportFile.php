@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -20,9 +21,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int|null $rapport
+ * @property int|null $semaine
  * 
  * @property User|null $user
  * @property Rapportgeneral|null $rapportgeneral
+ * @property Collection|PlanifHebdomadaire[] $planif_hebdomadaires
  *
  * @package App\Models
  */
@@ -33,7 +36,8 @@ class ImportFile extends Model
 	protected $casts = [
 		'id_user' => 'int',
 		'id_rapport' => 'int',
-		'rapport' => 'int'
+		'rapport' => 'int',
+		'semaine' => 'int'
 	];
 
 	protected $fillable = [
@@ -41,7 +45,8 @@ class ImportFile extends Model
 		'id_rapport',
 		'links',
 		'nom_fichier',
-		'rapport'
+		'rapport',
+		'semaine'
 	];
 
 	public function rapport()
@@ -58,9 +63,14 @@ class ImportFile extends Model
 	{
 		return $this->belongsTo(Rapportgeneral::class, 'rapport');
 	}
-	
+
 	public function planif_hebdomadaires()
 	{
 		return $this->hasMany(PlanifHebdomadaire::class, 'importfile');
+	}
+
+	public function Semaine()
+	{
+		return $this->hasMany(RapportSemaine::class, 'semaine');
 	}
 }

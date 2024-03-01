@@ -33,14 +33,16 @@ class Tach extends Model
 	protected $table = 'taches';
 
 	protected $casts = [
-		'id_projet' => 'int'
+		'id_projet' => 'int',
+		'taches_suplementaires' => 'int'
 	];
 
 	protected $fillable = [
 		'slug',
 		'tache_prevues',
 		'status',
-		'id_projet'
+		'id_projet',
+		'taches_suplementaires'
 	];
 
 	public function projet()
@@ -66,5 +68,11 @@ class Tach extends Model
 	public function rapports()
 	{
 		return $this->hasMany(Rapport::class, 'id_tache');
+	}
+
+	// Relation avec le modèle TacheSupplementaire
+	public function tacheSupplementaires()
+	{
+	   return $this->belongsTo(TacheSupplementaire::class, 'taches_suplementaires');
 	}
 }

@@ -5,9 +5,10 @@ namespace App\Livewire\Taches;
 use App\Models\Tach;
 use App\Models\Projet;
 use Livewire\Component;
-use Livewire\Attributes\Url;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ListeTache extends Component
 {
@@ -17,11 +18,40 @@ class ListeTache extends Component
     public $completedTasksByMonth;
     public $totalTasksByDay;
     public $tache_prevues;
+    public $userRoles;
     public $tache = [];
 
     public function render()
     {
-        $recuper = Tach::where('status','!=','Supprimer');
+        $Authuser = Auth::user();
+        $this->userRoles = $Authuser->permissions->pluck('id_role')->toArray();
+
+        // Vérifiez si l'utilisateur a le rôle de Responsable
+        if (in_array(6, $this->userRoles)) {
+            $recuper = Tach::where('status','!=','Supprimer')
+                    ->whereIn('id_projet', function($query) use ($Authuser) {
+                        $query->select('id_projet')
+                              ->from('membres_projet')
+                              ->where('id_user', $Authuser->id);
+                    });
+        }elseif (in_array(5, $this->userRoles)) {
+            $recuper = Tach::where('status','!=','Supprimer')
+                    ->whereIn('id_projet', function($query) use ($Authuser) {
+                        $query->select('id_projet')
+                              ->from('membres_projet')
+                              ->where('id_user', $Authuser->id);
+                    });
+        }elseif (in_array(2, $this->userRoles)) {
+            $recuper = Tach::where('status','!=','Supprimer')
+                    ->whereIn('id_projet', function($query) use ($Authuser) {
+                        $query->select('id_projet')
+                              ->from('membres_projet')
+                              ->where('id_user', $Authuser->id);
+                    });
+        }
+        else {
+            $recuper = Tach::where('status','!=','Supprimer');
+        }
 
         if ($this->projet) {
             $recuper->where('id_projet', $this->projet);

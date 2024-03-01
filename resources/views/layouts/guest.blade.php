@@ -34,8 +34,6 @@
         <link href="{{asset('assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />  
 
         <script src="{{asset('https://cdn.jsdelivr.net/npm/apexcharts')}}"></script>
-        
-        <script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
     
         <script src="{{asset('https://js.pusher.com/8.2.0/pusher.min.js')}}"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
@@ -49,7 +47,8 @@
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
     <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
-
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet">
         @livewireStyles
     </head>
     <body data-sidebar="dark" data-layout-mode="light">
@@ -163,7 +162,11 @@
         <script src="assets/js/pages/datatables.init.js"></script>
 
         <script src="assets/js/app.js"></script>
-
+        <script>
+            const quill = new Quill('#editor', {
+              theme: 'snow'
+            });
+          </script>
         @include('sweetalert')
         @livewireScripts
     </body>

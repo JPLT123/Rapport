@@ -191,7 +191,7 @@
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Nom et Prenom: <span
                                             class="text-danger">*</span></label>
-                                    <input id="name" type="text" wire:model='name' autofocus
+                                    <input id="name" type="text" wire:model.defer='name' autofocus
                                         autocomplete="name" class="form-control @error('name') is-invalid @enderror">
                                     @error('name')
                                         <span class="text-danger"> {{ $message }} </span>
@@ -203,7 +203,7 @@
                                 <div class="mb-3">
                                     <label for="adresse" class="form-label">Adresse : <span
                                             class="text-danger">*</span></label>
-                                    <input id="adresse" type="text" wire:model='adresse' autofocus
+                                    <input id="adresse" type="text" wire:model.defer='adresse' autofocus
                                         autocomplete="adresse"
                                         class="form-control @error('adresse') is-invalid @enderror">
                                     @error('adresse')
@@ -216,7 +216,7 @@
                                 <div class="mb-3">
                                     <label for="telephone" class="form-label">Telephone : <span
                                             class="text-danger">*</span></label>
-                                    <input id="telephone" type="text" wire:model='telephone' autofocus
+                                    <input id="telephone" type="text" wire:model.defer='telephone' autofocus
                                         autocomplete="telephone"
                                         class="form-control @error('telephone') is-invalid @enderror">
                                     @error('telephone')
@@ -229,7 +229,7 @@
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email : <span
                                             class="text-danger">*</span></label>
-                                    <input id="email" type="text" wire:model='email' autofocus
+                                    <input id="email" type="text" wire:model.defer='email' autofocus
                                         autocomplete="email"
                                         class="form-control @error('email') is-invalid @enderror">
                                     @error('email')
@@ -261,7 +261,7 @@
                                 @if ($showFormOption1)
                                     <div class="form-group mb-3">
                                         <label for="service">Departements <span class="text-danger">*</span></label>
-                                        <select name="service" id="service" class="form-control" wire:model="service">
+                                        <select name="service" id="service" class="form-control" wire:model.defer="service">
                                             <option value="">selectionneur...</option>
                                             @foreach ($services as $service)
                                                 <option value="{{ $service->id }}">{{ $service->nom  }}</option>
@@ -292,7 +292,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group mb-3">
                                             <label for="filiale">Services <span class="text-danger">*</span></label>
-                                            <select name="filiale" id="filiale" class="form-control" wire:model="departement">
+                                            <select name="filiale" id="filiale" class="form-control" wire:model.defer="departement">
                                                 <option value="">selectionneur...</option>
                                                 @foreach ($departements  as $departement)
                                                     <option value="{{ $departement->id }}">{{ $departement->nom  }}</option>
@@ -319,7 +319,7 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label for="role" class="form-label">Role du consultant: <span class="text-danger">*</span></label>
-                                            <select name="role" id="role" wire:model='role' class="form-control">
+                                            <select name="role" id="role" wire:model.defer='role' class="form-control">
                                                 <option value="">Selectionner un role... </option>
                                                 @foreach ($roles as $item)
                                                     <option value="{{ $item->id }}">
@@ -353,7 +353,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label for="filiale">Services <span class="text-danger">*</span></label>
-                                        <select name="filiale" id="filiale" class="form-control" wire:model="departement">
+                                        <select name="filiale" id="filiale" class="form-control" wire:model.defer="departement">
                                             <option value="">selectionneur...</option>
                                             @foreach ($departements  as $departement)
                                                 <option value="{{ $departement->id }}">{{ $departement->nom  }}</option>
@@ -398,7 +398,7 @@
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Nom et Prenom: <span
                                             class="text-danger">*</span></label>
-                                    <input id="name" type="text" wire:model='name' autofocus
+                                    <input id="name" type="text" wire:model.defer='name' autofocus
                                         autocomplete="name" class="form-control @error('name') is-invalid @enderror">
                                     @error('name')
                                         <span class="text-danger"> {{ $message }} </span>
@@ -410,7 +410,7 @@
                                 <div class="mb-3">
                                     <label for="adresse" class="form-label">Adresse : <span
                                             class="text-danger">*</span></label>
-                                    <input id="adresse" type="text" wire:model='adresse' autofocus
+                                    <input id="adresse" type="text" wire:model.defer='adresse' autofocus
                                         autocomplete="adresse"
                                         class="form-control @error('adresse') is-invalid @enderror">
                                     @error('adresse')
@@ -423,7 +423,7 @@
                                 <div class="mb-3">
                                     <label for="telephone" class="form-label">Telephone : <span
                                             class="text-danger">*</span></label>
-                                    <input id="telephone" type="text" wire:model='telephone' autofocus
+                                    <input id="telephone" type="text" wire:model.defer='telephone' autofocus
                                         autocomplete="telephone"
                                         class="form-control @error('telephone') is-invalid @enderror">
                                     @error('telephone')
@@ -436,7 +436,7 @@
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email : <span
                                             class="text-danger">*</span></label>
-                                    <input id="email" type="text" wire:model='email' autofocus
+                                    <input id="email" type="text" wire:model.defer='email' autofocus
                                         autocomplete="email"
                                         class="form-control @error('email') is-invalid @enderror">
                                     @error('email')
@@ -468,7 +468,7 @@
                                 @if ($showFormOption1)
                                     <div class="form-group mb-3">
                                         <label for="service">Departements <span class="text-danger">*</span></label>
-                                        <select name="service" id="service" class="form-control" wire:model="service">
+                                        <select name="service" id="service" class="form-control" wire:model.defer="service">
                                             <option value="">selectionneur...</option>
                                             @foreach ($services as $service)
                                                 <option value="{{ $service->id }}">{{ $service->nom  }}</option>
@@ -499,7 +499,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group mb-3">
                                             <label for="filiale">Services <span class="text-danger">*</span></label>
-                                            <select name="filiale" id="filiale" class="form-control" wire:model="departement">
+                                            <select name="filiale" id="filiale" class="form-control" wire:model.defer="departement">
                                                 <option value="">selectionneur...</option>
                                                 @foreach ($departements  as $departement)
                                                     <option value="{{ $departement->id }}">{{ $departement->nom  }}</option>
@@ -530,7 +530,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group mb-3">
                                         <label for="filiale">Services <span class="text-danger">*</span></label>
-                                        <select name="filiale" id="filiale" class="form-control" wire:model="departement">
+                                        <select name="filiale" id="filiale" class="form-control" wire:model.defer="departement">
                                             <option value="">selectionneur...</option>
                                             @foreach ($departements  as $departement)
                                                 <option value="{{ $departement->id }}">{{ $departement->nom  }}</option>

@@ -24,12 +24,9 @@ class Dashboad extends Component
                 return redirect()->route('Accueil');
             }
         }else {
-            if ($user->status == 'desactiver') {
+            if ($user->status == 'desactiver' || $user->status == 'supprimer') {
                 
                     return redirect()->route('SupprimerDesactiver');
-                    
-            }elseif($user->status == 'supprimer'){
-                Auth::logout(); 
             }
         }
 

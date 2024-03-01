@@ -36,7 +36,7 @@ class VerificationCodeMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.verification-code',
+            markdown: 'emails.verification-code',
         );
     }
 

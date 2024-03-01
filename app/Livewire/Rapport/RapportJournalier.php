@@ -440,7 +440,6 @@ class RapportJournalier extends Component
                 $data = [
                     'Auth_user' => Auth::user(),
                     'rapport' => $General->id,
-                    'ccEmail' => $email_admin,
                 ];
                 Mail::to($email_admin)->send(new EnvoieRapport($data)); // Ajout de l'email en copie
             }
@@ -489,10 +488,8 @@ class RapportJournalier extends Component
                     ->whereIn('id', function($query) {
                         $query->select('id_user')->from('permissions')->where('id_role', 1);
                     })->value('email');
-        
                 $data = [
                     'Auth_user' => Auth::user(),
-                    'ccEmail' => $email_admin,
                     'rapport' => $General->id
                 ];
                 Mail::to($email_admin)->send(new EnvoieRapport($data)); // Ajout de l'email en copie

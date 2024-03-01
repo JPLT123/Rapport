@@ -121,7 +121,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="mb-4 card-title">Attached Files</h4>
-                                <div class="table-responsive">
+                                <div class="table-responsive" style="max-height: 309px; overflow-y: auto;">
                                     <table class="table mb-0 align-middle table-nowrap table-hover">
                                         <tbody>
                                             @foreach ($user->importfiles as $fichier)
@@ -179,7 +179,7 @@
                                 <div class="mt-4">
                                     <div data-simplebar style="max-height: 250px;">
 
-                                        <div class="table-responsive">
+                                        <div class="table-responsive" style="max-height: 309px; overflow-y: auto;">
                                             <table class="table mb-0 align-middle table-nowrap table-hover">
                                                 <tbody>
                                                     @foreach ($user->planif_hebdomadaires as $item)
@@ -228,7 +228,7 @@
                             <h4 class="mb-4 card-title">Rapport</h4>
                             <h6>Fichier rapport</h6>
                             <div class="mt-4">
-                                <div data-simplebar style="max-height: 250px;">
+                                <div data-simplebar style="max-height: 309px; overflow-y: auto;">
                                     <div class="table-responsive">
                                         <table class="table mb-0 align-middle table-nowrap table-hover">
                                             <tbody>
@@ -374,7 +374,7 @@
     // Récupérez le tableau de séries en PHP
     var seriesData = <?php echo json_encode($TotalTaches); ?>;
     var totale = <?php echo json_encode($totale); ?>;
-
+ 
     var options = {
         series: seriesData.map(function(projet) {
             var totalTaches = projet.taches_count;

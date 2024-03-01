@@ -14,6 +14,7 @@ use App\Http\Controllers\PagePDF;
 use App\Livewire\Profile\Reglage;
 use App\Livewire\Accueil\Dashboad;
 use App\Livewire\CompteDesactiver;
+use App\Livewire\Taches\FormTache;
 use App\Models\PlanifHebdomadaire;
 use App\Livewire\HistoriqueRapport;
 use App\Livewire\Services\Services;
@@ -27,13 +28,19 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Planification\Apercu;
 use App\Livewire\Planification\Create;
 use App\Http\Middleware\RoleMiddleware;
+use App\Livewire\Rapport\DetailSemaine;
 use App\Livewire\Profile\ChangePassword;
+use App\Livewire\Rapport\RapportSemaines;
 use App\Livewire\Planification\PlanifChef;
 use App\Livewire\Rapport\RapportJournalier;
 use App\Livewire\Planification\DetailPlanif;
+use App\Livewire\Taches\TacheSupplementaire;
 use App\Livewire\GestionUtilisateur\AuthUser;
+use App\Livewire\Taches\TacheSupplementaires;
 use App\Livewire\GestionUtilisateur\ListeUser;
 use App\Livewire\GestionUtilisateur\DetailUser;
+use App\Livewire\Rapport\AfficheRapportSemaine;
+use App\Livewire\Taches\VueTacheSupplementaire;
 use App\Livewire\Planification\HistoriquePlanif;
 use App\Livewire\Planification\Veficationplanif;
 use App\Livewire\Planification\UpdatePlanification;
@@ -83,9 +90,15 @@ Route::middleware([
     Route::get('/Apercu-projet/{slug}', ApercuProjet::class)->name('Apercu-projet');
     Route::get('/liste-tache', ListeTache::class)->name('liste-tache');
     Route::get('/create-tache', CreateTache::class)->name('create-tache');
+    Route::get('/taches-supplementaire', VueTacheSupplementaire::class)->name('taches-supplementaire');
+    Route::get('/vue-taches-supplementaire/{slug}', TacheSupplementaires::class)->name('vue-taches-supplementaire');
+    Route::get('/form-taches', FormTache::class)->name('form-taches');
     Route::get('/histoire-planification', HistoriquePlanif::class)->name('histoire-planification');
     Route::get('/histoire-rapport', HistoriqueRapport::class)->name('histoire-rapport');
-    Route::get('/rapport-journalier', RapportJournalier::class)->name('rapport-journalier');
+    Route::get('/rapport-journalier', RapportJournalier::class)->name('rapport-journalier'); 
+    Route::get('/rapport-semaine', RapportSemaines::class)->name('rapport-semaine');
+    Route::get('/rapport-semaine/{slug}', DetailSemaine::class)->name('rapport-semaine-detail');
+    Route::get('/affiche-rapport-semaine/{slug}', AfficheRapportSemaine::class)->name('affiche-rapport-semaine');
     Route::get('/reglage-profil-user', Reglage::class)->name('reglage');
     Route::get('/pdf-page1/{slug}', [PagePDF::class,'generatePDF'])->name('telecharger-pdf');
     Route::get('/fichhier_rapport/{slug}', AfficheRapport::class)->name('affiche-rapport');
@@ -93,9 +106,6 @@ Route::middleware([
     Route::get('/pdf-page1', [PagePDF::class,'index'])->name('telecharger');
     Route::get('/telecharger/{id_rapport}', [PagePDF::class,'telecharger'])->name('telecharger-fichier');    Route::get('/telecharger/{id_rapport}', [status::class,'telecharger'])->name('telecharger-fichier');
     Route::get('/status/{slug}', [PagePDF::class,'status'])->name('statusupdate');
-
-    
-
 
 });
 

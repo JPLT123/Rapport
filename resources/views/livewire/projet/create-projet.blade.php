@@ -36,7 +36,7 @@
                                     <div class="form-group mb-3">
                                         <label for="nom" class="col-form-label">Project Name<span class="text-danger">*</span></label>
                                         <div class="col-lg-12">
-                                            <input id="nom" wire:model='nom' type="text" class="form-control @error('nom') is-invalid @enderror" placeholder="Enter Project Name..." required>
+                                            <input id="nom" wire:model.defer='nom' type="text" class="form-control @error('nom') is-invalid @enderror" placeholder="Enter Project Name..." required>
                                             @error('nom')
                                                 <span class="text-danger"> {{$message}} </span>
                                             @enderror
@@ -45,7 +45,7 @@
                                     <div class="form-group mb-3">
                                         <label class="col-form-label">Project Description <span class="text-danger">*</span></label>
                                         <div class="col-lg-12">
-                                            <textarea id="description" wire:model='description' class="form-control @error('description') is-invalid @enderror"></textarea>
+                                            <textarea id="description" wire:model.defer='description' class="form-control @error('description') is-invalid @enderror"></textarea>
                                             @error('description')
                                                 <span class="text-danger"> {{$message}} </span>
                                             @enderror
@@ -55,8 +55,8 @@
                                         <label class="col-form-label">Project Date <span class="text-danger">*</span></label>
                                         <div class="col-lg-12">
                                             <div class="input-daterange input-group" id="project-date-inputgroup" >
-                                                <input type="date" wire:model='datedebut' class="form-control @error('datedebut') is-invalid @enderror" placeholder="Start Date" name="debutdate" />
-                                                <input type="date" wire:model='datefin' class="form-control @error('datefin') is-invalid @enderror" placeholder="End Date" name="findate" />
+                                                <input type="date" wire:model.defer='datedebut' class="form-control @error('datedebut') is-invalid @enderror" placeholder="Start Date" name="debutdate" />
+                                                <input type="date" wire:model.defer='datefin' class="form-control @error('datefin') is-invalid @enderror" placeholder="End Date" name="findate" />
                                                 @error('datedebut')
                                                     <span class="text-danger"> {{$message}} </span>
                                                 @enderror

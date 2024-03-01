@@ -110,6 +110,9 @@
                                                 @elseif ($projet->status == 'activer')
                                                     <td><button class="btn btn-soft-primary btn-sm btn-rounded">En
                                                             Cours</button></td>
+                                                @elseif ($projet->status == 'urgence')
+                                                <td><button class="btn btn-soft-danger btn-sm btn-rounded">En
+                                                        Urgence</button></td>
                                                 @endif
                                                 <td>
                                                     <div class="avatar-group">
@@ -134,8 +137,6 @@
                                                             <i class="mdi mdi-dots-horizontal font-size-18"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item"
-                                                                wire:click="edite('{{ $projet->code }}')">Edit</a>
                                                             @if ($projet->status == 'Suspendu')
                                                                 <a class="dropdown-item"
                                                                     wire:click="confirmation('{{ $projet->code }}')">Activer
@@ -146,10 +147,14 @@
                                                                     le project</a>
                                                             @endif
                                                             <a class="dropdown-item"
-                                                                wire:click="confirmationDelete('{{ $projet->code }}')">Delete</a>
+                                                                wire:click="Urgence('{{ $projet->code }}')">Urgence</a>
                                                             <a class="dropdown-item"
                                                                 href="{{ route('Apercu-projet', ['slug' => $projet->code]) }}">View
                                                                 details</a>
+                                                            <a class="dropdown-item"
+                                                                wire:click="edite('{{ $projet->code }}')">Edit</a>
+                                                            <a class="dropdown-item"
+                                                                wire:click="confirmationDelete('{{ $projet->code }}')">Delete</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -208,7 +213,7 @@
                             <label for="Projetname" class="col-form-label">Projet Name<span
                                     class="text-danger">*</span></label>
                             <div class="col-sm-12">
-                                <input wire:model='nom' id="Projetname" name="Projetname" type="text"
+                                <input wire:model.defer='nom' id="Projetname" name="Projetname" type="text"
                                     class="form-control validate" placeholder="Enter Projet Name..." required>
                                 @error('nom')
                                     <span class="text-danger"> {{ $message }} </span>
@@ -218,13 +223,94 @@
                         <div class="form-group mb-3">
                             <label class="col-form-label">Projet Description</label>
                             <div class="col-lg-12">
-                                <textarea wire:model.live="description" id="Projetdesc" class="form-control" name="Projetdesc"></textarea>
+                                <textarea wire:model.defer="description" id="Projetdesc" class="form-control" name="Projetdesc"></textarea>
                                 @error('description')
                                     <span class="text-danger"> {{ $message }} </span>
                                 @enderror
                             </div>
                         </div>
 
+                        <div class="form-group mb-3">
+                            <label class="col-form-label">Add Team Member<span class="text-danger">*</span></label>
+                            <ul class="list-unstyled user-list validate" id="taskassignee">
+                                @foreach ($membre as $user)
+                                    <li>
+                                        <div class="form-check form-check-primary mb-2 d-flex align-items-center">
+                                            <input wire:model.live="usersnewMembres" class="form-check-input"
+                                                type="checkbox" id="usersnewMembres-{{ $user->user->id }}"
+                                                name="usersnewMembres[]" value="{{ $user->user->id }}" checked>
+                                            <label class="form-check-label ms-2"
+                                                for="member-{{ $user->user->id }}">{{ $user->user->name }}</label>
+                                            <img src="{{ asset($user->user->profile_photo_path ? $user->user->profile_photo_path : 'assets/images/users/avatar-1.jpg') }}"
+                                                class="rounded-circle avatar-xs m-1" alt="">
+                                            <span class="badge m-2 rounded-1 badge-soft-secondary">Membre
+                                                existant</span>
+                                        </div>
+                                    </li>
+                                @endforeach
+                                @foreach ($newmembre as $user)
+                                    <li>
+                                        <div class="form-check form-check-primary mb-2 d-flex align-items-center">
+                                            <input wire:model.live="usersnewMembres" class="form-check-input"
+                                                type="checkbox" id="usersnewMembres-{{ $user->id }}"
+                                                name="usersnewMembres[]" value="{{ $user->id }}">
+                                            <label class="form-check-label ms-2"
+                                                for="member-{{ $user->id }}">{{ $user->name }}</label>
+                                            <img src="{{ asset($user->profile_photo_path ? $user->profile_photo_path : 'assets/images/users/avatar-1.jpg') }}"
+                                                class="rounded-circle avatar-xs m-1" alt="">
+                                            <span class="badge m-2 rounded-1 badge-soft-success">Nouveau membre</span>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                            @error('usersnewMembres')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="col-form-label">Project Manager<span class="text-danger">*</span></label>
+                            <div class="col-lg-12">
+                                <select name="departement" id="departement" class="form-control"
+                                    wire:model.live="manager">
+                                    <option value="">Choose...</option>
+                                    @foreach ($usersnewMembres as $managerId)
+                                        @foreach ($users as $user)
+                                            @if ($user->id == $managerId)
+                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                            @endif
+                                        @endforeach
+                                    @endforeach
+                                </select>
+                                @error('Manager')
+                                    <span class="text-danger"> {{ $message }} </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between p-3 border-top border-opacity-10">
+                            <button type="button" class="btn btn-danger" wire:click='ModalEdite'>Annuler</button>
+                            <button type="submit" class="btn btn-success waves-effect waves-light">
+                                <i class="mdi mdi-pencil font-size-18"></i> Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    
+    <div class="modal fade orderdetailsModal " id="urgenceEditModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="orderdetailsModalLabel" aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title update-task-title">Update Projet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form wire:submit.prevent='UrgenceUpdate'>
                         <div class="form-group mb-3">
                             <label class="col-form-label">Add Team Member<span class="text-danger">*</span></label>
                             <ul class="list-unstyled user-list validate" id="taskassignee">
@@ -303,7 +389,13 @@
         $('#editModal').modal('show');
     })
 
+    window.addEventListener("show_Projet_urgence_modal", event => {
+        // alert('okay')
+        $('#urgenceEditModal').modal('show');
+    })
+
     window.addEventListener("closeModal", event => {
         $("#editModal").modal("hide")
+        $('#urgenceEditModal').modal('hide');
     })
 </script>

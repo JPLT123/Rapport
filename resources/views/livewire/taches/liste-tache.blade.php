@@ -74,13 +74,19 @@
                                                         </td>
                                                         <td>
                                                             <div class="avatar-group">
-                                                                @foreach ($tache->projet->membres_projets_relation as $item)
+                                                                
+                                                                <div class="avatar-group-item">
+                                                                    <a href="javascript: void(0);" class="d-inline-block">
+                                                                        <img src="{{asset($item->profile_photo_path ? '/storage/'.$item->profile_photo_path : 'assets\user.png')}}" alt="" class="rounded-circle avatar-xs">
+                                                                    </a>
+                                                                </div>
+                                                                {{-- @foreach ($tache->projet->membres_projets as $item)
                                                                     <div class="avatar-group-item">
                                                                         <a href="javascript: void(0);" class="d-inline-block">
                                                                             <img src="{{asset($item->profile_photo_path ? '/storage/'.$item->profile_photo_path : 'assets\user.png')}}" alt="" class="rounded-circle avatar-xs">
                                                                         </a>
                                                                     </div>
-                                                                @endforeach
+                                                                @endforeach --}}
                                                             </div>
                                                         </td>
                                                         <td>

@@ -129,10 +129,9 @@ class DetailPlanif extends Component
                             $data = [
                                 'user' => $this->user,
                                 'Auth_user'=> Auth::user(),
-                                'ccEmail' => $email
                             ];
                 
-                            Mail::to($this->user->email)->cc($email)->cc($email_admin)->send(new ConfirmationChefEmail($data));  
+                            Mail::to($this->user->email)->cc($email_responsable)->cc($email_admin)->send(new ConfirmationChefEmail($data));  
                     }
                 } elseif ($this->permission == "Responsable service") {
                     $hierachie = $this->filiale->hierachie;
